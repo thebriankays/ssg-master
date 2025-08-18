@@ -1,0 +1,291 @@
+// Accordion Component Styles
+// Using BEM naming convention
+
+.accordion {
+  width: 100%;
+  
+  // Accordion item container
+  &__item {
+    position: relative;
+    
+    // Disabled state
+    &--disabled {
+      opacity: 0.5;
+      pointer-events: none;
+    }
+  }
+  
+  // Accordion trigger button
+  &__trigger {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    padding: 1rem 1.25rem;
+    font-size: 1rem;
+    font-weight: 500;
+    text-align: left;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    
+    // Hover state
+    &:hover:not(:disabled) {
+      background-color: var(--accordion-hover-bg, rgba(0, 0, 0, 0.02));
+    }
+    
+    // Focus state
+    &:focus-visible {
+      outline: 2px solid var(--accordion-focus-color, #3b82f6);
+      outline-offset: 2px;
+    }
+    
+    // Disabled state
+    &:disabled {
+      cursor: not-allowed;
+      opacity: 0.5;
+    }
+    
+    // Icon positioning variants
+    &--icon-left {
+      flex-direction: row;
+      
+      .accordion__icon {
+        margin-right: 0.75rem;
+        margin-left: 0;
+      }
+    }
+    
+    &--icon-right {
+      flex-direction: row;
+      
+      .accordion__icon {
+        margin-left: auto;
+        margin-right: 0;
+      }
+    }
+  }
+  
+  // Trigger text
+  &__trigger-text {
+    flex: 1;
+    text-align: left;
+  }
+  
+  // Icon element
+  &__icon {
+    flex-shrink: 0;
+    width: 1.25rem;
+    height: 1.25rem;
+    margin-left: 0.75rem;
+    transition: transform 0.3s cubic-bezier(0.87, 0, 0.13, 1);
+    
+    // Rotate when open
+    [data-state="open"] & {
+      transform: rotate(180deg);
+    }
+  }
+  
+  // Content wrapper (handles animation)
+  &__content-wrapper {
+    overflow: hidden;
+    transition: height 0.3s cubic-bezier(0.87, 0, 0.13, 1);
+    
+    // Closed state
+    &[data-state="closed"] {
+      animation: accordion-slide-up 0.3s ease-out;
+    }
+    
+    // Open state
+    &[data-state="open"] {
+      animation: accordion-slide-down 0.3s ease-out;
+    }
+  }
+  
+  // Content container
+  &__content {
+    padding: 0 1.25rem 1.25rem;
+    
+    // Add top padding if there's content
+    &:not(:empty) {
+      padding-top: 0.5rem;
+    }
+  }
+  
+  // Variant: Default
+  &--default {
+    border: 1px solid var(--accordion-border-color, #e5e7eb);
+    border-radius: 0.5rem;
+    
+    .accordion__item {
+      border-bottom: 1px solid var(--accordion-border-color, #e5e7eb);
+      
+      &:last-child {
+        border-bottom: none;
+      }
+    }
+  }
+  
+  // Variant: Bordered
+  &--bordered {
+    .accordion__item {
+      border: 1px solid var(--accordion-border-color, #e5e7eb);
+      border-radius: 0.5rem;
+      margin-bottom: 0.5rem;
+      
+      &:last-child {
+        margin-bottom: 0;
+      }
+    }
+    
+    .accordion__trigger {
+      border-radius: 0.5rem;
+      
+      [data-state="open"] & {
+        border-bottom-left-radius: 0;
+        border-bottom-right-radius: 0;
+      }
+    }
+  }
+  
+  // Variant: Separated
+  &--separated {
+    .accordion__item {
+      background-color: var(--accordion-item-bg, #f9fafb);
+      border-radius: 0.5rem;
+      margin-bottom: 0.75rem;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+      
+      &:last-child {
+        margin-bottom: 0;
+      }
+    }
+    
+    .accordion__trigger {
+      border-radius: 0.5rem;
+      
+      [data-state="open"] & {
+        border-bottom-left-radius: 0;
+        border-bottom-right-radius: 0;
+      }
+    }
+  }
+  
+  // Variant: Flush (no borders/padding)
+  &--flush {
+    .accordion__item {
+      border-bottom: 1px solid var(--accordion-border-color, #e5e7eb);
+      
+      &:last-child {
+        border-bottom: none;
+      }
+    }
+    
+    .accordion__trigger {
+      padding-left: 0;
+      padding-right: 0;
+    }
+    
+    .accordion__content {
+      padding-left: 0;
+      padding-right: 0;
+    }
+  }
+}
+
+// Animations
+@keyframes accordion-slide-down {
+  from {
+    opacity: 0;
+    transform: translateY(-0.5rem);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes accordion-slide-up {
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(-0.5rem);
+  }
+}
+
+// Dark mode support
+@media (prefers-color-scheme: dark) {
+  .accordion {
+    &--default,
+    &--bordered,
+    &--flush {
+      --accordion-border-color: #374151;
+    }
+    
+    &--separated {
+      --accordion-item-bg: #1f2937;
+    }
+    
+    &__trigger {
+      --accordion-hover-bg: rgba(255, 255, 255, 0.05);
+      --accordion-focus-color: #60a5fa;
+    }
+  }
+}
+
+// Accessibility: Respect reduced motion preference
+@media (prefers-reduced-motion: reduce) {
+  .accordion {
+    &__icon {
+      transition: none;
+    }
+    
+    &__content-wrapper {
+      transition: none;
+      animation: none;
+    }
+    
+    &__trigger {
+      transition: none;
+    }
+  }
+}
+
+// Size modifiers (optional utility classes)
+.accordion {
+  &--sm {
+    .accordion__trigger {
+      padding: 0.5rem 0.75rem;
+      font-size: 0.875rem;
+    }
+    
+    .accordion__content {
+      padding: 0 0.75rem 0.75rem;
+    }
+    
+    .accordion__icon {
+      width: 1rem;
+      height: 1rem;
+    }
+  }
+  
+  &--lg {
+    .accordion__trigger {
+      padding: 1.25rem 1.5rem;
+      font-size: 1.125rem;
+    }
+    
+    .accordion__content {
+      padding: 0 1.5rem 1.5rem;
+    }
+    
+    .accordion__icon {
+      width: 1.5rem;
+      height: 1.5rem;
+    }
+  }
+}

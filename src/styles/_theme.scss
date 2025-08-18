@@ -1,0 +1,417 @@
+// Theme Configuration and CSS Custom Properties
+// =====================================================
+// Theme configuration for light/dark modes and 
+// CSS custom properties for runtime theming.
+// =====================================================
+
+// =====================================================
+// CSS Custom Properties (CSS Variables)
+// =====================================================
+
+:root {
+  // ===================================================
+  // Color System
+  // ===================================================
+  
+  // Brand Colors
+  --color-primary: #{$color-primary};
+  --color-primary-light: #{$color-primary-light};
+  --color-primary-dark: #{$color-primary-dark};
+  
+  --color-secondary: #{$color-secondary};
+  --color-secondary-light: #{$color-secondary-light};
+  --color-secondary-dark: #{$color-secondary-dark};
+  
+  --color-accent: #{$color-accent};
+  --color-accent-light: #{$color-accent-light};
+  --color-accent-dark: #{$color-accent-dark};
+  
+  // Semantic Colors
+  --color-success: #{$color-success};
+  --color-warning: #{$color-warning};
+  --color-error: #{$color-error};
+  --color-info: #{$color-info};
+  
+  // ===================================================
+  // Typography
+  // ===================================================
+  
+  // Font families (already defined in typography.scss, but included for completeness)
+  --font-sans: #{$font-sans};
+  --font-heading: #{$font-heading};
+  --font-mono: #{$font-mono};
+  
+  // Font sizes
+  --font-size-base: #{$font-size-base};
+  --font-size-lg: #{$font-size-lg};
+  --font-size-xl: #{$font-size-xl};
+  
+  // Line heights
+  --line-height-base: #{$line-height-normal};
+  --line-height-heading: #{$line-height-tight};
+  
+  // ===================================================
+  // Spacing
+  // ===================================================
+  
+  --spacing-unit: 0.25rem; // 4px base unit
+  --container-padding: #{$container-padding};
+  --grid-gutter: #{$grid-gutter};
+  
+  // ===================================================
+  // Borders
+  // ===================================================
+  
+  --border-width: #{$border-width-1};
+  --border-radius: #{$border-radius-base};
+  --border-radius-lg: #{$border-radius-lg};
+  
+  // ===================================================
+  // Shadows
+  // ===================================================
+  
+  --shadow-sm: #{$shadow-sm};
+  --shadow-base: #{$shadow-base};
+  --shadow-lg: #{$shadow-lg};
+  
+  // ===================================================
+  // Z-Index
+  // ===================================================
+  
+  --z-dropdown: #{$z-index-dropdown};
+  --z-sticky: #{$z-index-sticky};
+  --z-fixed: #{$z-index-fixed};
+  --z-modal-backdrop: #{$z-index-modal-backdrop};
+  --z-modal: #{$z-index-modal};
+  --z-popover: #{$z-index-popover};
+  --z-tooltip: #{$z-index-tooltip};
+  
+  // ===================================================
+  // Transitions
+  // ===================================================
+  
+  --transition-base: #{$transition-default};
+  --duration-fast: #{$duration-200};
+  --duration-normal: #{$duration-300};
+  --duration-slow: #{$duration-500};
+  
+  // ===================================================
+  // Light Theme (Default)
+  // ===================================================
+  
+  // Background colors
+  --background: #{$color-white};
+  --background-secondary: #{$color-gray-50};
+  --background-tertiary: #{$color-gray-100};
+  
+  // Foreground colors
+  --foreground: #{$color-gray-900};
+  --foreground-secondary: #{$color-gray-700};
+  --foreground-tertiary: #{$color-gray-500};
+  
+  // Surface colors
+  --surface: #{$color-white};
+  --surface-hover: #{$color-gray-50};
+  --surface-active: #{$color-gray-100};
+  
+  // Border colors
+  --border: #{$color-gray-200};
+  --border-hover: #{$color-gray-300};
+  --border-active: #{$color-gray-400};
+  
+  // Component specific
+  --card: #{$color-white};
+  --card-foreground: #{$color-gray-900};
+  
+  --popover: #{$color-white};
+  --popover-foreground: #{$color-gray-900};
+  
+  --primary: #{$color-primary};
+  --primary-foreground: #{$color-white};
+  
+  --secondary: #{$color-secondary};
+  --secondary-foreground: #{$color-white};
+  
+  --muted: #{$color-gray-100};
+  --muted-foreground: #{$color-gray-600};
+  
+  --accent: #{$color-accent};
+  --accent-foreground: #{$color-primary};
+  
+  --destructive: #{$color-error};
+  --destructive-foreground: #{$color-white};
+  
+  --success: #{$color-success};
+  --success-foreground: #{$color-white};
+  
+  --warning: #{$color-warning};
+  --warning-foreground: #{$color-gray-900};
+  
+  --info: #{$color-info};
+  --info-foreground: #{$color-white};
+  
+  // Input specific
+  --input: #{$color-white};
+  --input-border: #{$color-gray-300};
+  --input-hover: #{$color-gray-50};
+  --input-focus: #{$color-primary};
+  
+  // Ring (focus outline)
+  --ring: #{$color-primary};
+  
+  // Selection
+  --selection-bg: #{$color-primary};
+  --selection-fg: #{$color-white};
+  
+  // Scrollbar
+  --scrollbar-track: #{$color-gray-100};
+  --scrollbar-thumb: #{$color-gray-400};
+  --scrollbar-thumb-hover: #{$color-gray-500};
+}
+
+// =====================================================
+// Dark Theme
+// =====================================================
+
+[data-theme='dark'] {
+  // Background colors
+  --background: #{$color-gray-900};
+  --background-secondary: #{$color-gray-800};
+  --background-tertiary: #{$color-gray-700};
+  
+  // Foreground colors
+  --foreground: #{$color-gray-50};
+  --foreground-secondary: #{$color-gray-200};
+  --foreground-tertiary: #{$color-gray-400};
+  
+  // Surface colors
+  --surface: #{$color-gray-800};
+  --surface-hover: #{$color-gray-700};
+  --surface-active: #{$color-gray-600};
+  
+  // Border colors
+  --border: #{$color-gray-700};
+  --border-hover: #{$color-gray-600};
+  --border-active: #{$color-gray-500};
+  
+  // Component specific
+  --card: #{$color-gray-800};
+  --card-foreground: #{$color-gray-50};
+  
+  --popover: #{$color-gray-800};
+  --popover-foreground: #{$color-gray-50};
+  
+  --primary: #{$color-primary-light};
+  --primary-foreground: #{$color-white};
+  
+  --secondary: #{$color-secondary-light};
+  --secondary-foreground: #{$color-white};
+  
+  --muted: #{$color-gray-700};
+  --muted-foreground: #{$color-gray-400};
+  
+  --accent: #{$color-accent-dark};
+  --accent-foreground: #{$color-gray-50};
+  
+  --destructive: #{lighten($color-error, 10%)};
+  --destructive-foreground: #{$color-white};
+  
+  --success: #{darken($color-success, 10%)};
+  --success-foreground: #{$color-white};
+  
+  --warning: #{darken($color-warning, 10%)};
+  --warning-foreground: #{$color-gray-900};
+  
+  --info: #{lighten($color-info, 10%)};
+  --info-foreground: #{$color-white};
+  
+  // Input specific
+  --input: #{$color-gray-800};
+  --input-border: #{$color-gray-600};
+  --input-hover: #{$color-gray-700};
+  --input-focus: #{$color-primary-light};
+  
+  // Ring (focus outline)
+  --ring: #{$color-primary-light};
+  
+  // Selection
+  --selection-bg: #{$color-primary-light};
+  --selection-fg: #{$color-white};
+  
+  // Scrollbar
+  --scrollbar-track: #{$color-gray-800};
+  --scrollbar-thumb: #{$color-gray-600};
+  --scrollbar-thumb-hover: #{$color-gray-500};
+  
+  // Shadows (adjusted for dark mode)
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.3);
+  --shadow-base: 0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -1px rgba(0, 0, 0, 0.2);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.3), 0 4px 6px -2px rgba(0, 0, 0, 0.2);
+}
+
+// =====================================================
+// System Preference (Auto Theme)
+// =====================================================
+
+@media (prefers-color-scheme: dark) {
+  [data-theme='auto'] {
+    // Background colors
+    --background: #{$color-gray-900};
+    --background-secondary: #{$color-gray-800};
+    --background-tertiary: #{$color-gray-700};
+    
+    // Foreground colors
+    --foreground: #{$color-gray-50};
+    --foreground-secondary: #{$color-gray-200};
+    --foreground-tertiary: #{$color-gray-400};
+    
+    // Surface colors
+    --surface: #{$color-gray-800};
+    --surface-hover: #{$color-gray-700};
+    --surface-active: #{$color-gray-600};
+    
+    // Border colors
+    --border: #{$color-gray-700};
+    --border-hover: #{$color-gray-600};
+    --border-active: #{$color-gray-500};
+    
+    // Component specific colors (same as dark theme)
+    --card: #{$color-gray-800};
+    --card-foreground: #{$color-gray-50};
+    
+    --popover: #{$color-gray-800};
+    --popover-foreground: #{$color-gray-50};
+    
+    --primary: #{$color-primary-light};
+    --primary-foreground: #{$color-white};
+    
+    --secondary: #{$color-secondary-light};
+    --secondary-foreground: #{$color-white};
+    
+    --muted: #{$color-gray-700};
+    --muted-foreground: #{$color-gray-400};
+    
+    --accent: #{$color-accent-dark};
+    --accent-foreground: #{$color-gray-50};
+    
+    --destructive: #{lighten($color-error, 10%)};
+    --destructive-foreground: #{$color-white};
+    
+    --success: #{darken($color-success, 10%)};
+    --success-foreground: #{$color-white};
+    
+    --warning: #{darken($color-warning, 10%)};
+    --warning-foreground: #{$color-gray-900};
+    
+    --info: #{lighten($color-info, 10%)};
+    --info-foreground: #{$color-white};
+    
+    // Input specific
+    --input: #{$color-gray-800};
+    --input-border: #{$color-gray-600};
+    --input-hover: #{$color-gray-700};
+    --input-focus: #{$color-primary-light};
+    
+    // Ring (focus outline)
+    --ring: #{$color-primary-light};
+    
+    // Selection
+    --selection-bg: #{$color-primary-light};
+    --selection-fg: #{$color-white};
+    
+    // Scrollbar
+    --scrollbar-track: #{$color-gray-800};
+    --scrollbar-thumb: #{$color-gray-600};
+    --scrollbar-thumb-hover: #{$color-gray-500};
+    
+    // Shadows
+    --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.3);
+    --shadow-base: 0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -1px rgba(0, 0, 0, 0.2);
+    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.3), 0 4px 6px -2px rgba(0, 0, 0, 0.2);
+  }
+}
+
+// =====================================================
+// Theme-specific Utility Classes
+// =====================================================
+
+// Background utilities using CSS variables
+.bg-background { background-color: var(--background); }
+.bg-background-secondary { background-color: var(--background-secondary); }
+.bg-background-tertiary { background-color: var(--background-tertiary); }
+.bg-surface { background-color: var(--surface); }
+.bg-primary { background-color: var(--primary); }
+.bg-secondary { background-color: var(--secondary); }
+.bg-accent { background-color: var(--accent); }
+.bg-muted { background-color: var(--muted); }
+.bg-success { background-color: var(--success); }
+.bg-warning { background-color: var(--warning); }
+.bg-error { background-color: var(--destructive); }
+.bg-info { background-color: var(--info); }
+
+// Text color utilities using CSS variables
+.text-foreground { color: var(--foreground); }
+.text-foreground-secondary { color: var(--foreground-secondary); }
+.text-foreground-tertiary { color: var(--foreground-tertiary); }
+.text-primary { color: var(--primary); }
+.text-secondary { color: var(--secondary); }
+.text-accent { color: var(--accent); }
+.text-muted { color: var(--muted-foreground); }
+.text-success { color: var(--success); }
+.text-warning { color: var(--warning); }
+.text-error { color: var(--destructive); }
+.text-info { color: var(--info); }
+
+// Border color utilities using CSS variables
+.border-border { border-color: var(--border); }
+.border-primary { border-color: var(--primary); }
+.border-secondary { border-color: var(--secondary); }
+.border-accent { border-color: var(--accent); }
+.border-muted { border-color: var(--muted); }
+.border-success { border-color: var(--success); }
+.border-warning { border-color: var(--warning); }
+.border-error { border-color: var(--destructive); }
+.border-info { border-color: var(--info); }
+
+// =====================================================
+// Selection Styles
+// =====================================================
+
+::selection {
+  background-color: var(--selection-bg);
+  color: var(--selection-fg);
+}
+
+::-moz-selection {
+  background-color: var(--selection-bg);
+  color: var(--selection-fg);
+}
+
+// =====================================================
+// Scrollbar Styles
+// =====================================================
+
+// Webkit browsers
+::-webkit-scrollbar {
+  width: 12px;
+  height: 12px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--scrollbar-track);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--scrollbar-thumb);
+  border-radius: 6px;
+  
+  &:hover {
+    background: var(--scrollbar-thumb-hover);
+  }
+}
+
+// Firefox
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-track);
+}

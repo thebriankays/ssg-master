@@ -1,0 +1,67 @@
+// Shared Canvas Styles
+.shared-canvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 1;
+
+  canvas {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+}
+
+// WebGL View Container
+.webgl-view {
+  position: relative;
+  
+  &__content {
+    position: relative;
+    z-index: 1;
+  }
+
+  &__placeholder {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  // Loading state
+  &--loading {
+    .webgl-view__placeholder {
+      opacity: 1;
+      background: rgba(0, 0, 0, 0.05);
+    }
+  }
+
+  // Interactive view
+  &--interactive {
+    pointer-events: auto;
+  }
+}
+
+// Performance optimizations
+.webgl-view--hidden {
+  canvas {
+    visibility: hidden;
+  }
+}
+
+// Responsive adjustments
+@media (max-width: 768px) {
+  .shared-canvas {
+    // Reduce quality on mobile for performance
+    canvas {
+      image-rendering: -webkit-optimize-contrast;
+      image-rendering: crisp-edges;
+    }
+  }
+}

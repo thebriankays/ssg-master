@@ -1,0 +1,84 @@
+// FormField Component Styles
+// Using BEM naming convention
+
+.form-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  width: 100%;
+  
+  &--error {
+    .form-field__label {
+      color: var(--destructive);
+    }
+  }
+  
+  &__label {
+    font-size: 0.875rem;
+    font-weight: 500;
+    line-height: 1.25rem;
+    color: var(--foreground);
+    transition: color 0.2s ease;
+    
+    &--required::after {
+      content: ' *';
+      color: var(--destructive);
+    }
+  }
+  
+  &__description {
+    font-size: 0.875rem;
+    line-height: 1.25rem;
+    color: var(--muted-foreground);
+    margin-top: -0.25rem;
+  }
+  
+  &__control {
+    // Container for the form control
+  }
+  
+  &__error {
+    font-size: 0.875rem;
+    line-height: 1.25rem;
+    color: var(--destructive);
+    animation: form-field-error-in 0.2s ease;
+    
+    &:not(:last-of-type) {
+      margin-bottom: 0.25rem;
+    }
+  }
+}
+
+// Animations
+@keyframes form-field-error-in {
+  from {
+    opacity: 0;
+    transform: translateY(-0.25rem);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+// Spacing adjustments when used with different form controls
+.form-field {
+  // When containing input or textarea wrappers that have their own labels
+  .input-wrapper,
+  .textarea-wrapper,
+  .select,
+  .checkbox-wrapper,
+  .radio-group {
+    // Remove duplicate labels
+    .input-label,
+    .textarea-label,
+    .select__label,
+    .checkbox-label:first-child,
+    .radio-group__label {
+      display: none;
+    }
+    
+    // Remove top gap since we have our own
+    gap: 0;
+  }
+}

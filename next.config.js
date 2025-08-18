@@ -27,6 +27,12 @@ const nextConfig = {
       '.mjs': ['.mts', '.mjs'],
     }
 
+    // Add shader file loader
+    webpackConfig.module.rules.push({
+      test: /\.(glsl|vert|frag)$/,
+      type: 'asset/source',
+    })
+
     return webpackConfig
   },
   reactStrictMode: true,

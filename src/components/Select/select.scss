@@ -1,0 +1,184 @@
+// Select Component Styles
+// Using BEM naming convention
+
+.select {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  
+  // Label
+  &__label {
+    display: block;
+    margin-bottom: 0.25rem;
+  }
+}
+
+// Trigger button
+.select-trigger {
+  transition: all 0.2s ease;
+  
+  &:hover:not(:disabled) {
+    border-color: var(--border-hover, var(--gray-400));
+  }
+  
+  &:focus {
+    outline: none;
+  }
+  
+  // Icon rotation on open
+  &[data-state="open"] {
+    svg {
+      transform: rotate(180deg);
+      transition: transform 0.2s ease;
+    }
+  }
+  
+  &[data-state="closed"] {
+    svg {
+      transition: transform 0.2s ease;
+    }
+  }
+}
+
+// Content dropdown
+.select-content {
+  backdrop-filter: blur(10px);
+  background-color: rgba(var(--popover-rgb), 0.95);
+  
+  // Custom scrollbar
+  &::-webkit-scrollbar {
+    width: 8px;
+  }
+  
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  
+  &::-webkit-scrollbar-thumb {
+    background-color: var(--gray-400);
+    border-radius: 4px;
+    
+    &:hover {
+      background-color: var(--gray-500);
+    }
+  }
+}
+
+// Scroll buttons
+.select-scroll-button {
+  background: linear-gradient(
+    to bottom,
+    var(--popover),
+    transparent
+  );
+  
+  &:last-child {
+    background: linear-gradient(
+      to top,
+      var(--popover),
+      transparent
+    );
+  }
+}
+
+// Items
+.select-item {
+  position: relative;
+  transition: all 0.15s ease;
+  
+  // Hover effect
+  &[data-highlighted] {
+    background-color: var(--accent);
+    color: var(--accent-foreground);
+    
+    &::before {
+      content: '';
+      position: absolute;
+      left: 0.25rem;
+      right: 0.25rem;
+      top: 0;
+      bottom: 0;
+      background-color: var(--primary);
+      opacity: 0.1;
+      border-radius: 0.25rem;
+      z-index: -1;
+    }
+  }
+  
+  // Selected state
+  &[data-state="checked"] {
+    font-weight: 500;
+  }
+  
+  // Disabled state
+  &[data-disabled] {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}
+
+// Label
+.select-label {
+  color: var(--muted-foreground);
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+// Separator
+.select-separator {
+  background-color: var(--border);
+}
+
+// Animations
+@keyframes select-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes select-zoom-in {
+  from {
+    transform: scale(0.95);
+  }
+  to {
+    transform: scale(1);
+  }
+}
+
+@keyframes select-slide-down {
+  from {
+    transform: translateY(-2px);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+// Dark mode adjustments
+@media (prefers-color-scheme: dark) {
+  .select-content {
+    background-color: rgba(var(--popover-rgb), 0.98);
+    border-color: var(--border);
+  }
+  
+  .select-item {
+    &[data-highlighted] {
+      background-color: var(--accent);
+      
+      &::before {
+        opacity: 0.2;
+      }
+    }
+  }
+}
+
+// Responsive adjustments
+@media (max-width: 640px) {
+  .select-content {
+    max-height: 50vh;
+  }
+}

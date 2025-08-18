@@ -1,0 +1,35 @@
+// Wrapper Component Styles
+// Using BEM naming convention
+
+.wrapper {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  width: 100%;
+  
+  // Main content area
+  &__main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    z-index: 1;
+  }
+  
+  // Theme variations
+  &[data-theme="light"] {
+    background-color: var(--background-light, #ffffff);
+    color: var(--foreground-light, #000000);
+  }
+  
+  &[data-theme="dark"] {
+    background-color: var(--background-dark, #000000);
+    color: var(--foreground-dark, #ffffff);
+  }
+}
+
+// Ensure proper stacking context
+body:has(.wrapper) {
+  overflow-x: hidden;
+}

@@ -1,0 +1,204 @@
+// RevealImage component styles
+.revealImage {
+  position: relative;
+  overflow: hidden;
+  display: inline-block;
+  width: 100%;
+  
+  // Image wrapper
+  &__wrapper {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    
+    // For Next.js Image with fill
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+  }
+  
+  // Image element
+  &__img {
+    display: block;
+    width: 100%;
+    height: auto;
+    max-width: 100%;
+  }
+  
+  // Overlay for reveal effects
+  &__overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    pointer-events: none;
+    transform-origin: center;
+  }
+  
+  // Animation variants
+  &--clip {
+    &.revealImage--up .revealImage__overlay {
+      transform-origin: bottom center;
+    }
+    
+    &.revealImage--down .revealImage__overlay {
+      transform-origin: top center;
+    }
+    
+    &.revealImage--left .revealImage__overlay {
+      transform-origin: right center;
+    }
+    
+    &.revealImage--right .revealImage__overlay {
+      transform-origin: left center;
+    }
+  }
+  
+  &--slide {
+    .revealImage__wrapper {
+      overflow: visible;
+    }
+  }
+  
+  &--scale {
+    .revealImage__wrapper {
+      transform-origin: center center;
+    }
+  }
+  
+  &--zoom {
+    .revealImage__wrapper {
+      transform-origin: center center;
+    }
+  }
+  
+  &--parallax {
+    .revealImage__wrapper {
+      will-change: transform;
+      height: 120%; // Extra height for parallax movement
+      
+      img {
+        height: 100%;
+        object-fit: cover;
+      }
+    }
+  }
+  
+  // States
+  &--loaded {
+    .revealImage__img {
+      opacity: 1;
+    }
+  }
+  
+  &--revealing {
+    .revealImage__wrapper {
+      will-change: transform, opacity, clip-path;
+    }
+    
+    .revealImage__overlay {
+      will-change: transform;
+    }
+  }
+  
+  &--revealed {
+    .revealImage__overlay {
+      display: none; // Remove overlay after animation
+    }
+  }
+  
+  // Loading state
+  &:not(.revealImage--loaded) {
+    background-color: var(--skeleton-bg, #f0f0f0);
+    
+    .revealImage__img {
+      opacity: 0;
+    }
+    
+    // Skeleton animation
+    &::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(255, 255, 255, 0.4),
+        transparent
+      );
+      animation: revealImage-skeleton 1.5s infinite;
+    }
+  }
+  
+  // Aspect ratio containers
+  &--square {
+    aspect-ratio: 1 / 1;
+  }
+  
+  &--landscape {
+    aspect-ratio: 16 / 9;
+  }
+  
+  &--portrait {
+    aspect-ratio: 3 / 4;
+  }
+  
+  // Responsive
+  @media (max-width: 768px) {
+    &--parallax {
+      .revealImage__wrapper {
+        height: 110%; // Reduce parallax range on mobile
+      }
+    }
+  }
+  
+  // Reduced motion
+  @media (prefers-reduced-motion: reduce) {
+    .revealImage__wrapper,
+    .revealImage__overlay {
+      transition: opacity 0.3s ease !important;
+      transform: none !important;
+      clip-path: none !important;
+    }
+    
+    &--parallax {
+      .revealImage__wrapper {
+        height: 100% !important;
+      }
+    }
+  }
+}
+
+// Keyframes
+@keyframes revealImage-skeleton {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(200%);
+  }
+}
+
+// Dark mode
+@media (prefers-color-scheme: dark) {
+  .revealImage:not(.revealImage--loaded) {
+    background-color: var(--skeleton-bg-dark, #2a2a2a);
+    
+    &::before {
+      background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(255, 255, 255, 0.1),
+        transparent
+      );
+    }
+  }
+}

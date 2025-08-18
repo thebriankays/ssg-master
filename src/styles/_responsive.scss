@@ -1,0 +1,356 @@
+// Responsive Utilities
+// =====================================================
+// Responsive design utilities for showing/hiding elements
+// and applying responsive variations of other utilities.
+// =====================================================
+
+// =====================================================
+// Responsive Display Utilities
+// =====================================================
+
+// Hide utilities
+.hidden {
+  display: none;
+}
+
+// Show/hide at specific breakpoints
+@each $breakpoint, $value in $breakpoints {
+  @include breakpoint($breakpoint) {
+    .#{$breakpoint}\:block { display: block; }
+    .#{$breakpoint}\:inline-block { display: inline-block; }
+    .#{$breakpoint}\:inline { display: inline; }
+    .#{$breakpoint}\:flex { display: flex; }
+    .#{$breakpoint}\:inline-flex { display: inline-flex; }
+    .#{$breakpoint}\:grid { display: grid; }
+    .#{$breakpoint}\:inline-grid { display: inline-grid; }
+    .#{$breakpoint}\:hidden { display: none; }
+  }
+}
+
+// Hide above/below breakpoint utilities
+@each $breakpoint, $value in $breakpoints {
+  // Hide above breakpoint
+  .#{$breakpoint}\:hidden-up {
+    @include breakpoint($breakpoint) {
+      display: none;
+    }
+  }
+  
+  // Hide below breakpoint
+  .#{$breakpoint}\:hidden-down {
+    @include breakpoint-down($breakpoint) {
+      display: none;
+    }
+  }
+}
+
+// =====================================================
+// Responsive Text Alignment
+// =====================================================
+
+@each $breakpoint, $value in $breakpoints {
+  @include breakpoint($breakpoint) {
+    .#{$breakpoint}\:text-left { text-align: left; }
+    .#{$breakpoint}\:text-center { text-align: center; }
+    .#{$breakpoint}\:text-right { text-align: right; }
+    .#{$breakpoint}\:text-justify { text-align: justify; }
+  }
+}
+
+// =====================================================
+// Responsive Flexbox Utilities
+// =====================================================
+
+@each $breakpoint, $value in $breakpoints {
+  @include breakpoint($breakpoint) {
+    // Flex direction
+    .#{$breakpoint}\:flex-row { flex-direction: row; }
+    .#{$breakpoint}\:flex-row-reverse { flex-direction: row-reverse; }
+    .#{$breakpoint}\:flex-col { flex-direction: column; }
+    .#{$breakpoint}\:flex-col-reverse { flex-direction: column-reverse; }
+    
+    // Flex wrap
+    .#{$breakpoint}\:flex-wrap { flex-wrap: wrap; }
+    .#{$breakpoint}\:flex-wrap-reverse { flex-wrap: wrap-reverse; }
+    .#{$breakpoint}\:flex-nowrap { flex-wrap: nowrap; }
+    
+    // Justify content
+    .#{$breakpoint}\:justify-start { justify-content: flex-start; }
+    .#{$breakpoint}\:justify-end { justify-content: flex-end; }
+    .#{$breakpoint}\:justify-center { justify-content: center; }
+    .#{$breakpoint}\:justify-between { justify-content: space-between; }
+    .#{$breakpoint}\:justify-around { justify-content: space-around; }
+    .#{$breakpoint}\:justify-evenly { justify-content: space-evenly; }
+    
+    // Align items
+    .#{$breakpoint}\:items-start { align-items: flex-start; }
+    .#{$breakpoint}\:items-end { align-items: flex-end; }
+    .#{$breakpoint}\:items-center { align-items: center; }
+    .#{$breakpoint}\:items-baseline { align-items: baseline; }
+    .#{$breakpoint}\:items-stretch { align-items: stretch; }
+  }
+}
+
+// =====================================================
+// Responsive Spacing Utilities
+// =====================================================
+
+@each $breakpoint, $value in $breakpoints {
+  @include breakpoint($breakpoint) {
+    // Margin
+    @each $size, $space-value in $spacing-values {
+      .#{$breakpoint}\:m-#{$size} { margin: $space-value; }
+      .#{$breakpoint}\:mt-#{$size} { margin-top: $space-value; }
+      .#{$breakpoint}\:mr-#{$size} { margin-right: $space-value; }
+      .#{$breakpoint}\:mb-#{$size} { margin-bottom: $space-value; }
+      .#{$breakpoint}\:ml-#{$size} { margin-left: $space-value; }
+      .#{$breakpoint}\:mx-#{$size} { 
+        margin-left: $space-value; 
+        margin-right: $space-value; 
+      }
+      .#{$breakpoint}\:my-#{$size} { 
+        margin-top: $space-value; 
+        margin-bottom: $space-value; 
+      }
+    }
+    
+    // Padding
+    @each $size, $space-value in $spacing-values {
+      @if $size != "auto" {
+        .#{$breakpoint}\:p-#{$size} { padding: $space-value; }
+        .#{$breakpoint}\:pt-#{$size} { padding-top: $space-value; }
+        .#{$breakpoint}\:pr-#{$size} { padding-right: $space-value; }
+        .#{$breakpoint}\:pb-#{$size} { padding-bottom: $space-value; }
+        .#{$breakpoint}\:pl-#{$size} { padding-left: $space-value; }
+        .#{$breakpoint}\:px-#{$size} { 
+          padding-left: $space-value; 
+          padding-right: $space-value; 
+        }
+        .#{$breakpoint}\:py-#{$size} { 
+          padding-top: $space-value; 
+          padding-bottom: $space-value; 
+        }
+      }
+    }
+  }
+}
+
+// =====================================================
+// Responsive Width & Height
+// =====================================================
+
+@each $breakpoint, $value in $breakpoints {
+  @include breakpoint($breakpoint) {
+    // Width
+    .#{$breakpoint}\:w-full { width: 100%; }
+    .#{$breakpoint}\:w-screen { width: 100vw; }
+    .#{$breakpoint}\:w-min { width: min-content; }
+    .#{$breakpoint}\:w-max { width: max-content; }
+    .#{$breakpoint}\:w-fit { width: fit-content; }
+    .#{$breakpoint}\:w-auto { width: auto; }
+    
+    // Common widths
+    .#{$breakpoint}\:w-1\/2 { width: 50%; }
+    .#{$breakpoint}\:w-1\/3 { width: 33.333333%; }
+    .#{$breakpoint}\:w-2\/3 { width: 66.666667%; }
+    .#{$breakpoint}\:w-1\/4 { width: 25%; }
+    .#{$breakpoint}\:w-3\/4 { width: 75%; }
+    
+    // Height
+    .#{$breakpoint}\:h-full { height: 100%; }
+    .#{$breakpoint}\:h-screen { height: 100vh; }
+    .#{$breakpoint}\:h-min { height: min-content; }
+    .#{$breakpoint}\:h-max { height: max-content; }
+    .#{$breakpoint}\:h-fit { height: fit-content; }
+    .#{$breakpoint}\:h-auto { height: auto; }
+  }
+}
+
+// =====================================================
+// Responsive Typography
+// =====================================================
+
+@each $breakpoint, $value in $breakpoints {
+  @include breakpoint($breakpoint) {
+    // Font size
+    .#{$breakpoint}\:text-xs { font-size: $font-size-xs; }
+    .#{$breakpoint}\:text-sm { font-size: $font-size-sm; }
+    .#{$breakpoint}\:text-base { font-size: $font-size-base; }
+    .#{$breakpoint}\:text-lg { font-size: $font-size-lg; }
+    .#{$breakpoint}\:text-xl { font-size: $font-size-xl; }
+    .#{$breakpoint}\:text-2xl { font-size: $font-size-2xl; }
+    .#{$breakpoint}\:text-3xl { font-size: $font-size-3xl; }
+    .#{$breakpoint}\:text-4xl { font-size: $font-size-4xl; }
+    .#{$breakpoint}\:text-5xl { font-size: $font-size-5xl; }
+    .#{$breakpoint}\:text-6xl { font-size: $font-size-6xl; }
+    
+    // Font weight
+    .#{$breakpoint}\:font-thin { font-weight: $font-weight-thin; }
+    .#{$breakpoint}\:font-light { font-weight: $font-weight-light; }
+    .#{$breakpoint}\:font-regular { font-weight: $font-weight-regular; }
+    .#{$breakpoint}\:font-medium { font-weight: $font-weight-medium; }
+    .#{$breakpoint}\:font-semibold { font-weight: $font-weight-semibold; }
+    .#{$breakpoint}\:font-bold { font-weight: $font-weight-bold; }
+    .#{$breakpoint}\:font-black { font-weight: $font-weight-black; }
+  }
+}
+
+// =====================================================
+// Container Queries (if supported)
+// =====================================================
+
+// Container query support
+@supports (container-type: inline-size) {
+  .container-query {
+    container-type: inline-size;
+  }
+  
+  // Container query breakpoints
+  @container (min-width: 640px) {
+    .cq\:text-lg { font-size: $font-size-lg; }
+    .cq\:p-6 { padding: $spacing-6; }
+  }
+  
+  @container (min-width: 768px) {
+    .cq\:text-xl { font-size: $font-size-xl; }
+    .cq\:p-8 { padding: $spacing-8; }
+  }
+  
+  @container (min-width: 1024px) {
+    .cq\:text-2xl { font-size: $font-size-2xl; }
+    .cq\:p-10 { padding: $spacing-10; }
+  }
+}
+
+// =====================================================
+// Print Responsive Utilities
+// =====================================================
+
+@media print {
+  .print\:hidden {
+    display: none;
+  }
+  
+  .print\:block {
+    display: block;
+  }
+  
+  .print\:break-before {
+    break-before: page;
+  }
+  
+  .print\:break-after {
+    break-after: page;
+  }
+  
+  .print\:break-inside-avoid {
+    break-inside: avoid;
+  }
+}
+
+// =====================================================
+// Orientation Utilities
+// =====================================================
+
+@media (orientation: portrait) {
+  .portrait\:hidden {
+    display: none;
+  }
+  
+  .portrait\:block {
+    display: block;
+  }
+}
+
+@media (orientation: landscape) {
+  .landscape\:hidden {
+    display: none;
+  }
+  
+  .landscape\:block {
+    display: block;
+  }
+}
+
+// =====================================================
+// Hover State Utilities
+// =====================================================
+
+@media (hover: hover) {
+  .hover\:hidden {
+    display: none;
+  }
+  
+  .hover\:block {
+    display: block;
+  }
+}
+
+@media (hover: none) {
+  .touch\:hidden {
+    display: none;
+  }
+  
+  .touch\:block {
+    display: block;
+  }
+}
+
+// =====================================================
+// Custom Responsive Utilities
+// =====================================================
+
+// Stack to horizontal layout
+.stack {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-4;
+  
+  @include breakpoint(md) {
+    flex-direction: row;
+    align-items: center;
+  }
+}
+
+// Responsive container padding
+.responsive-padding {
+  padding: $spacing-4;
+  
+  @include breakpoint(sm) {
+    padding: $spacing-6;
+  }
+  
+  @include breakpoint(md) {
+    padding: $spacing-8;
+  }
+  
+  @include breakpoint(lg) {
+    padding: $spacing-12;
+  }
+}
+
+// Responsive text sizing
+.responsive-text {
+  font-size: $font-size-base;
+  
+  @include breakpoint(sm) {
+    font-size: $font-size-lg;
+  }
+  
+  @include breakpoint(md) {
+    font-size: $font-size-xl;
+  }
+  
+  @include breakpoint(lg) {
+    font-size: $font-size-2xl;
+  }
+}
+
+// Responsive heading
+.responsive-heading {
+  @include fluid-type($font-size-2xl, $font-size-5xl);
+  
+  @include breakpoint(lg) {
+    @include fluid-type($font-size-4xl, $font-size-6xl);
+  }
+}

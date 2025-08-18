@@ -1,0 +1,144 @@
+// Marquee Component Styles
+// Using BEM naming convention
+
+.marquee {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  
+  // Mask edges for smooth fade (optional enhancement)
+  &::before,
+  &::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 100px;
+    z-index: 1;
+    pointer-events: none;
+  }
+  
+  &::before {
+    left: 0;
+    background: linear-gradient(to right, white, transparent);
+  }
+  
+  &::after {
+    right: 0;
+    background: linear-gradient(to left, white, transparent);
+  }
+  
+  // Inner container for the scrolling content
+  &__inner {
+    display: flex;
+    width: fit-content;
+    will-change: transform;
+    
+    // Smooth transitions when pausing
+    transition: transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  }
+  
+  // Content wrapper for each repeated item
+  &__content {
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+    
+    // Ensure all children maintain their size
+    > * {
+      flex-shrink: 0;
+    }
+  }
+  
+  // State modifiers
+  &--paused {
+    .marquee__inner {
+      animation-play-state: paused;
+    }
+  }
+  
+  &--reversed {
+    .marquee__inner {
+      flex-direction: row-reverse;
+    }
+  }
+  
+  // Dark mode support
+  @media (prefers-color-scheme: dark) {
+    &::before {
+      background: linear-gradient(to right, black, transparent);
+    }
+    
+    &::after {
+      background: linear-gradient(to left, black, transparent);
+    }
+  }
+  
+  // Remove edge masks on smaller screens if needed
+  @media (max-width: 768px) {
+    &::before,
+    &::after {
+      width: 50px;
+    }
+  }
+  
+  // Accessibility: Respect reduced motion preference
+  @media (prefers-reduced-motion: reduce) {
+    .marquee__inner {
+      transform: none !important;
+      transition: none;
+    }
+  }
+}
+
+// Utility classes for common use cases
+.marquee {
+  // Variant without edge masks
+  &--no-mask {
+    &::before,
+    &::after {
+      display: none;
+    }
+  }
+  
+  // Variant with custom mask colors
+  &--mask-transparent {
+    &::before,
+    &::after {
+      background: none;
+    }
+  }
+  
+  // Size variants
+  &--sm {
+    height: 40px;
+    
+    .marquee__content {
+      font-size: 0.875rem;
+    }
+  }
+  
+  &--md {
+    height: 60px;
+    
+    .marquee__content {
+      font-size: 1rem;
+    }
+  }
+  
+  &--lg {
+    height: 80px;
+    
+    .marquee__content {
+      font-size: 1.25rem;
+    }
+  }
+  
+  &--xl {
+    height: 100px;
+    
+    .marquee__content {
+      font-size: 1.5rem;
+    }
+  }
+}

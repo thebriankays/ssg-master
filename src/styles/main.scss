@@ -1,0 +1,48 @@
+// Main SCSS Entry Point
+// =====================================================
+// This is the main entry point for all SCSS styles.
+// Import order matters for cascade and specificity.
+// =====================================================
+
+// 1. Configuration Layer
+// Variables and functions that don't output CSS
+@import 'variables';
+@import 'mixins';
+
+// 2. Base Layer
+// CSS reset, base element styles, and global defaults
+@import 'base';
+
+// 3. Theme Layer
+// Theme configuration and CSS custom properties
+@import 'theme';
+
+// 4. Layout Layer
+// Layout utilities and grid systems
+@import 'layout';
+
+// 5. Components Layer
+// Component-specific styles (if needed)
+// @import 'components/buttons';
+// @import 'components/cards';
+// etc.
+
+// 6. Utilities Layer
+// Utility classes and helpers
+@import 'utilities';
+
+// 7. Animation Layer
+// Animation utilities and keyframes
+@import 'animations';
+
+// 8. Responsive Layer
+// Responsive utilities and overrides
+@import 'responsive';
+
+// 9. Vendor Layer
+// Third-party library overrides (if needed)
+// @import 'vendor/library-overrides';
+
+// 10. Shame Layer
+// Quick fixes and hacks to be refactored later
+// @import 'shame';

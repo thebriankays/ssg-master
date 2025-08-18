@@ -1,0 +1,178 @@
+// Checkbox Component Styles
+// Using BEM naming convention
+
+.checkbox-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 0.375rem;
+}
+
+.checkbox-container {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+}
+
+.checkbox {
+  transition: all 0.2s ease;
+  background-color: var(--background);
+  
+  &[data-state="checked"],
+  &[data-state="indeterminate"] {
+    background-color: var(--primary);
+    border-color: var(--primary);
+    
+    &:hover:not(:disabled) {
+      background-color: var(--primary-hover, var(--primary));
+      border-color: var(--primary-hover, var(--primary));
+    }
+  }
+  
+  &:hover:not(:disabled):not([data-state="checked"]):not([data-state="indeterminate"]) {
+    border-color: var(--primary);
+    background-color: var(--muted);
+  }
+  
+  &:focus-visible {
+    outline: none;
+  }
+}
+
+.checkbox-indicator {
+  animation: checkbox-check-in 0.2s ease;
+}
+
+.checkbox-content {
+  display: flex;
+  flex-direction: column;
+  gap: 0.125rem;
+  flex: 1;
+}
+
+.checkbox-label {
+  cursor: pointer;
+  user-select: none;
+  
+  .checkbox:disabled ~ .checkbox-content & {
+    cursor: not-allowed;
+  }
+}
+
+.checkbox-description {
+  line-height: 1.5;
+}
+
+.checkbox-error {
+  margin-top: 0.25rem;
+  margin-left: 1.75rem; // Align with checkbox content
+  animation: checkbox-fade-in 0.2s ease;
+}
+
+// Checkbox Group Styles
+.checkbox-group {
+  border: none;
+  padding: 0;
+  margin: 0;
+  
+  &__header {
+    margin-bottom: 0.75rem;
+  }
+  
+  &__label {
+    font-weight: 500;
+    margin-bottom: 0.25rem;
+  }
+  
+  &__description {
+    margin-top: 0.25rem;
+  }
+  
+  &__items {
+    display: flex;
+    gap: 0.75rem;
+    
+    &--horizontal {
+      flex-direction: row;
+      flex-wrap: wrap;
+      gap: 1.5rem;
+    }
+    
+    &--vertical {
+      flex-direction: column;
+    }
+  }
+  
+  &__error {
+    margin-top: 0.5rem;
+    animation: checkbox-fade-in 0.2s ease;
+  }
+}
+
+// Animations
+@keyframes checkbox-check-in {
+  from {
+    transform: scale(0);
+    opacity: 0;
+  }
+  50% {
+    transform: scale(1.1);
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes checkbox-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(-0.25rem);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+// Dark mode adjustments
+@media (prefers-color-scheme: dark) {
+  .checkbox {
+    &:not([data-state="checked"]):not([data-state="indeterminate"]) {
+      background-color: var(--background);
+      
+      &:hover:not(:disabled) {
+        background-color: var(--muted);
+      }
+    }
+  }
+}
+
+// Focus styles for keyboard navigation
+.checkbox:focus-visible {
+  box-shadow: 0 0 0 2px var(--background), 0 0 0 4px var(--ring);
+}
+
+// Size variations
+.checkbox-wrapper {
+  // Small size adjustments
+  .checkbox.h-4 {
+    & ~ .checkbox-content {
+      .checkbox-label {
+        font-size: 0.875rem;
+      }
+      
+      .checkbox-description {
+        font-size: 0.75rem;
+      }
+    }
+  }
+  
+  // Large size adjustments
+  .checkbox.h-6 {
+    & ~ .checkbox-content {
+      .checkbox-label {
+        font-size: 1rem;
+      }
+    }
+  }
+}

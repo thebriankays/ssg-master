@@ -1,0 +1,127 @@
+// ProgressText component styles using BEM methodology
+
+.progress-text {
+  // Block styles
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 0.25em;
+  
+  // Custom properties for dynamic styling
+  --transition-duration: 600ms;
+  --transition-delay: 0ms;
+  --transition-easing: cubic-bezier(0.4, 0, 0.2, 1);
+  --word-opacity-hidden: 0;
+  --word-opacity-visible: 1;
+  --word-transform-hidden: translateY(20px);
+  --word-transform-visible: translateY(0);
+  --word-filter-hidden: blur(4px);
+  --word-filter-visible: blur(0);
+
+  // Word element
+  &__word {
+    display: inline-block;
+    opacity: var(--word-opacity-hidden);
+    transform: var(--word-transform-hidden);
+    filter: var(--word-filter-hidden);
+    transition: 
+      opacity var(--transition-duration) var(--transition-easing),
+      transform var(--transition-duration) var(--transition-easing),
+      filter var(--transition-duration) var(--transition-easing);
+    transition-delay: var(--transition-delay);
+    will-change: opacity, transform, filter;
+
+    // Visible modifier
+    &--visible {
+      opacity: var(--word-opacity-visible);
+      transform: var(--word-transform-visible);
+      filter: var(--word-filter-visible);
+    }
+  }
+
+  // Space element (when animating spaces)
+  &__space {
+    display: inline-block;
+    white-space: pre;
+  }
+
+  // Animation variations
+  &--fade-up {
+    --word-transform-hidden: translateY(30px);
+    --word-transform-visible: translateY(0);
+  }
+
+  &--fade-down {
+    --word-transform-hidden: translateY(-30px);
+    --word-transform-visible: translateY(0);
+  }
+
+  &--fade-left {
+    --word-transform-hidden: translateX(30px);
+    --word-transform-visible: translateX(0);
+  }
+
+  &--fade-right {
+    --word-transform-hidden: translateX(-30px);
+    --word-transform-visible: translateX(0);
+  }
+
+  &--scale {
+    --word-transform-hidden: scale(0.8);
+    --word-transform-visible: scale(1);
+  }
+
+  &--rotate {
+    --word-transform-hidden: rotate(10deg) translateY(20px);
+    --word-transform-visible: rotate(0deg) translateY(0);
+  }
+
+  &--skew {
+    --word-transform-hidden: skewY(10deg) translateY(20px);
+    --word-transform-visible: skewY(0deg) translateY(0);
+  }
+
+  // No blur variation
+  &--no-blur {
+    --word-filter-hidden: blur(0);
+    --word-filter-visible: blur(0);
+  }
+
+  // Performance optimization for large texts
+  &--optimize {
+    .progress-text__word {
+      will-change: auto;
+      
+      &--visible {
+        will-change: opacity, transform, filter;
+      }
+    }
+  }
+
+  // Responsive adjustments
+  @media (max-width: 768px) {
+    gap: 0.2em;
+    
+    &__word {
+      --word-transform-hidden: translateY(15px);
+    }
+  }
+
+  // Reduced motion preference
+  @media (prefers-reduced-motion: reduce) {
+    &__word {
+      transition: opacity var(--transition-duration) var(--transition-easing);
+      transform: none !important;
+      filter: none !important;
+    }
+  }
+
+  // Dark mode support
+  @media (prefers-color-scheme: dark) {
+    &__word {
+      // Slightly reduce opacity for better readability in dark mode
+      &--visible {
+        opacity: 0.95;
+      }
+    }
+  }
+}

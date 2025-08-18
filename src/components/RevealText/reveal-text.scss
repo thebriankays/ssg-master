@@ -1,0 +1,51 @@
+.reveal-text {
+  position: relative;
+  
+  // Line wrapper for split text
+  &__line {
+    display: block;
+    position: relative;
+    overflow: hidden;
+    
+    // Add spacing between lines
+    &:not(:last-child) {
+      margin-bottom: 0.2em;
+    }
+  }
+  
+  // Word wrapper
+  &__word {
+    display: inline-block;
+    position: relative;
+    white-space: nowrap;
+    
+    // Add spacing between words
+    &:not(:last-child) {
+      margin-right: 0.25em;
+    }
+  }
+  
+  // Character wrapper
+  &__char {
+    display: inline-block;
+    position: relative;
+  }
+  
+  // Block type - mask reveal
+  &--block {
+    position: relative;
+    overflow: hidden;
+    
+    &::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: currentColor;
+      transform-origin: left center;
+      pointer-events: none;
+    }
+  }
+}

@@ -1,0 +1,252 @@
+// Radio Component Styles
+// Using BEM naming convention
+
+.radio-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+}
+
+.radio-button {
+  transition: all 0.2s ease;
+  background-color: var(--background);
+  
+  &[data-state="checked"] {
+    border-color: var(--primary);
+    
+    .radio-indicator {
+      animation: radio-check-in 0.2s ease;
+    }
+  }
+  
+  &:hover:not(:disabled):not([data-state="checked"]) {
+    border-color: var(--primary);
+    background-color: var(--muted);
+  }
+  
+  &:focus-visible {
+    outline: none;
+  }
+}
+
+.radio-indicator {
+  color: var(--primary);
+}
+
+.radio-content {
+  display: flex;
+  flex-direction: column;
+  gap: 0.125rem;
+  flex: 1;
+}
+
+.radio-label {
+  cursor: pointer;
+  user-select: none;
+  
+  .radio-button:disabled ~ .radio-content & {
+    cursor: not-allowed;
+  }
+}
+
+.radio-description {
+  line-height: 1.5;
+}
+
+// Radio Group Styles
+.radio-group {
+  border: none;
+  padding: 0;
+  margin: 0;
+  
+  &__header {
+    margin-bottom: 0.75rem;
+  }
+  
+  &__label {
+    font-weight: 500;
+    margin-bottom: 0.25rem;
+  }
+  
+  &__description {
+    margin-top: 0.25rem;
+  }
+  
+  &__items {
+    display: flex;
+    gap: 0.75rem;
+    
+    &--horizontal {
+      flex-direction: row;
+      flex-wrap: wrap;
+      gap: 1.5rem;
+    }
+    
+    &--vertical {
+      flex-direction: column;
+    }
+    
+    &--cards {
+      gap: 0.5rem;
+      
+      .radio-item {
+        padding: 1rem;
+        border: 1px solid var(--border);
+        border-radius: 0.5rem;
+        transition: all 0.2s ease;
+        cursor: pointer;
+        
+        &:hover {
+          background-color: var(--muted);
+          border-color: var(--primary);
+        }
+        
+        &:has(.radio-button[data-state="checked"]) {
+          border-color: var(--primary);
+          background-color: var(--primary-foreground);
+          box-shadow: 0 0 0 1px var(--primary);
+        }
+      }
+    }
+  }
+  
+  &__error {
+    margin-top: 0.5rem;
+    animation: radio-fade-in 0.2s ease;
+  }
+}
+
+// Radio Card Styles
+.radio-card {
+  width: 100%;
+  
+  .radio-button {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+  }
+  
+  &__content {
+    display: flex;
+    gap: 0.75rem;
+    padding-right: 2.5rem; // Space for radio button
+  }
+  
+  &__icon {
+    flex-shrink: 0;
+    width: 2.5rem;
+    height: 2.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--muted);
+    border-radius: 0.375rem;
+    
+    svg {
+      width: 1.5rem;
+      height: 1.5rem;
+    }
+  }
+  
+  &__text {
+    flex: 1;
+  }
+  
+  &__header {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.25rem;
+  }
+  
+  &__label {
+    font-weight: 500;
+  }
+  
+  &__badge {
+    font-size: 0.75rem;
+    padding: 0.125rem 0.5rem;
+    background-color: var(--primary);
+    color: var(--primary-foreground);
+    border-radius: 9999px;
+  }
+  
+  &__description {
+    color: var(--muted-foreground);
+  }
+}
+
+// Animations
+@keyframes radio-check-in {
+  from {
+    transform: scale(0);
+    opacity: 0;
+  }
+  50% {
+    transform: scale(1.2);
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes radio-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(-0.25rem);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+// Focus styles for keyboard navigation
+.radio-button:focus-visible {
+  box-shadow: 0 0 0 2px var(--background), 0 0 0 4px var(--ring);
+}
+
+// Dark mode adjustments
+@media (prefers-color-scheme: dark) {
+  .radio-button {
+    &:not([data-state="checked"]) {
+      background-color: var(--background);
+      
+      &:hover:not(:disabled) {
+        background-color: var(--muted);
+      }
+    }
+  }
+  
+  .radio-group__items--cards {
+    .radio-item:has(.radio-button[data-state="checked"]) {
+      background-color: var(--muted);
+    }
+  }
+}
+
+// Size variations
+.radio-item {
+  // Small size adjustments
+  .radio-button.h-4 {
+    & ~ .radio-content {
+      .radio-label {
+        font-size: 0.875rem;
+      }
+      
+      .radio-description {
+        font-size: 0.75rem;
+      }
+    }
+  }
+  
+  // Large size adjustments
+  .radio-button.h-6 {
+    & ~ .radio-content {
+      .radio-label {
+        font-size: 1rem;
+      }
+    }
+  }
+}

@@ -1,0 +1,236 @@
+// Fold Component Styles
+// Using BEM naming convention
+
+.fold {
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
+  overflow: hidden;
+  
+  // CSS custom properties set by JavaScript
+  --fold-progress: 0;
+  --fold-progress-inverse: 1;
+  
+  // Content container
+  &__content {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    will-change: transform;
+    transition: transform 0.1s linear;
+    
+    // Disable transition when reduced motion is preferred
+    @media (prefers-reduced-motion: reduce) {
+      transition: none;
+    }
+  }
+  
+  // Overlay element for darkening effect
+  &__overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #000;
+    opacity: 0;
+    pointer-events: none;
+    will-change: opacity;
+    transition: opacity 0.1s linear;
+    z-index: 1;
+    
+    // Disable transition when reduced motion is preferred
+    @media (prefers-reduced-motion: reduce) {
+      transition: none;
+    }
+  }
+  
+  // Header component
+  &__header {
+    position: relative;
+    z-index: 2;
+    
+    &--sticky {
+      position: sticky;
+      top: 0;
+      background-color: inherit;
+    }
+  }
+  
+  // Body component
+  &__body {
+    position: relative;
+    z-index: 2;
+    flex: 1;
+  }
+  
+  // Footer component
+  &__footer {
+    position: relative;
+    z-index: 2;
+    
+    &--sticky {
+      position: sticky;
+      bottom: 0;
+      background-color: inherit;
+    }
+  }
+  
+  // Type modifiers
+  &--top {
+    position: sticky;
+    top: 0;
+    
+    .fold__content {
+      transform-origin: center top;
+    }
+    
+    // Fade out as it scrolls up
+    .fold__overlay {
+      background: linear-gradient(to bottom, transparent, rgba(0, 0, 0, 0.8));
+    }
+  }
+  
+  &--bottom {
+    position: sticky;
+    bottom: 0;
+    
+    .fold__content {
+      transform-origin: center bottom;
+    }
+    
+    // Fade in as it approaches
+    .fold__overlay {
+      background: linear-gradient(to top, transparent, rgba(0, 0, 0, 0.8));
+    }
+  }
+  
+  // Active state (when scrolling through)
+  &--active {
+    .fold__content {
+      // Optional: Add specific styles when fold is active
+    }
+  }
+  
+  // Disabled state
+  &--disabled {
+    position: relative;
+    
+    .fold__content {
+      transform: none !important;
+      transition: none;
+    }
+    
+    .fold__overlay {
+      display: none;
+    }
+  }
+}
+
+// Utility classes for common fold patterns
+.fold-hero {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 4rem 2rem;
+  
+  h1, h2, h3 {
+    margin-bottom: 1.5rem;
+  }
+  
+  p {
+    max-width: 600px;
+    margin: 0 auto 2rem;
+  }
+}
+
+.fold-section {
+  padding: 4rem 2rem;
+  
+  @media (min-width: 768px) {
+    padding: 6rem 3rem;
+  }
+  
+  @media (min-width: 1024px) {
+    padding: 8rem 4rem;
+  }
+}
+
+// Dark mode support
+@media (prefers-color-scheme: dark) {
+  .fold {
+    &__overlay {
+      // Overlay already uses black, no change needed
+    }
+    
+    &__header--sticky,
+    &__footer--sticky {
+      background-color: var(--fold-sticky-bg-dark, #1a1a1a);
+    }
+  }
+}
+
+// Performance optimizations
+.fold {
+  // Use GPU acceleration
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  
+  &__content,
+  &__overlay {
+    transform: translateZ(0);
+    backface-visibility: hidden;
+  }
+}
+
+// Responsive adjustments
+@media (max-width: 768px) {
+  .fold {
+    min-height: 100svh; // Use small viewport height on mobile
+  }
+}
+
+// Custom scroll progress utilities
+.fold[data-fold-progress] {
+  // These can be used in CSS to create custom effects based on scroll progress
+  // Example usage:
+  // .my-element {
+  //   opacity: calc(var(--fold-progress) * 1);
+  //   transform: translateX(calc(var(--fold-progress) * 100px));
+  // }
+}
+
+// Animation helpers
+@keyframes fold-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fold-fade-out {
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+}
+
+// Optional animation classes
+.fold-animate-in {
+  animation: fold-fade-in 0.6s ease-out forwards;
+  opacity: 0;
+}
+
+.fold-animate-out {
+  animation: fold-fade-out 0.6s ease-in forwards;
+}

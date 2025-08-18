@@ -1,0 +1,53 @@
+@import '../../styles/typography.scss';
+
+.heading {
+  // Reset margins
+  margin: 0;
+  
+  // Apply base heading styles
+  @include heading-base;
+  
+  // Add default spacing
+  &:not(:first-child) {
+    margin-top: 1.5em;
+  }
+  
+  &:not(:last-child) {
+    margin-bottom: 0.5em;
+  }
+  
+  // Style variants are handled by typography.scss classes
+  &.display-large,
+  &.display-medium,
+  &.display-small,
+  &.h1,
+  &.h2,
+  &.h3,
+  &.h4,
+  &.h5,
+  &.h6 {
+    // These will inherit styles from typography.scss
+  }
+  
+  // Additional modifiers
+  &.no-margin {
+    margin: 0 !important;
+  }
+  
+  &.centered {
+    text-align: center;
+  }
+  
+  // Color variants
+  &.primary {
+    color: var(--primary);
+  }
+  
+  &.secondary {
+    color: var(--secondary);
+  }
+  
+  &.muted {
+    color: var(--muted-foreground);
+  }
+}

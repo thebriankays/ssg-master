@@ -1,0 +1,377 @@
+// Typography SCSS System
+// =====================================================
+
+// Import CSS custom properties from fonts.ts
+:root {
+  // Font families
+  --font-sans: var(--font-inter);
+  --font-heading: var(--font-manrope);
+  --font-mono: var(--font-jetbrains-mono);
+
+  // Font weights
+  --font-weight-thin: 100;
+  --font-weight-extralight: 200;
+  --font-weight-light: 300;
+  --font-weight-regular: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+  --font-weight-extrabold: 800;
+  --font-weight-black: 900;
+
+  // Font sizes
+  --font-size-2xs: 0.625rem; // 10px
+  --font-size-xs: 0.75rem; // 12px
+  --font-size-sm: 0.875rem; // 14px
+  --font-size-base: 1rem; // 16px
+  --font-size-lg: 1.125rem; // 18px
+  --font-size-xl: 1.25rem; // 20px
+  --font-size-2xl: 1.5rem; // 24px
+  --font-size-3xl: 1.875rem; // 30px
+  --font-size-4xl: 2.25rem; // 36px
+  --font-size-5xl: 3rem; // 48px
+  --font-size-6xl: 3.75rem; // 60px
+  --font-size-7xl: 4.5rem; // 72px
+  --font-size-8xl: 6rem; // 96px
+  --font-size-9xl: 8rem; // 128px
+
+  // Line heights
+  --line-height-none: 1;
+  --line-height-tight: 1.25;
+  --line-height-snug: 1.375;
+  --line-height-normal: 1.5;
+  --line-height-relaxed: 1.625;
+  --line-height-loose: 2;
+
+  // Letter spacing
+  --letter-spacing-tighter: -0.05em;
+  --letter-spacing-tight: -0.025em;
+  --letter-spacing-normal: 0;
+  --letter-spacing-wide: 0.025em;
+  --letter-spacing-wider: 0.05em;
+  --letter-spacing-widest: 0.1em;
+}
+
+// Breakpoint variables
+$breakpoints: (
+  sm: 640px,
+  md: 768px,
+  lg: 1024px,
+  xl: 1280px,
+  xxl: 1536px,
+);
+
+// Fluid typography variables
+$fluid-min-viewport: 320px;
+$fluid-max-viewport: 1920px;
+$fluid-min-scale: 0.8;
+$fluid-max-scale: 1;
+
+// =====================================================
+// Mixins
+// =====================================================
+
+// Responsive breakpoint mixin
+@mixin breakpoint($size) {
+  @media (min-width: map-get($breakpoints, $size)) {
+    @content;
+  }
+}
+
+// Fluid typography mixin
+@mixin fluid-type($min-size, $max-size, $min-viewport: $fluid-min-viewport, $max-viewport: $fluid-max-viewport) {
+  $slope: ($max-size - $min-size) / ($max-viewport - $min-viewport);
+  $y-intercept: $min-size - $slope * $min-viewport;
+
+  font-size: clamp(
+    #{$min-size},
+    #{$y-intercept} + #{$slope * 100}vw,
+    #{$max-size}
+  );
+}
+
+// Font smoothing mixin
+@mixin font-smoothing {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+// Text truncate mixin
+@mixin text-truncate {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+// Line clamp mixin
+@mixin line-clamp($lines: 2) {
+  display: -webkit-box;
+  -webkit-line-clamp: $lines;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+// =====================================================
+// Typography Styles
+// =====================================================
+
+// Display styles
+.display-large {
+  font-family: var(--font-heading);
+  font-weight: var(--font-weight-bold);
+  letter-spacing: var(--letter-spacing-tight);
+  line-height: var(--line-height-none);
+  @include fluid-type(3rem, 6rem);
+  
+  @include breakpoint(lg) {
+    @include fluid-type(4.5rem, 8rem);
+  }
+}
+
+.display-medium {
+  font-family: var(--font-heading);
+  font-weight: var(--font-weight-bold);
+  letter-spacing: var(--letter-spacing-tight);
+  line-height: var(--line-height-none);
+  @include fluid-type(2.5rem, 4.5rem);
+  
+  @include breakpoint(lg) {
+    @include fluid-type(3.75rem, 4.5rem);
+  }
+}
+
+.display-small {
+  font-family: var(--font-heading);
+  font-weight: var(--font-weight-bold);
+  letter-spacing: var(--letter-spacing-tight);
+  line-height: var(--line-height-tight);
+  @include fluid-type(2rem, 3.75rem);
+  
+  @include breakpoint(lg) {
+    @include fluid-type(3rem, 3.75rem);
+  }
+}
+
+// Heading styles
+@mixin heading-base {
+  font-family: var(--font-heading);
+  @include font-smoothing;
+}
+
+.h1, h1 {
+  @include heading-base;
+  font-weight: var(--font-weight-bold);
+  letter-spacing: var(--letter-spacing-tight);
+  line-height: var(--line-height-tight);
+  @include fluid-type(2rem, 3rem);
+  
+  @include breakpoint(lg) {
+    font-size: var(--font-size-5xl);
+  }
+}
+
+.h2, h2 {
+  @include heading-base;
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: var(--letter-spacing-tight);
+  line-height: var(--line-height-tight);
+  @include fluid-type(1.5rem, 2.25rem);
+  
+  @include breakpoint(lg) {
+    font-size: var(--font-size-4xl);
+  }
+}
+
+.h3, h3 {
+  @include heading-base;
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: var(--letter-spacing-normal);
+  line-height: var(--line-height-snug);
+  @include fluid-type(1.25rem, 1.875rem);
+  
+  @include breakpoint(lg) {
+    font-size: var(--font-size-3xl);
+  }
+}
+
+.h4, h4 {
+  @include heading-base;
+  font-weight: var(--font-weight-medium);
+  letter-spacing: var(--letter-spacing-normal);
+  line-height: var(--line-height-snug);
+  @include fluid-type(1.125rem, 1.5rem);
+  
+  @include breakpoint(lg) {
+    font-size: var(--font-size-2xl);
+  }
+}
+
+.h5, h5 {
+  @include heading-base;
+  font-weight: var(--font-weight-medium);
+  letter-spacing: var(--letter-spacing-normal);
+  line-height: var(--line-height-normal);
+  font-size: var(--font-size-xl);
+}
+
+.h6, h6 {
+  @include heading-base;
+  font-weight: var(--font-weight-medium);
+  letter-spacing: var(--letter-spacing-normal);
+  line-height: var(--line-height-normal);
+  font-size: var(--font-size-lg);
+}
+
+// Body text styles
+.body-large {
+  font-family: var(--font-sans);
+  font-size: var(--font-size-lg);
+  line-height: var(--line-height-relaxed);
+  letter-spacing: var(--letter-spacing-normal);
+  font-weight: var(--font-weight-regular);
+  @include font-smoothing;
+}
+
+.body-base {
+  font-family: var(--font-sans);
+  font-size: var(--font-size-base);
+  line-height: var(--line-height-normal);
+  letter-spacing: var(--letter-spacing-normal);
+  font-weight: var(--font-weight-regular);
+  @include font-smoothing;
+}
+
+.body-small {
+  font-family: var(--font-sans);
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-normal);
+  letter-spacing: var(--letter-spacing-normal);
+  font-weight: var(--font-weight-regular);
+  @include font-smoothing;
+}
+
+// Label styles
+.label-large {
+  font-family: var(--font-sans);
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-tight);
+  letter-spacing: var(--letter-spacing-wide);
+  font-weight: var(--font-weight-medium);
+  text-transform: uppercase;
+  @include font-smoothing;
+}
+
+.label-base {
+  font-family: var(--font-sans);
+  font-size: var(--font-size-xs);
+  line-height: var(--line-height-tight);
+  letter-spacing: var(--letter-spacing-wide);
+  font-weight: var(--font-weight-medium);
+  text-transform: uppercase;
+  @include font-smoothing;
+}
+
+.label-small {
+  font-family: var(--font-sans);
+  font-size: var(--font-size-2xs);
+  line-height: var(--line-height-tight);
+  letter-spacing: var(--letter-spacing-wider);
+  font-weight: var(--font-weight-medium);
+  text-transform: uppercase;
+  @include font-smoothing;
+}
+
+// Code styles
+.code-large {
+  font-family: var(--font-mono);
+  font-size: var(--font-size-base);
+  line-height: var(--line-height-relaxed);
+  letter-spacing: var(--letter-spacing-normal);
+  font-weight: var(--font-weight-regular);
+}
+
+.code-base {
+  font-family: var(--font-mono);
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-normal);
+  letter-spacing: var(--letter-spacing-normal);
+  font-weight: var(--font-weight-regular);
+}
+
+.code-small {
+  font-family: var(--font-mono);
+  font-size: var(--font-size-xs);
+  line-height: var(--line-height-normal);
+  letter-spacing: var(--letter-spacing-normal);
+  font-weight: var(--font-weight-regular);
+}
+
+// =====================================================
+// Utility Classes
+// =====================================================
+
+// Font weight utilities
+.font-thin { font-weight: var(--font-weight-thin); }
+.font-extralight { font-weight: var(--font-weight-extralight); }
+.font-light { font-weight: var(--font-weight-light); }
+.font-regular { font-weight: var(--font-weight-regular); }
+.font-medium { font-weight: var(--font-weight-medium); }
+.font-semibold { font-weight: var(--font-weight-semibold); }
+.font-bold { font-weight: var(--font-weight-bold); }
+.font-extrabold { font-weight: var(--font-weight-extrabold); }
+.font-black { font-weight: var(--font-weight-black); }
+
+// Text alignment utilities
+.text-left { text-align: left; }
+.text-center { text-align: center; }
+.text-right { text-align: right; }
+.text-justify { text-align: justify; }
+
+// Text transform utilities
+.uppercase { text-transform: uppercase; }
+.lowercase { text-transform: lowercase; }
+.capitalize { text-transform: capitalize; }
+.normal-case { text-transform: none; }
+
+// Text decoration utilities
+.underline { text-decoration: underline; }
+.line-through { text-decoration: line-through; }
+.no-underline { text-decoration: none; }
+
+// Text overflow utilities
+.truncate {
+  @include text-truncate;
+}
+
+.line-clamp-1 { @include line-clamp(1); }
+.line-clamp-2 { @include line-clamp(2); }
+.line-clamp-3 { @include line-clamp(3); }
+.line-clamp-4 { @include line-clamp(4); }
+.line-clamp-5 { @include line-clamp(5); }
+.line-clamp-6 { @include line-clamp(6); }
+
+// Letter spacing utilities
+.tracking-tighter { letter-spacing: var(--letter-spacing-tighter); }
+.tracking-tight { letter-spacing: var(--letter-spacing-tight); }
+.tracking-normal { letter-spacing: var(--letter-spacing-normal); }
+.tracking-wide { letter-spacing: var(--letter-spacing-wide); }
+.tracking-wider { letter-spacing: var(--letter-spacing-wider); }
+.tracking-widest { letter-spacing: var(--letter-spacing-widest); }
+
+// Line height utilities
+.leading-none { line-height: var(--line-height-none); }
+.leading-tight { line-height: var(--line-height-tight); }
+.leading-snug { line-height: var(--line-height-snug); }
+.leading-normal { line-height: var(--line-height-normal); }
+.leading-relaxed { line-height: var(--line-height-relaxed); }
+.leading-loose { line-height: var(--line-height-loose); }
+
+// Font family utilities
+.font-sans { font-family: var(--font-sans); }
+.font-heading { font-family: var(--font-heading); }
+.font-mono { font-family: var(--font-mono); }
+
+// Font smoothing utility
+.font-smooth {
+  @include font-smoothing;
+}

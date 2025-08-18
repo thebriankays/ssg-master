@@ -1,0 +1,403 @@
+// Layout Utilities
+// =====================================================
+// Layout utilities for common patterns like containers,
+// grids, flexbox, spacing, and positioning.
+// =====================================================
+
+// =====================================================
+// Container
+// =====================================================
+
+.container {
+  @include container;
+}
+
+.container-fluid {
+  width: 100%;
+  padding-left: $container-padding;
+  padding-right: $container-padding;
+  
+  @include breakpoint(sm) {
+    padding-left: $spacing-6;
+    padding-right: $spacing-6;
+  }
+  
+  @include breakpoint(lg) {
+    padding-left: $spacing-8;
+    padding-right: $spacing-8;
+  }
+}
+
+// =====================================================
+// Grid System
+// =====================================================
+
+// Grid container
+.grid {
+  display: grid;
+  gap: $grid-gutter;
+  
+  // Grid columns
+  @for $i from 1 through 12 {
+    &.grid-cols-#{$i} {
+      grid-template-columns: repeat($i, 1fr);
+    }
+  }
+  
+  // Responsive grid columns
+  @each $breakpoint, $value in $breakpoints {
+    @include breakpoint($breakpoint) {
+      @for $i from 1 through 12 {
+        &.#{$breakpoint}\:grid-cols-#{$i} {
+          grid-template-columns: repeat($i, 1fr);
+        }
+      }
+    }
+  }
+  
+  // Grid gap variations
+  &.gap-0 { gap: 0; }
+  &.gap-1 { gap: $spacing-1; }
+  &.gap-2 { gap: $spacing-2; }
+  &.gap-3 { gap: $spacing-3; }
+  &.gap-4 { gap: $spacing-4; }
+  &.gap-5 { gap: $spacing-5; }
+  &.gap-6 { gap: $spacing-6; }
+  &.gap-8 { gap: $spacing-8; }
+  &.gap-10 { gap: $spacing-10; }
+  &.gap-12 { gap: $spacing-12; }
+  &.gap-16 { gap: $spacing-16; }
+}
+
+// Grid item spans
+@for $i from 1 through 12 {
+  .col-span-#{$i} {
+    grid-column: span $i / span $i;
+  }
+}
+
+// =====================================================
+// Flexbox Utilities
+// =====================================================
+
+// Display flex
+.flex { display: flex; }
+.inline-flex { display: inline-flex; }
+
+// Flex direction
+.flex-row { flex-direction: row; }
+.flex-row-reverse { flex-direction: row-reverse; }
+.flex-col { flex-direction: column; }
+.flex-col-reverse { flex-direction: column-reverse; }
+
+// Flex wrap
+.flex-wrap { flex-wrap: wrap; }
+.flex-wrap-reverse { flex-wrap: wrap-reverse; }
+.flex-nowrap { flex-wrap: nowrap; }
+
+// Justify content
+.justify-start { justify-content: flex-start; }
+.justify-end { justify-content: flex-end; }
+.justify-center { justify-content: center; }
+.justify-between { justify-content: space-between; }
+.justify-around { justify-content: space-around; }
+.justify-evenly { justify-content: space-evenly; }
+
+// Align items
+.items-start { align-items: flex-start; }
+.items-end { align-items: flex-end; }
+.items-center { align-items: center; }
+.items-baseline { align-items: baseline; }
+.items-stretch { align-items: stretch; }
+
+// Align self
+.self-auto { align-self: auto; }
+.self-start { align-self: flex-start; }
+.self-end { align-self: flex-end; }
+.self-center { align-self: center; }
+.self-stretch { align-self: stretch; }
+.self-baseline { align-self: baseline; }
+
+// Flex grow/shrink
+.flex-1 { flex: 1 1 0%; }
+.flex-auto { flex: 1 1 auto; }
+.flex-initial { flex: 0 1 auto; }
+.flex-none { flex: none; }
+.flex-grow { flex-grow: 1; }
+.flex-grow-0 { flex-grow: 0; }
+.flex-shrink { flex-shrink: 1; }
+.flex-shrink-0 { flex-shrink: 0; }
+
+// Gap utilities for flexbox
+.gap-0 { gap: 0; }
+.gap-1 { gap: $spacing-1; }
+.gap-2 { gap: $spacing-2; }
+.gap-3 { gap: $spacing-3; }
+.gap-4 { gap: $spacing-4; }
+.gap-5 { gap: $spacing-5; }
+.gap-6 { gap: $spacing-6; }
+.gap-8 { gap: $spacing-8; }
+.gap-10 { gap: $spacing-10; }
+.gap-12 { gap: $spacing-12; }
+.gap-16 { gap: $spacing-16; }
+
+// Gap X and Y
+.gap-x-0 { column-gap: 0; }
+.gap-x-1 { column-gap: $spacing-1; }
+.gap-x-2 { column-gap: $spacing-2; }
+.gap-x-3 { column-gap: $spacing-3; }
+.gap-x-4 { column-gap: $spacing-4; }
+.gap-x-5 { column-gap: $spacing-5; }
+.gap-x-6 { column-gap: $spacing-6; }
+.gap-x-8 { column-gap: $spacing-8; }
+
+.gap-y-0 { row-gap: 0; }
+.gap-y-1 { row-gap: $spacing-1; }
+.gap-y-2 { row-gap: $spacing-2; }
+.gap-y-3 { row-gap: $spacing-3; }
+.gap-y-4 { row-gap: $spacing-4; }
+.gap-y-5 { row-gap: $spacing-5; }
+.gap-y-6 { row-gap: $spacing-6; }
+.gap-y-8 { row-gap: $spacing-8; }
+
+// =====================================================
+// Spacing Utilities
+// =====================================================
+
+// Margin utilities
+$spacing-props: (
+  "m": margin,
+  "mt": margin-top,
+  "mr": margin-right,
+  "mb": margin-bottom,
+  "ml": margin-left,
+  "mx": (margin-left, margin-right),
+  "my": (margin-top, margin-bottom)
+);
+
+// Padding utilities
+$padding-props: (
+  "p": padding,
+  "pt": padding-top,
+  "pr": padding-right,
+  "pb": padding-bottom,
+  "pl": padding-left,
+  "px": (padding-left, padding-right),
+  "py": (padding-top, padding-bottom)
+);
+
+// Generate spacing classes
+$spacing-values: (
+  "0": 0,
+  "px": 1px,
+  "0-5": $spacing-0-5,
+  "1": $spacing-1,
+  "1-5": $spacing-1-5,
+  "2": $spacing-2,
+  "2-5": $spacing-2-5,
+  "3": $spacing-3,
+  "3-5": $spacing-3-5,
+  "4": $spacing-4,
+  "5": $spacing-5,
+  "6": $spacing-6,
+  "8": $spacing-8,
+  "10": $spacing-10,
+  "12": $spacing-12,
+  "14": $spacing-14,
+  "16": $spacing-16,
+  "20": $spacing-20,
+  "24": $spacing-24,
+  "32": $spacing-32,
+  "40": $spacing-40,
+  "48": $spacing-48,
+  "56": $spacing-56,
+  "64": $spacing-64,
+  "auto": auto
+);
+
+// Generate margin classes
+@each $prefix, $property in $spacing-props {
+  @each $size, $value in $spacing-values {
+    .#{$prefix}-#{$size} {
+      @if type-of($property) == list {
+        @each $prop in $property {
+          #{$prop}: $value;
+        }
+      } @else {
+        #{$property}: $value;
+      }
+    }
+    
+    // Negative margins (except for auto)
+    @if $size != "auto" and $value != 0 {
+      .-#{$prefix}-#{$size} {
+        @if type-of($property) == list {
+          @each $prop in $property {
+            #{$prop}: -$value;
+          }
+        } @else {
+          #{$property}: -$value;
+        }
+      }
+    }
+  }
+}
+
+// Generate padding classes
+@each $prefix, $property in $padding-props {
+  @each $size, $value in $spacing-values {
+    @if $size != "auto" { // Padding can't be auto
+      .#{$prefix}-#{$size} {
+        @if type-of($property) == list {
+          @each $prop in $property {
+            #{$prop}: $value;
+          }
+        } @else {
+          #{$property}: $value;
+        }
+      }
+    }
+  }
+}
+
+// =====================================================
+// Position Utilities
+// =====================================================
+
+.static { position: static; }
+.fixed { position: fixed; }
+.absolute { position: absolute; }
+.relative { position: relative; }
+.sticky { position: sticky; }
+
+// Position values
+.inset-0 { top: 0; right: 0; bottom: 0; left: 0; }
+.inset-x-0 { left: 0; right: 0; }
+.inset-y-0 { top: 0; bottom: 0; }
+
+.top-0 { top: 0; }
+.right-0 { right: 0; }
+.bottom-0 { bottom: 0; }
+.left-0 { left: 0; }
+
+.top-auto { top: auto; }
+.right-auto { right: auto; }
+.bottom-auto { bottom: auto; }
+.left-auto { left: auto; }
+
+// =====================================================
+// Display Utilities
+// =====================================================
+
+.block { display: block; }
+.inline-block { display: inline-block; }
+.inline { display: inline; }
+.flex { display: flex; }
+.inline-flex { display: inline-flex; }
+.grid { display: grid; }
+.inline-grid { display: inline-grid; }
+.hidden { display: none; }
+
+// =====================================================
+// Width & Height Utilities
+// =====================================================
+
+// Width
+.w-full { width: 100%; }
+.w-screen { width: 100vw; }
+.w-min { width: min-content; }
+.w-max { width: max-content; }
+.w-fit { width: fit-content; }
+.w-auto { width: auto; }
+
+// Height
+.h-full { height: 100%; }
+.h-screen { height: 100vh; }
+.h-min { height: min-content; }
+.h-max { height: max-content; }
+.h-fit { height: fit-content; }
+.h-auto { height: auto; }
+
+// Min/Max dimensions
+.min-w-0 { min-width: 0; }
+.min-w-full { min-width: 100%; }
+.min-h-0 { min-height: 0; }
+.min-h-full { min-height: 100%; }
+.min-h-screen { min-height: 100vh; }
+
+.max-w-none { max-width: none; }
+.max-w-full { max-width: 100%; }
+.max-w-screen { max-width: 100vw; }
+.max-h-full { max-height: 100%; }
+.max-h-screen { max-height: 100vh; }
+
+// Common max-widths
+.max-w-xs { max-width: 20rem; }
+.max-w-sm { max-width: 24rem; }
+.max-w-md { max-width: 28rem; }
+.max-w-lg { max-width: 32rem; }
+.max-w-xl { max-width: 36rem; }
+.max-w-2xl { max-width: 42rem; }
+.max-w-3xl { max-width: 48rem; }
+.max-w-4xl { max-width: 56rem; }
+.max-w-5xl { max-width: 64rem; }
+.max-w-6xl { max-width: 72rem; }
+.max-w-7xl { max-width: 80rem; }
+.max-w-prose { max-width: 65ch; }
+
+// =====================================================
+// Overflow Utilities
+// =====================================================
+
+.overflow-auto { overflow: auto; }
+.overflow-hidden { overflow: hidden; }
+.overflow-visible { overflow: visible; }
+.overflow-scroll { overflow: scroll; }
+
+.overflow-x-auto { overflow-x: auto; }
+.overflow-x-hidden { overflow-x: hidden; }
+.overflow-x-visible { overflow-x: visible; }
+.overflow-x-scroll { overflow-x: scroll; }
+
+.overflow-y-auto { overflow-y: auto; }
+.overflow-y-hidden { overflow-y: hidden; }
+.overflow-y-visible { overflow-y: visible; }
+.overflow-y-scroll { overflow-y: scroll; }
+
+// =====================================================
+// Z-Index Utilities
+// =====================================================
+
+.z-0 { z-index: $z-index-0; }
+.z-10 { z-index: $z-index-10; }
+.z-20 { z-index: $z-index-20; }
+.z-30 { z-index: $z-index-30; }
+.z-40 { z-index: $z-index-40; }
+.z-50 { z-index: $z-index-50; }
+.z-auto { z-index: $z-index-auto; }
+
+// =====================================================
+// Object Fit Utilities
+// =====================================================
+
+.object-contain { object-fit: contain; }
+.object-cover { object-fit: cover; }
+.object-fill { object-fit: fill; }
+.object-none { object-fit: none; }
+.object-scale-down { object-fit: scale-down; }
+
+// Object position
+.object-center { object-position: center; }
+.object-top { object-position: top; }
+.object-bottom { object-position: bottom; }
+.object-left { object-position: left; }
+.object-right { object-position: right; }
+
+// =====================================================
+// Aspect Ratio Utilities
+// =====================================================
+
+.aspect-square { aspect-ratio: $aspect-ratio-square; }
+.aspect-video { aspect-ratio: $aspect-ratio-video; }
+.aspect-portrait { aspect-ratio: $aspect-ratio-portrait; }
+.aspect-landscape { aspect-ratio: $aspect-ratio-landscape; }

@@ -1,0 +1,241 @@
+.loading-placeholder {
+  padding: 10px;
+  background-color: #f5f5f5;
+  border-radius: 4px;
+  text-align: center;
+  color: #666;
+  font-style: italic;
+}
+.bulk-add-modal__content {
+  padding: 16px;
+  overflow-y: auto;
+  max-height: 60vh;
+}
+
+.bulk-add-modal__error {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: #feecec;
+  border-radius: 4px;
+  padding: 0.75rem 1rem;
+  margin-bottom: 1rem;
+}
+
+.bulk-add-modal__error p {
+  color: #d03737;
+  margin: 0;
+}
+
+.bulk-add-modal__form {
+  margin-bottom: 20px;
+}
+
+.bulk-add-modal__form h3 {
+  margin-top: 0;
+  margin-bottom: 10px;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #333;
+}
+
+.mini-form {
+  margin-bottom: 10px;
+}
+
+.button-wrapper {
+  margin-top: 10px;
+}
+
+.add-destination-button {
+  position: relative;
+  z-index: 100;
+}
+
+.add-destination-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed !important;
+}
+
+.bulk-add-modal__selected {
+  margin-bottom: 1.5rem;
+}
+
+.bulk-add-modal__selected h2 {
+  margin-bottom: 1rem;
+  font-size: 1.25rem;
+  color: #333;
+}
+
+.destination-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  border: 1px solid #e0e0e0;
+  border-radius: 4px;
+  max-height: 300px;
+  overflow-y: auto;
+  background: #fff;
+}
+
+.destination-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid #e0e0e0;
+  color: #333;
+}
+
+.destination-item:last-child {
+  border-bottom: none;
+}
+
+.bulk-add-modal__footer {
+  margin-top: 1.5rem;
+}
+
+.bulk-add-modal__footer .button-container {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+}
+
+/* Ensure dialog visibility only when it should be shown */
+.bulk-add-modal[open] {
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+  visibility: visible !important;
+}
+
+/* Make our buttons look more like the default Payload buttons */
+.button-wrapper .add-destination-button,
+.bulk-add-modal__footer .button-container button {
+  height: 40px;
+  border-radius: 4px;
+  font-weight: 600;
+  font-family: var(--font-body);
+  transition: all 0.2s ease;
+  background-color: var(--theme-elevation-800, #333);
+  color: var(--theme-elevation-0, white);
+  padding: 8px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-transform: none;
+  font-size: 1rem;
+}
+
+.button-wrapper .add-destination-button:hover,
+.bulk-add-modal__footer .button-container button:hover {
+  background-color: var(--theme-elevation-1000, #000);
+}
+
+/* Secondary buttons */
+.bulk-add-modal__footer .button-container button:first-child {
+  background-color: var(--theme-elevation-100, #f3f3f3);
+  color: var(--theme-elevation-800, #333);
+  border: 1px solid var(--theme-elevation-200, #e0e0e0);
+}
+
+.bulk-add-modal__footer .button-container button:first-child:hover {
+  background-color: var(--theme-elevation-200, #e0e0e0);
+}
+
+.btn {
+  pointer-events: auto !important;
+}
+
+/* Make sure our modal is above other modals when open */
+.payload__modal-item--slug-bulk-add-destinations-modal {
+  z-index: 200 !important;
+  visibility: visible !important;
+}
+
+/* Make the modal content properly displayed */
+.bulk-add-modal__content {
+  background: white;
+  padding: 16px;
+  overflow-y: auto;
+  max-height: 60vh;
+  position: relative;
+  pointer-events: auto !important;
+}
+
+/* Make sure Google Places autocomplete is above everything */
+.pac-container {
+  z-index: 10000000 !important;
+}
+
+/* Modal overlay */
+.bulk-add-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 20px;
+}
+
+/* Modal container */
+.bulk-add-modal {
+  position: relative;
+  width: 100%;
+  max-width: 800px;
+  max-height: 90vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Modal wrapper and header styles */
+.bulk-add-modal__wrapper {
+  background: white;
+  border-radius: 8px;
+  overflow: hidden;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+}
+
+.bulk-add-modal__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.5rem;
+  border-bottom: 1px solid #e0e0e0;
+  background: #f5f5f5;
+}
+
+.bulk-add-modal__header h2 {
+  margin: 0;
+  font-size: 1.5rem;
+  color: #333;
+}
+
+.bulk-add-modal__close {
+  background: none;
+  border: none;
+  font-size: 2rem;
+  cursor: pointer;
+  color: #666;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+}
+
+.bulk-add-modal__close:hover {
+  background: #e0e0e0;
+  color: #333;
+}

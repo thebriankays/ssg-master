@@ -1,0 +1,524 @@
+// Animation Utilities and Keyframes
+// =====================================================
+// Animation utilities, keyframe definitions, and 
+// motion-related classes for consistent animations.
+// =====================================================
+
+// =====================================================
+// Keyframe Animations
+// =====================================================
+
+// Fade animations
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fade-out {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+// Scale animations
+@keyframes scale-in {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes scale-out {
+  from {
+    opacity: 1;
+    transform: scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+}
+
+// Slide animations
+@keyframes slide-in-up {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slide-in-down {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slide-in-left {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slide-in-right {
+  from {
+    opacity: 0;
+    transform: translateX(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+// Rotate animations
+@keyframes rotate {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes rotate-reverse {
+  from {
+    transform: rotate(360deg);
+  }
+  to {
+    transform: rotate(0deg);
+  }
+}
+
+// Bounce animation
+@keyframes bounce {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-25%);
+  }
+}
+
+// Pulse animation
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+// Ping animation
+@keyframes ping {
+  75%, 100% {
+    transform: scale(2);
+    opacity: 0;
+  }
+}
+
+// Spin animation
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+// Float animation
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+// Shake animation
+@keyframes shake {
+  0%, 100% {
+    transform: translateX(0);
+  }
+  10%, 30%, 50%, 70%, 90% {
+    transform: translateX(-10px);
+  }
+  20%, 40%, 60%, 80% {
+    transform: translateX(10px);
+  }
+}
+
+// Loading dots animation
+@keyframes loading-dots {
+  0% {
+    content: '';
+  }
+  25% {
+    content: '.';
+  }
+  50% {
+    content: '..';
+  }
+  75% {
+    content: '...';
+  }
+}
+
+// Skeleton loading animation
+@keyframes skeleton-loading {
+  0% {
+    background-position: -200px 0;
+  }
+  100% {
+    background-position: calc(200px + 100%) 0;
+  }
+}
+
+// =====================================================
+// Animation Classes
+// =====================================================
+
+// Fade animations
+.animate-fade-in {
+  animation: fade-in $animation-duration-fast $ease-out;
+}
+
+.animate-fade-out {
+  animation: fade-out $animation-duration-fast $ease-in;
+}
+
+// Scale animations
+.animate-scale-in {
+  animation: scale-in $animation-duration-fast $ease-out;
+}
+
+.animate-scale-out {
+  animation: scale-out $animation-duration-fast $ease-in;
+}
+
+// Slide animations
+.animate-slide-in-up {
+  animation: slide-in-up $animation-duration-fast $ease-out;
+}
+
+.animate-slide-in-down {
+  animation: slide-in-down $animation-duration-fast $ease-out;
+}
+
+.animate-slide-in-left {
+  animation: slide-in-left $animation-duration-fast $ease-out;
+}
+
+.animate-slide-in-right {
+  animation: slide-in-right $animation-duration-fast $ease-out;
+}
+
+// Continuous animations
+.animate-spin {
+  animation: spin $animation-duration-normal $ease-linear infinite;
+}
+
+.animate-ping {
+  animation: ping $animation-duration-normal $ease-out infinite;
+}
+
+.animate-pulse {
+  animation: pulse 2s $ease-in-out infinite;
+}
+
+.animate-bounce {
+  animation: bounce $animation-duration-normal infinite;
+}
+
+.animate-float {
+  animation: float 3s $ease-in-out infinite;
+}
+
+.animate-shake {
+  animation: shake $animation-duration-fast $ease-in-out;
+}
+
+// =====================================================
+// Transition Utilities
+// =====================================================
+
+// Transition property classes
+.transition-none {
+  transition-property: none;
+}
+
+.transition-all {
+  transition-property: all;
+  transition-timing-function: $ease-in-out;
+  transition-duration: $duration-200;
+}
+
+.transition {
+  transition-property: background-color, border-color, color, fill, stroke, opacity, box-shadow, transform;
+  transition-timing-function: $ease-in-out;
+  transition-duration: $duration-200;
+}
+
+.transition-colors {
+  transition-property: background-color, border-color, color, fill, stroke;
+  transition-timing-function: $ease-in-out;
+  transition-duration: $duration-200;
+}
+
+.transition-opacity {
+  transition-property: opacity;
+  transition-timing-function: $ease-in-out;
+  transition-duration: $duration-200;
+}
+
+.transition-shadow {
+  transition-property: box-shadow;
+  transition-timing-function: $ease-in-out;
+  transition-duration: $duration-200;
+}
+
+.transition-transform {
+  transition-property: transform;
+  transition-timing-function: $ease-in-out;
+  transition-duration: $duration-200;
+}
+
+// Transition duration classes
+.duration-75 { transition-duration: $duration-75; }
+.duration-100 { transition-duration: $duration-100; }
+.duration-150 { transition-duration: $duration-150; }
+.duration-200 { transition-duration: $duration-200; }
+.duration-300 { transition-duration: $duration-300; }
+.duration-500 { transition-duration: $duration-500; }
+.duration-700 { transition-duration: $duration-700; }
+.duration-1000 { transition-duration: $duration-1000; }
+
+// Transition timing functions
+.ease-linear { transition-timing-function: $ease-linear; }
+.ease-in { transition-timing-function: $ease-in; }
+.ease-out { transition-timing-function: $ease-out; }
+.ease-in-out { transition-timing-function: $ease-in-out; }
+
+// Transition delay classes
+.delay-75 { transition-delay: $duration-75; }
+.delay-100 { transition-delay: $duration-100; }
+.delay-150 { transition-delay: $duration-150; }
+.delay-200 { transition-delay: $duration-200; }
+.delay-300 { transition-delay: $duration-300; }
+.delay-500 { transition-delay: $duration-500; }
+.delay-700 { transition-delay: $duration-700; }
+.delay-1000 { transition-delay: $duration-1000; }
+
+// =====================================================
+// Transform Utilities
+// =====================================================
+
+// Scale
+.scale-0 { transform: scale(0); }
+.scale-50 { transform: scale(0.5); }
+.scale-75 { transform: scale(0.75); }
+.scale-90 { transform: scale(0.9); }
+.scale-95 { transform: scale(0.95); }
+.scale-100 { transform: scale(1); }
+.scale-105 { transform: scale(1.05); }
+.scale-110 { transform: scale(1.1); }
+.scale-125 { transform: scale(1.25); }
+.scale-150 { transform: scale(1.5); }
+
+// Rotate
+.rotate-0 { transform: rotate(0deg); }
+.rotate-45 { transform: rotate(45deg); }
+.rotate-90 { transform: rotate(90deg); }
+.rotate-180 { transform: rotate(180deg); }
+.-rotate-45 { transform: rotate(-45deg); }
+.-rotate-90 { transform: rotate(-90deg); }
+.-rotate-180 { transform: rotate(-180deg); }
+
+// Translate
+.translate-x-0 { transform: translateX(0); }
+.translate-x-full { transform: translateX(100%); }
+.-translate-x-full { transform: translateX(-100%); }
+.translate-y-0 { transform: translateY(0); }
+.translate-y-full { transform: translateY(100%); }
+.-translate-y-full { transform: translateY(-100%); }
+
+// Skew
+.skew-x-0 { transform: skewX(0deg); }
+.skew-x-6 { transform: skewX(6deg); }
+.skew-x-12 { transform: skewX(12deg); }
+.-skew-x-6 { transform: skewX(-6deg); }
+.-skew-x-12 { transform: skewX(-12deg); }
+.skew-y-0 { transform: skewY(0deg); }
+.skew-y-6 { transform: skewY(6deg); }
+.skew-y-12 { transform: skewY(12deg); }
+.-skew-y-6 { transform: skewY(-6deg); }
+.-skew-y-12 { transform: skewY(-12deg); }
+
+// Transform origin
+.origin-center { transform-origin: center; }
+.origin-top { transform-origin: top; }
+.origin-top-right { transform-origin: top right; }
+.origin-right { transform-origin: right; }
+.origin-bottom-right { transform-origin: bottom right; }
+.origin-bottom { transform-origin: bottom; }
+.origin-bottom-left { transform-origin: bottom left; }
+.origin-left { transform-origin: left; }
+.origin-top-left { transform-origin: top left; }
+
+// =====================================================
+// Animation Utilities
+// =====================================================
+
+// Animation play state
+.animation-play {
+  animation-play-state: running;
+}
+
+.animation-pause {
+  animation-play-state: paused;
+}
+
+// Animation fill mode
+.animation-fill-none {
+  animation-fill-mode: none;
+}
+
+.animation-fill-forwards {
+  animation-fill-mode: forwards;
+}
+
+.animation-fill-backwards {
+  animation-fill-mode: backwards;
+}
+
+.animation-fill-both {
+  animation-fill-mode: both;
+}
+
+// Animation iteration count
+.animation-once {
+  animation-iteration-count: 1;
+}
+
+.animation-infinite {
+  animation-iteration-count: infinite;
+}
+
+// =====================================================
+// Motion Preferences
+// =====================================================
+
+// Reduce motion for accessibility
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+// Motion safe utilities
+@media (prefers-reduced-motion: no-preference) {
+  .motion-safe\:animate-spin {
+    animation: spin $animation-duration-normal $ease-linear infinite;
+  }
+  
+  .motion-safe\:animate-bounce {
+    animation: bounce $animation-duration-normal infinite;
+  }
+  
+  .motion-safe\:animate-pulse {
+    animation: pulse 2s $ease-in-out infinite;
+  }
+}
+
+// Motion reduce utilities
+@media (prefers-reduced-motion: reduce) {
+  .motion-reduce\:animate-none {
+    animation: none;
+  }
+  
+  .motion-reduce\:transition-none {
+    transition-property: none;
+  }
+}
+
+// =====================================================
+// Loading States
+// =====================================================
+
+// Skeleton loading
+.skeleton {
+  position: relative;
+  overflow: hidden;
+  background-color: var(--muted);
+  
+  &::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    transform: translateX(-100%);
+    background: linear-gradient(
+      90deg,
+      transparent,
+      rgba(255, 255, 255, 0.2),
+      transparent
+    );
+    animation: skeleton-loading 1.5s ease-in-out infinite;
+  }
+  
+  @include dark-mode {
+    &::after {
+      background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(255, 255, 255, 0.05),
+        transparent
+      );
+    }
+  }
+}
+
+// Loading spinner
+.spinner {
+  display: inline-block;
+  width: 2rem;
+  height: 2rem;
+  border: 3px solid var(--muted);
+  border-radius: 50%;
+  border-top-color: var(--primary);
+  animation: spin $animation-duration-normal $ease-linear infinite;
+}

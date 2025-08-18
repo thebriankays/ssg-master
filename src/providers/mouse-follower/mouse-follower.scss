@@ -1,0 +1,226 @@
+// Mouse Follower Styles (from Cuberto)
+// Using BEM naming convention
+
+.mf-cursor {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 10000;
+  pointer-events: none;
+  user-select: none;
+  mix-blend-mode: difference;
+  
+  // Ensure it's above everything
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+  }
+}
+
+.mf-cursor-inner {
+  position: relative;
+  width: 60px;
+  height: 60px;
+  margin: -30px 0 0 -30px;
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  border-radius: 50%;
+  transition: transform 0.15s ease-out, width 0.3s ease-out, height 0.3s ease-out, margin 0.3s ease-out;
+  
+  // Default state
+  transform: scale(1);
+}
+
+// States
+.mf-cursor {
+  // Hidden state
+  &.-hidden {
+    .mf-cursor-inner {
+      transform: scale(0);
+    }
+  }
+  
+  // Pointer state (hovering links/buttons)
+  &.-pointer {
+    .mf-cursor-inner {
+      transform: scale(0.5);
+      background-color: rgba(255, 255, 255, 0.1);
+    }
+  }
+  
+  // Text state
+  &.-text {
+    .mf-cursor-inner {
+      width: 120px;
+      height: 120px;
+      margin: -60px 0 0 -60px;
+    }
+    
+    .mf-cursor-text {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+  
+  // Active state (clicking)
+  &.-active {
+    .mf-cursor-inner {
+      transform: scale(0.8);
+    }
+  }
+  
+  // Icon state
+  &.-icon {
+    .mf-cursor-inner {
+      width: 80px;
+      height: 80px;
+      margin: -40px 0 0 -40px;
+    }
+    
+    .mf-cursor-icon {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+  
+  // Media state (images/videos)
+  &.-media {
+    .mf-cursor-inner {
+      width: 200px;
+      height: 200px;
+      margin: -100px 0 0 -100px;
+      border: none;
+      overflow: hidden;
+    }
+    
+    .mf-cursor-media {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+  
+  // Custom states
+  
+  // Inverse state
+  &.-inverse {
+    .mf-cursor-inner {
+      background-color: rgba(255, 255, 255, 0.9);
+      border-color: rgba(0, 0, 0, 0.9);
+    }
+    
+    .mf-cursor-text {
+      color: #000;
+    }
+  }
+  
+  // Large state
+  &.-large {
+    .mf-cursor-inner {
+      width: 100px;
+      height: 100px;
+      margin: -50px 0 0 -50px;
+      border-width: 2px;
+    }
+  }
+  
+  // Opaque state
+  &.-opaque {
+    .mf-cursor-inner {
+      background-color: rgba(255, 255, 255, 0.2);
+      backdrop-filter: blur(10px);
+    }
+  }
+}
+
+// Text element
+.mf-cursor-text {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0);
+  font-size: 12px;
+  font-weight: 500;
+  text-align: center;
+  color: #fff;
+  opacity: 0;
+  transition: opacity 0.3s ease-out, transform 0.3s ease-out;
+}
+
+// Icon element
+.mf-cursor-icon {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0);
+  width: 24px;
+  height: 24px;
+  opacity: 0;
+  transition: opacity 0.3s ease-out, transform 0.3s ease-out;
+  
+  svg {
+    width: 100%;
+    height: 100%;
+    fill: #fff;
+  }
+}
+
+// Media element
+.mf-cursor-media {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  transform: scale(0);
+  transition: opacity 0.3s ease-out, transform 0.3s ease-out;
+  border-radius: 50%;
+  overflow: hidden;
+  
+  img,
+  video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+}
+
+.mf-cursor-media-box {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  transform: scale(1.2);
+}
+
+// Dark mode adjustments
+@media (prefers-color-scheme: dark) {
+  .mf-cursor {
+    mix-blend-mode: exclusion;
+    
+    .mf-cursor-inner {
+      border-color: rgba(255, 255, 255, 0.8);
+    }
+  }
+}
+
+// Disable on touch devices
+@media (hover: none) {
+  .mf-cursor {
+    display: none !important;
+  }
+}
+
+// Reduced motion
+@media (prefers-reduced-motion: reduce) {
+  .mf-cursor,
+  .mf-cursor-inner,
+  .mf-cursor-text,
+  .mf-cursor-icon,
+  .mf-cursor-media {
+    transition: none !important;
+  }
+}

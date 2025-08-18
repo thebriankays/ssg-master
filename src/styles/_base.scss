@@ -1,0 +1,373 @@
+// Base Styles and CSS Reset
+// =====================================================
+// Foundational styles that normalize browser defaults
+// and establish a consistent baseline for the design system.
+// =====================================================
+
+// =====================================================
+// CSS Reset / Normalize
+// =====================================================
+
+// Box sizing
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+// Remove default margin and padding
+* {
+  margin: 0;
+  padding: 0;
+}
+
+// =====================================================
+// Document
+// =====================================================
+
+html {
+  // Prevent font size adjustments after orientation changes
+  -webkit-text-size-adjust: 100%;
+  // Smooth scrolling behavior
+  scroll-behavior: smooth;
+  // Better font rendering
+  @include font-smoothing;
+}
+
+body {
+  min-height: 100vh;
+  line-height: $line-height-normal;
+  font-family: $font-sans;
+  font-size: $font-size-base;
+  color: var(--foreground);
+  background-color: var(--background);
+  // Improve text rendering
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+// =====================================================
+// Typography
+// =====================================================
+
+// Headings
+h1, h2, h3, h4, h5, h6 {
+  font-family: $font-heading;
+  font-weight: $font-weight-bold;
+  line-height: $line-height-tight;
+  color: inherit;
+}
+
+// Paragraphs
+p {
+  margin-bottom: 1em;
+  
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
+// Links
+a {
+  color: var(--primary);
+  text-decoration: none;
+  transition: $transition-default;
+  
+  @include hover {
+    text-decoration: underline;
+  }
+  
+  @include focus-visible {
+    outline: 2px solid var(--primary);
+    outline-offset: 2px;
+  }
+}
+
+// Lists
+ul, ol {
+  list-style-position: inside;
+  margin-bottom: 1em;
+  
+  &:last-child {
+    margin-bottom: 0;
+  }
+  
+  li {
+    margin-bottom: 0.25em;
+    
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+}
+
+// Definition lists
+dl {
+  margin-bottom: 1em;
+  
+  dt {
+    font-weight: $font-weight-semibold;
+  }
+  
+  dd {
+    margin-left: 1em;
+    margin-bottom: 0.5em;
+    
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+}
+
+// Blockquotes
+blockquote {
+  margin: 1em 0;
+  padding-left: 1em;
+  border-left: 4px solid var(--border);
+  font-style: italic;
+}
+
+// Code
+code, kbd, samp, pre {
+  font-family: $font-mono;
+  font-size: 0.875em;
+}
+
+code {
+  padding: 0.125em 0.25em;
+  background-color: var(--muted);
+  border-radius: $border-radius-sm;
+}
+
+pre {
+  display: block;
+  margin: 1em 0;
+  padding: 1em;
+  overflow-x: auto;
+  background-color: var(--muted);
+  border-radius: $border-radius-md;
+  
+  code {
+    padding: 0;
+    background-color: transparent;
+    border-radius: 0;
+  }
+}
+
+// Horizontal rules
+hr {
+  margin: 2em 0;
+  border: 0;
+  border-top: 1px solid var(--border);
+}
+
+// =====================================================
+// Media
+// =====================================================
+
+img, picture, video, canvas, svg {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+img {
+  // Remove the gap below images
+  vertical-align: middle;
+}
+
+// =====================================================
+// Forms
+// =====================================================
+
+input, button, textarea, select {
+  font: inherit;
+  color: inherit;
+}
+
+button {
+  cursor: pointer;
+  background-color: transparent;
+  border: none;
+  
+  @include disabled {
+    cursor: not-allowed;
+    opacity: 0.6;
+  }
+}
+
+input, textarea, select {
+  width: 100%;
+  padding: 0.5em;
+  border: 1px solid var(--border);
+  border-radius: $border-radius-base;
+  background-color: var(--background);
+  transition: $transition-default;
+  
+  &:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(var(--primary), 0.1);
+  }
+  
+  @include disabled {
+    cursor: not-allowed;
+    opacity: 0.6;
+    background-color: var(--muted);
+  }
+}
+
+textarea {
+  min-height: 120px;
+  resize: vertical;
+}
+
+select {
+  cursor: pointer;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23333' d='M10.293 3.293L6 7.586 1.707 3.293A1 1 0 00.293 4.707l5 5a1 1 0 001.414 0l5-5a1 1 0 10-1.414-1.414z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.5em center;
+  background-size: 1em;
+  padding-right: 2.5em;
+}
+
+// =====================================================
+// Tables
+// =====================================================
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  border-spacing: 0;
+  margin-bottom: 1em;
+}
+
+th, td {
+  padding: 0.75em;
+  text-align: left;
+  border-bottom: 1px solid var(--border);
+}
+
+th {
+  font-weight: $font-weight-semibold;
+  background-color: var(--muted);
+}
+
+tbody tr {
+  @include hover {
+    background-color: var(--muted);
+  }
+}
+
+// =====================================================
+// Interactive Elements
+// =====================================================
+
+details {
+  margin-bottom: 1em;
+  
+  summary {
+    cursor: pointer;
+    font-weight: $font-weight-semibold;
+    padding: 0.5em 0;
+    
+    @include hover {
+      color: var(--primary);
+    }
+  }
+}
+
+dialog {
+  max-width: 90vw;
+  max-height: 90vh;
+  padding: 2em;
+  border: none;
+  border-radius: $border-radius-lg;
+  box-shadow: $shadow-xl;
+  background-color: var(--background);
+  color: var(--foreground);
+  
+  &::backdrop {
+    background-color: rgba($color-black, 0.5);
+  }
+}
+
+// =====================================================
+// Accessibility
+// =====================================================
+
+// Skip to content link
+.skip-to-content {
+  @include visually-hidden;
+  
+  &:focus {
+    position: fixed;
+    top: 1rem;
+    left: 1rem;
+    z-index: $z-index-tooltip;
+    padding: 0.5em 1em;
+    background-color: var(--background);
+    color: var(--foreground);
+    text-decoration: none;
+    border-radius: $border-radius-base;
+    box-shadow: $shadow-lg;
+    width: auto;
+    height: auto;
+    clip: auto;
+  }
+}
+
+// Focus visible for keyboard navigation
+:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+
+// Remove focus for mouse users
+:focus:not(:focus-visible) {
+  outline: none;
+}
+
+// =====================================================
+// Print Styles
+// =====================================================
+
+@media print {
+  * {
+    background: transparent !important;
+    color: $color-black !important;
+    box-shadow: none !important;
+    text-shadow: none !important;
+  }
+  
+  a, a:visited {
+    text-decoration: underline;
+  }
+  
+  a[href^="http"]:after {
+    content: " (" attr(href) ")";
+  }
+  
+  pre, blockquote {
+    border: 1px solid $color-gray-500;
+    page-break-inside: avoid;
+  }
+  
+  thead {
+    display: table-header-group;
+  }
+  
+  tr, img {
+    page-break-inside: avoid;
+  }
+  
+  img {
+    max-width: 100% !important;
+  }
+  
+  h2, h3 {
+    page-break-after: avoid;
+  }
+}

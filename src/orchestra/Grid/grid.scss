@@ -1,0 +1,60 @@
+.grid-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  pointer-events: none;
+  z-index: 9990;
+
+  &__columns {
+    display: flex;
+    height: 100%;
+    margin: 0 auto;
+  }
+
+  &__column {
+    flex: 1;
+    height: 100%;
+    position: relative;
+  }
+
+  &__baseline {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    overflow: hidden;
+  }
+
+  &__baseline-line {
+    position: absolute;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: rgba(0, 255, 255, 0.2);
+    pointer-events: none;
+  }
+
+  &__info {
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    background: rgba(0, 0, 0, 0.8);
+    color: white;
+    padding: 12px 16px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-family: 'SF Mono', Monaco, monospace;
+    backdrop-filter: blur(10px);
+  }
+
+  &__info-item {
+    margin-bottom: 4px;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+}

@@ -11,8 +11,43 @@ import { Media } from './collections/Media'
 import { Pages } from './collections/Pages'
 import { Posts } from './collections/Posts'
 import { Users } from './collections/Users'
+// Travel collections
+import { Airlines } from './collections/Airlines'
+import { Airports } from './collections/Airports'
+import { Bookings } from './collections/Bookings'
+import { ChatSessions } from './collections/ChatSessions'
+import { ClubMembers } from './collections/ClubMembers'
+import { Countries } from './collections/Countries'
+import { CountryDetails } from './collections/CountryDetails'
+import { CountryMedia } from './collections/CountryMedia'
+import { CountryReligions } from './collections/CountryReligions'
+import { CrimeIndexScores } from './collections/CrimeIndexScores'
+import { CrimeTrends } from './collections/CrimeTrends'
+import { Currencies } from './collections/Currencies'
+import { Customers } from './collections/Customers'
+import { DestinationCategories } from './collections/DestinationCategories'
+import { DestinationTypes } from './collections/DestinationTypes'
+import { Destinations } from './collections/Destinations'
+import { ExperienceTypes } from './collections/ExperienceTypes'
+import { Experiences } from './collections/Experiences'
+import { FlightCache } from './collections/FlightCache'
+import { Languages } from './collections/Languages'
+import { Leads } from './collections/Leads'
+import { MapDataCache } from './collections/MapDataCache'
+import { MichelinRestaurants } from './collections/MichelinRestaurants'
+import { Regions } from './collections/Regions'
+import { Religions } from './collections/Religions'
+import { Routes } from './collections/Routes'
+import { SalesFunnel } from './collections/SalesFunnel'
+import { SocialMediaPosts } from './collections/SocialMediaPosts'
+import { Timezones } from './collections/Timezones'
+import { TravelAdvisories } from './collections/TravelAdvisories'
+import { TravelDiaries } from './collections/TravelDiaries'
+import { TravelItineraries } from './collections/TravelItineraries'
+import { VisaRequirements } from './collections/VisaRequirements'
 import { Footer } from './Footer/config'
 import { Header } from './Header/config'
+import { SiteSettings } from './globals/SiteSettings'
 import { plugins } from './plugins'
 import { defaultLexical } from '@/fields/defaultLexical'
 import { getServerSideURL } from './utilities/getURL'
@@ -64,9 +99,50 @@ export default buildConfig({
       connectionString: process.env.DATABASE_URI || '',
     },
   }),
-  collections: [Pages, Posts, Media, Categories, Users],
+  collections: [
+    // Core collections
+    Pages, 
+    Posts, 
+    Media, 
+    Categories, 
+    Users,
+    // Travel collections
+    Airlines,
+    Airports,
+    Bookings,
+    ChatSessions,
+    ClubMembers,
+    Countries,
+    CountryDetails,
+    CountryMedia,
+    CountryReligions,
+    CrimeIndexScores,
+    CrimeTrends,
+    Currencies,
+    Customers,
+    DestinationCategories,
+    DestinationTypes,
+    Destinations,
+    ExperienceTypes,
+    Experiences,
+    FlightCache,
+    Languages,
+    Leads,
+    MapDataCache,
+    MichelinRestaurants,
+    Regions,
+    Religions,
+    Routes,
+    SalesFunnel,
+    SocialMediaPosts,
+    Timezones,
+    TravelAdvisories,
+    TravelDiaries,
+    TravelItineraries,
+    VisaRequirements,
+  ],
   cors: [getServerSideURL()].filter(Boolean),
-  globals: [Header, Footer],
+  globals: [Header, Footer, SiteSettings],
   plugins: [
     ...plugins,
     // storage-adapter-placeholder

@@ -1,0 +1,135 @@
+// RevealText component styles
+.revealText {
+  position: relative;
+  overflow: hidden;
+  
+  // Content wrapper
+  &__content {
+    position: relative;
+    
+    // Prepare for 3D transforms
+    perspective: 1000px;
+    transform-style: preserve-3d;
+  }
+  
+  // Animation states
+  &--animating {
+    .revealText__content {
+      will-change: transform, opacity;
+    }
+  }
+  
+  // Reveal variants
+  &--fadeUp {
+    .split-text__word,
+    .split-text__char {
+      transform-origin: bottom center;
+    }
+  }
+  
+  &--slideIn {
+    .split-text__word,
+    .split-text__char {
+      transform-origin: left center;
+    }
+  }
+  
+  &--rotate {
+    .split-text__word,
+    .split-text__char {
+      transform-origin: center bottom;
+      backface-visibility: hidden;
+    }
+  }
+  
+  &--scale {
+    .split-text__word,
+    .split-text__char {
+      transform-origin: center center;
+    }
+  }
+  
+  // Mask effect
+  &--masked {
+    overflow: hidden;
+    
+    .split-text__line {
+      overflow: hidden;
+      padding: 0.1em 0;
+    }
+  }
+  
+  // Responsive
+  @media (max-width: 768px) {
+    &__content {
+      // Reduce perspective on mobile for performance
+      perspective: 800px;
+    }
+  }
+  
+  // Reduced motion
+  @media (prefers-reduced-motion: reduce) {
+    .split-text__word,
+    .split-text__char {
+      transition: opacity 0.3s ease !important;
+      transform: none !important;
+    }
+  }
+}
+
+// Utility classes for common reveal effects
+.revealText-effect {
+  &--wave {
+    .split-text__word {
+      display: inline-block;
+      
+      @for $i from 1 through 20 {
+        &:nth-child(#{$i}) {
+          animation-delay: #{$i * 0.05}s;
+        }
+      }
+    }
+  }
+  
+  &--cascade {
+    .split-text__char {
+      display: inline-block;
+      opacity: 0;
+      
+      @for $i from 1 through 50 {
+        &:nth-child(#{$i}) {
+          animation-delay: #{$i * 0.02}s;
+        }
+      }
+    }
+  }
+}
+
+// Loading state
+.revealText--loading {
+  .revealText__content {
+    opacity: 0;
+  }
+}
+
+// Debug mode
+.revealText--debug {
+  &::before,
+  &::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: red;
+    z-index: 9999;
+  }
+  
+  &::before {
+    top: 0;
+  }
+  
+  &::after {
+    bottom: 0;
+  }
+}

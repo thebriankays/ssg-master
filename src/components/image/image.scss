@@ -1,0 +1,140 @@
+// Image Component Styles
+// Using BEM naming convention
+
+.image {
+  position: relative;
+  display: block;
+  overflow: hidden;
+  
+  // Empty state
+  &--empty {
+    background-color: var(--gray-100);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 200px;
+  }
+  
+  // Fill container
+  &--fill {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+  }
+  
+  // Loading state
+  &--loading {
+    .image__img {
+      opacity: 0;
+    }
+  }
+  
+  // WebGL variant
+  &--webgl {
+    cursor: pointer;
+  }
+  
+  // Picture wrapper
+  &__picture {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+  
+  // Image element
+  &__img {
+    display: block;
+    width: 100%;
+    height: auto;
+    transition: opacity 0.3s ease;
+    
+    &[data-loading="lazy"] {
+      opacity: 0;
+    }
+    
+    &[data-loaded="true"] {
+      opacity: 1;
+    }
+  }
+  
+  // Placeholder
+  &__placeholder {
+    color: var(--gray-500);
+    font-size: 0.875rem;
+    text-align: center;
+    padding: 1rem;
+  }
+  
+  // WebGL container
+  &__webgl-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: auto;
+  }
+  
+  &__webgl-placeholder {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: var(--gray-100);
+    
+    &::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(255, 255, 255, 0.3),
+        transparent
+      );
+      animation: shimmer 1.5s infinite;
+    }
+  }
+}
+
+// Animations
+@keyframes shimmer {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+// Aspect ratio utilities
+.image[style*="aspect-ratio"] {
+  .image__picture,
+  .image__img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+}
+
+// Screen reader only (for SEO)
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
