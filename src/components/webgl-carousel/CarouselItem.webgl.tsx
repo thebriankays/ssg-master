@@ -52,20 +52,18 @@ export function CarouselItem({
     })
   }, [isActive])
 
-  /*------------------------------
-  Hover effect
-  ------------------------------*/
   useEffect(() => {
     if (!$root.current) return
     
-    const hoverScale = hover && !isActive ? 1.1 : 1
+    gsap.killTweensOf($root.current.scale)
+    
     gsap.to($root.current.scale, {
-      x: hoverScale,
-      y: hoverScale,
-      duration: 0.5,
+      x: hover ? 1.1 : 1,
+      y: hover ? 1.1 : 1,
+      duration: 0.2,
       ease: 'power3.out'
     })
-  }, [hover, isActive])
+  }, [hover])
 
   const handleClose = (e: any) => {
     e.stopPropagation()
@@ -75,15 +73,12 @@ export function CarouselItem({
     clearTimeout(timeoutID.current)
     timeoutID.current = setTimeout(() => {
       setCloseActive(false)
-    }, 1500) // The duration of this timer depends on the duration of the plane's closing animation.
+    }, 1500)
   }
 
   return (
     <group
       ref={$root}
-      onClick={() => {
-        setActivePlane(index)
-      }}
       onPointerEnter={() => setHover(true)}
       onPointerLeave={() => setHover(false)}
     >

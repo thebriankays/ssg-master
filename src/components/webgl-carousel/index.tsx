@@ -1,8 +1,9 @@
 'use client'
 
-import { useState, Suspense } from 'react'
-import { Canvas } from '@react-three/fiber'
+import { useState, useRef } from 'react'
+import { useRect } from '@/hooks/use-rect'
 import dynamic from 'next/dynamic'
+import { WebGLTunnel } from '@/webgl/components/tunnel'
 import './webgl-carousel.scss'
 
 const WebGLCarouselContent = dynamic(
@@ -51,6 +52,9 @@ export function WebGLCarousel({
   autoPlayInterval = 3000
 }: WebGLCarouselProps) {
   const [activePlane, setActivePlane] = useState<number | null>(null)
+  const [progress, setProgress] = useState(0)
+  const [setRectRef, rect] = useRect()
+  const dragRef = useRef({ isDown: false, startX: 0, startProgress: 0 })
 
   // Transform input images to carousel format
   const carouselImages = images?.map(img => ({
@@ -59,33 +63,76 @@ export function WebGLCarousel({
     description: img.description
   })) || defaultImages
 
+  // Handle wheel at DOM level
+  const handleWheel = (e: React.WheelEvent) => {
+    if (activePlane !== null) return
+    const isVerticalScroll = Math.abs(e.deltaY) > Math.abs(e.deltaX)
+    const wheelProgress = isVerticalScroll ? e.deltaY : e.deltaX
+    setProgress(prev => Math.max(0, Math.min(prev + wheelProgress * speed, 100)))
+  }
+
+  // Handle drag at DOM level
+  const handleMouseDown = (e: React.MouseEvent) => {
+    if (activePlane !== null) return
+    dragRef.current.isDown = true
+    dragRef.current.startX = e.clientX
+    dragRef.current.startProgress = progress
+  }
+
+  const handleMouseMove = (e: React.MouseEvent) => {
+    if (!dragRef.current.isDown || activePlane !== null) return
+    const deltaX = e.clientX - dragRef.current.startX
+    const newProgress = dragRef.current.startProgress + deltaX * -0.3
+    setProgress(Math.max(0, Math.min(newProgress, 100)))
+  }
+
+  const handleMouseUp = () => {
+    dragRef.current.isDown = false
+  }
+
+  const handleClick = (e: React.MouseEvent) => {
+    const deltaX = Math.abs(dragRef.current.startX - e.clientX)
+    if (deltaX > 5) return
+
+    if (activePlane !== null) {
+      setActivePlane(null)
+      return
+    }
+
+    const activeIndex = Math.round((progress / 100) * (carouselImages.length - 1))
+    setActivePlane(activeIndex)
+  }
+
   return (
-    <div className="webgl-carousel" data-cursor="-drag" data-cursor-text="DRAG">
-      <Canvas 
-        camera={{ position: [0, 0, 10], fov: 30 }}
-        gl={{ 
-          alpha: true, 
-          antialias: true,
-          preserveDrawingBuffer: true,
-          premultipliedAlpha: false
-        }}
-        style={{ background: 'transparent' }}
-        onCreated={({ gl }) => {
-          gl.setClearColor(0x000000, 0)
-        }}
-      >
-        <Suspense fallback={null}>
-          <WebGLCarouselContent
-            images={carouselImages}
-            speed={speed}
-            gap={gap}
-            planeWidth={width}
-            planeHeight={height}
-            activePlane={activePlane}
-            setActivePlane={setActivePlane}
-          />
-        </Suspense>
-      </Canvas>
+    <div 
+      ref={setRectRef}
+      className="webgl-carousel-container"
+      onWheel={handleWheel}
+      onMouseDown={handleMouseDown}
+      onMouseMove={handleMouseMove}
+      onMouseUp={handleMouseUp}
+      onMouseLeave={handleMouseUp}
+      onClick={handleClick}
+    >
+      <div 
+        className="webgl-carousel-images"
+        data-cursor="-drag" 
+        data-cursor-text="DRAG"
+      />
+      <WebGLTunnel>
+        <WebGLCarouselContent
+          rect={rect}
+          images={carouselImages}
+          speed={speed}
+          gap={gap}
+          planeWidth={width}
+          planeHeight={height}
+          activePlane={activePlane}
+          setActivePlane={setActivePlane}
+          progress={progress}
+          setProgress={setProgress}
+        />
+      </WebGLTunnel>
     </div>
   )
 }

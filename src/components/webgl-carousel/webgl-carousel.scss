@@ -1,17 +1,25 @@
-.webgl-carousel {
+.webgl-carousel-container {
   position: relative;
   width: 100vw;
   height: 100vh;
   overflow: hidden;
   background: transparent !important;
+  cursor: grab;
   
-  canvas {
-    width: 100% !important;
-    height: 100% !important;
-    background: transparent !important;
-    position: relative;
-    z-index: 1;
+  &:active {
+    cursor: grabbing;
   }
+}
+
+.webgl-carousel-images {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 60%;
+  height: 40%;
+  z-index: 2;
+  pointer-events: none;
   
   &[data-cursor="-drag"] {
     cursor: none;

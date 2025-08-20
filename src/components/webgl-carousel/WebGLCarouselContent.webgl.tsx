@@ -9,8 +9,11 @@ import { CarouselItem } from './CarouselItem.webgl'
 import { PostProcessing } from './PostProcessing.webgl'
 import { lerp, getPiramidalIndex } from './utils'
 import type { CarouselImage } from './index'
+import { useWebGLRect } from '@/hooks/use-webgl-rect'
+import type { Rect } from 'hamo'
 
 interface WebGLCarouselContentProps {
+  rect?: Rect | null
   images: CarouselImage[]
   speed: number
   gap: number
@@ -18,6 +21,8 @@ interface WebGLCarouselContentProps {
   planeHeight: number
   activePlane: number | null
   setActivePlane: (index: number | null) => void
+  progress: number
+  setProgress: (progress: number) => void
 }
 
 // Set GSAP defaults
@@ -27,27 +32,32 @@ gsap.defaults({
 })
 
 export function WebGLCarouselContent({
+  rect,
   images,
   speed: speedProp,
   gap,
   planeWidth,
   planeHeight,
   activePlane,
-  setActivePlane
+  setActivePlane,
+  progress,
+  setProgress
 }: WebGLCarouselContentProps) {
   const [root, setRoot] = useState<THREE.Group | null>(null)
   const postRef = useRef<any>(null)
   const prevActivePlane = usePrevious(activePlane)
+  const carouselRef = useRef<THREE.Group>(null)
   const { viewport } = useThree()
   
   // Internal state
-  const progressRef = useRef(0)
-  const startX = useRef(0)
-  const isDown = useRef(false)
-  const speedWheel = 0.02
-  const speedDrag = -0.3
+  const progressRef = useRef(progress)
   const oldProgressRef = useRef(0)
   const speedRef = useRef(0)
+
+  // Update progress ref when prop changes
+  useEffect(() => {
+    progressRef.current = progress
+  }, [progress])
 
   // Get items from root group
   const $items = useMemo(() => {
@@ -63,6 +73,16 @@ export function WebGLCarouselContent({
       y: $items.length * -0.1 + piramidalIndex * 0.1
     })
   }
+
+  // Position carousel based on DOM rect
+  useWebGLRect(rect, ({ scale, position }) => {
+    if (carouselRef.current && rect) {
+      carouselRef.current.position.set(position.x, position.y, position.z)
+      const carouselScale = Math.min(scale.x, scale.y) * 0.15
+      carouselRef.current.scale.set(carouselScale, carouselScale, carouselScale)
+      carouselRef.current.updateMatrix()
+    }
+  })
 
   // RAF update
   useFrame(() => {
@@ -86,32 +106,6 @@ export function WebGLCarouselContent({
     }
   })
 
-  // Event handlers
-  const handleWheel = (e: any) => {
-    if (activePlane !== null) return
-    const isVerticalScroll = Math.abs(e.deltaY) > Math.abs(e.deltaX)
-    const wheelProgress = isVerticalScroll ? e.deltaY : e.deltaX
-    progressRef.current = progressRef.current + wheelProgress * speedWheel
-  }
-
-  const handleDown = (e: any) => {
-    if (activePlane !== null) return
-    isDown.current = true
-    startX.current = e.clientX || (e.touches && e.touches[0].clientX) || 0
-  }
-
-  const handleUp = () => {
-    isDown.current = false
-  }
-
-  const handleMove = (e: any) => {
-    if (activePlane !== null || !isDown.current) return
-    const x = e.clientX || (e.touches && e.touches[0].clientX) || 0
-    const mouseProgress = (x - startX.current) * speedDrag
-    progressRef.current = progressRef.current + mouseProgress
-    startX.current = x
-  }
-
   // Click effect - sync progress when plane is clicked
   useEffect(() => {
     if (!$items.length) return
@@ -119,24 +113,6 @@ export function WebGLCarouselContent({
       progressRef.current = (activePlane / ($items.length - 1)) * 100
     }
   }, [activePlane, $items, prevActivePlane])
-
-  // Render plane events
-  const renderPlaneEvents = () => {
-    return (
-      <mesh
-        position={[0, 0, -0.01]}
-        onWheel={handleWheel}
-        onPointerDown={handleDown}
-        onPointerUp={handleUp}
-        onPointerMove={handleMove}
-        onPointerLeave={handleUp}
-        onPointerCancel={handleUp}
-      >
-        <planeGeometry args={[viewport.width, viewport.height]} />
-        <meshBasicMaterial transparent={true} opacity={0} />
-      </mesh>
-    )
-  }
 
   // Render slider
   const renderSlider = () => {
@@ -158,8 +134,7 @@ export function WebGLCarouselContent({
   }
 
   return (
-    <group>
-      {renderPlaneEvents()}
+    <group ref={carouselRef} matrixAutoUpdate={false}>
       {renderSlider()}
       <PostProcessing ref={postRef} />
     </group>

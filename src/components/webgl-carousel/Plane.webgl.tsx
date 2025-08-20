@@ -22,17 +22,25 @@ export function Plane({ texture, width, height, active, ...props }: PlaneProps) 
     if (meshRef.current && meshRef.current.material) {
       const material = meshRef.current.material as THREE.ShaderMaterial
       
-      // Setting the 'uZoomScale' uniform to resize the texture proportionally to the dimensions of the viewport.
-      material.uniforms.uZoomScale.value.x = viewport.width / width
-      material.uniforms.uZoomScale.value.y = viewport.height / height
+      // When using shared canvas with 0.15 scale, we need to compensate
+      // The carousel group is scaled to 0.15, so to fill the viewport:
+      // We need to scale up by 1/0.15 = 6.67
+      const scaleCompensation = 6.67
+      
+      material.uniforms.uZoomScale.value.x = viewport.width / width * scaleCompensation
+      material.uniforms.uZoomScale.value.y = viewport.height / height * scaleCompensation
 
       gsap.to(material.uniforms.uProgress, {
-        value: active ? 1 : 0
+        value: active ? 1 : 0,
+        duration: 2.5,
+        ease: 'power3.out'
       })
 
       gsap.to(material.uniforms.uRes.value, {
         x: active ? viewport.width : width,
-        y: active ? viewport.height : height
+        y: active ? viewport.height : height,
+        duration: 2.5,
+        ease: 'power3.out'
       })
     }
   }, [viewport, active, width, height])
@@ -43,7 +51,7 @@ export function Plane({ texture, width, height, active, ...props }: PlaneProps) 
         uProgress: { value: 0 },
         uZoomScale: { value: { x: 1, y: 1 } },
         uTex: { value: tex },
-        uRes: { value: { x: 1, y: 1 } },
+        uRes: { value: { x: width, y: height } },
         uImageRes: {
           value: { x: tex.source.data.width, y: tex.source.data.height }
         }
@@ -86,7 +94,7 @@ export function Plane({ texture, width, height, active, ...props }: PlaneProps) 
         }
       `
     }),
-    [tex]
+    [tex, width, height]
   )
 
   return (
