@@ -1,9 +1,10 @@
 'use client'
 
-import { useEffect, useMemo, useRef } from 'react'
+import { useMemo, useRef } from 'react'
 import { useThree } from '@react-three/fiber'
 import { useTexture } from '@react-three/drei'
-import { gsap } from 'gsap'
+import { useGSAP } from '@/hooks/use-gsap'
+import gsap from 'gsap'
 import * as THREE from 'three'
 
 interface PlaneProps {
@@ -18,36 +19,33 @@ export function Plane({ texture, width, height, active, ...props }: PlaneProps) 
   const { viewport } = useThree()
   const tex = useTexture(texture)
 
-  useEffect(() => {
-    if (meshRef.current && meshRef.current.material) {
-      const material = meshRef.current.material as THREE.ShaderMaterial
-      
-      // The carousel group is scaled by 0.15
-      // To make the plane fill the viewport when expanded:
-      // We need to scale the plane up by: viewport / (plane size * 0.15)
-      const scaleFactorX = (viewport.width / 0.15) / width
-      const scaleFactorY = (viewport.height / 0.15) / height
-      
-      // Use the smaller scale to maintain aspect ratio
-      const scaleFactor = Math.min(scaleFactorX, scaleFactorY) * 0.9 // 0.9 to leave some margin
-      
-      material.uniforms.uZoomScale.value.x = scaleFactor
-      material.uniforms.uZoomScale.value.y = scaleFactor
+  // Animate expansion with useGSAP for proper cleanup
+  useGSAP(() => {
+    if (!meshRef.current || !(meshRef.current.material instanceof THREE.ShaderMaterial)) return
+    
+    const material = meshRef.current.material as THREE.ShaderMaterial
+    
+    // Calculate scale to fill viewport
+    const scaleX = viewport.width / width
+    const scaleY = viewport.height / height
+    const scale = Math.min(scaleX, scaleY) * 0.9 // 90% to leave margin
+    
+    material.uniforms.uZoomScale.value.x = scale
+    material.uniforms.uZoomScale.value.y = scale
 
-      gsap.to(material.uniforms.uProgress, {
-        value: active ? 1 : 0,
-        duration: 2.5,
-        ease: 'power3.out'
-      })
+    gsap.to(material.uniforms.uProgress, {
+      value: active ? 1 : 0,
+      duration: 2.5,
+      ease: 'power3.out'
+    })
 
-      gsap.to(material.uniforms.uRes.value, {
-        x: active ? width * scaleFactor : width,
-        y: active ? height * scaleFactor : height,
-        duration: 2.5,
-        ease: 'power3.out'
-      })
-    }
-  }, [viewport, active, width, height])
+    gsap.to(material.uniforms.uRes.value, {
+      x: active ? width * scale : width,
+      y: active ? height * scale : height,
+      duration: 2.5,
+      ease: 'power3.out'
+    })
+  }, [viewport.width, viewport.height, active, width, height])
 
   const shaderArgs = useMemo(
     () => ({

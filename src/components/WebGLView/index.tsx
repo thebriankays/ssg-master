@@ -1,8 +1,7 @@
 'use client'
 
 import { View } from '@react-three/drei'
-import { forwardRef, type ReactNode } from 'react'
-import { useRect } from 'hamo'
+import { forwardRef, useRef, type ReactNode } from 'react'
 
 interface WebGLViewProps {
   children: ReactNode
@@ -10,6 +9,8 @@ interface WebGLViewProps {
   style?: React.CSSProperties
   index?: number
   frames?: number
+  'data-cursor'?: string
+  'data-cursor-text'?: string
 }
 
 /**
@@ -17,15 +18,15 @@ interface WebGLViewProps {
  * Wrapper around drei's View that handles DOM tracking and styling
  */
 export const WebGLView = forwardRef<HTMLDivElement, WebGLViewProps>(
-  ({ children, className, style, index = 1, frames = Infinity }, ref) => {
-    const [setRectRef, rect] = useRect()
+  ({ children, className, style, index = 1, frames = Infinity, ...props }, ref) => {
+    const containerRef = useRef<HTMLDivElement>(null)
 
     return (
       <>
         {/* DOM element that defines the bounds */}
         <div 
           ref={(el) => {
-            setRectRef(el)
+            containerRef.current = el
             if (ref) {
               if (typeof ref === 'function') ref(el)
               else ref.current = el
@@ -33,10 +34,12 @@ export const WebGLView = forwardRef<HTMLDivElement, WebGLViewProps>(
           }}
           className={className}
           style={style}
+          data-cursor={props['data-cursor']}
+          data-cursor-text={props['data-cursor-text']}
         />
         
         {/* WebGL View that renders within those bounds */}
-        <View track={setRectRef as any} index={index} frames={frames}>
+        <View track={containerRef} index={index} frames={frames}>
           {children}
         </View>
       </>

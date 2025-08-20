@@ -48,14 +48,13 @@ export function WebGLCanvas({ render = true, postprocessing = false, className, 
           // Disable MSAA when DPR is high to avoid redundant work
           antialias: dpr < 2,
           alpha: true,
-          preserveDrawingBuffer: true,
-          premultipliedAlpha: false,
           ...(postprocessing && { stencil: false, depth: false }),
         }}
         onCreated={({ gl }) => {
           gl.setClearColor(0x000000, 0) // Set clear color to transparent
           gl.outputColorSpace = THREE.SRGBColorSpace // Ensure sRGB output
           gl.toneMapping = THREE.NoToneMapping // No tone mapping
+          gl.autoClear = false // Don't auto clear between renders
         }}
         dpr={[1, 2]}
         orthographic
@@ -87,7 +86,7 @@ export function WebGLCanvas({ render = true, postprocessing = false, className, 
             <Suspense>
               <WebGLTunnel.Out />
             </Suspense>
-            {/* View.Port for drei View components (3D widgets) */}
+            {/* View.Port for drei View components - render after tunnel */}
             <View.Port />
             {postprocessing && <PostProcessing />}
           </FlowmapProvider>

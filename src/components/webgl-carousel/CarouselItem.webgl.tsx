@@ -2,7 +2,8 @@
 
 import { useEffect, useRef, useState } from 'react'
 import { useThree } from '@react-three/fiber'
-import { gsap } from 'gsap'
+import { useGSAP } from '@/hooks/use-gsap'
+import gsap from 'gsap'
 import * as THREE from 'three'
 import { Plane } from './Plane.webgl'
 import type { CarouselImage } from './index'
@@ -40,10 +41,10 @@ export function CarouselItem({
     }
   }, [activePlane, index])
 
-  useEffect(() => {
+  // Animate position when active state changes
+  useGSAP(() => {
     if (!$root.current) return
     
-    gsap.killTweensOf($root.current.position)
     gsap.to($root.current.position, {
       z: isActive ? 1 : -0.01,
       duration: 0.2,
@@ -52,10 +53,10 @@ export function CarouselItem({
     })
   }, [isActive])
 
-  useEffect(() => {
+  // Animate scale on hover
+  useGSAP(() => {
     if (!$root.current) return
     
-    gsap.killTweensOf($root.current.scale)
     gsap.to($root.current.scale, {
       x: hover ? 1.1 : 1,
       y: hover ? 1.1 : 1,

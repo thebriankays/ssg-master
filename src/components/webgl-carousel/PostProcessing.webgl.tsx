@@ -1,33 +1,40 @@
 'use client'
 
-import { forwardRef, useImperativeHandle, useRef } from 'react'
-import { useThree } from '@react-three/fiber'
+import { useRef, forwardRef, useImperativeHandle } from 'react'
+import { useFrame, useThree } from '@react-three/fiber'
 import { MeshTransmissionMaterial } from '@react-three/drei'
-import { Color } from 'three'
 
-interface PostProcessingProps {
-  ior?: number
-}
+interface PostProcessingProps {}
 
 export const PostProcessing = forwardRef<any, PostProcessingProps>((props, ref) => {
-  const { ior = 0.9 } = props
-  const { viewport } = useThree()
   const materialRef = useRef<any>(null)
-
-  // Expose thickness setter to parent
+  const meshRef = useRef<any>(null)
+  const { viewport } = useThree()
+  
+  // Expose thickness control to parent
   useImperativeHandle(ref, () => ({
-    get thickness() {
-      return materialRef.current?.thickness || 0
-    },
     set thickness(value: number) {
       if (materialRef.current) {
         materialRef.current.thickness = value
       }
     },
+    get thickness() {
+      return materialRef.current?.thickness || 0
+    }
   }))
 
+  // Animate IOR for subtle effect
+  let ior = 1.0
+  useFrame((state) => {
+    const time = state.clock.getElapsedTime()
+    ior = 1.0 + Math.sin(time * 0.5) * 0.05
+    if (materialRef.current) {
+      materialRef.current.ior = ior
+    }
+  })
+
   return (
-    <mesh position={[0, 0, 1]}>
+    <mesh ref={meshRef} position={[0, 0, 1]}>
       <planeGeometry args={[viewport.width, viewport.height]} />
       <MeshTransmissionMaterial
         ref={materialRef}
@@ -37,10 +44,14 @@ export const PostProcessing = forwardRef<any, PostProcessingProps>((props, ref) 
         chromaticAberration={0.06}
         anisotropy={0}
         ior={ior}
-        background={null} // Set background to null for transparency
-        transparent={true} // Enable transparency
+        background={null}
+        transparent
+        depthWrite={false}
+        depthTest={false}
+        toneMapped={false}
       />
     </mesh>
   )
 })
+
 PostProcessing.displayName = 'PostProcessing'

@@ -1,9 +1,8 @@
 'use client'
 
-import { useState, useRef } from 'react'
-import { useRect } from '@/hooks/use-rect'
+import { useState } from 'react'
 import dynamic from 'next/dynamic'
-import { WebGLTunnel } from '@/webgl/components/tunnel'
+import { WebGLView } from '@/components/WebGLView'
 import './webgl-carousel.scss'
 
 const WebGLCarouselContent = dynamic(
@@ -53,8 +52,6 @@ export function WebGLCarousel({
 }: WebGLCarouselProps) {
   const [activePlane, setActivePlane] = useState<number | null>(null)
   const [progress, setProgress] = useState(0)
-  const [setRectRef, rect] = useRect()
-  const dragRef = useRef({ isDown: false, startX: 0, startProgress: 0 })
 
   // Transform input images to carousel format
   const carouselImages = images?.map(img => ({
@@ -63,80 +60,24 @@ export function WebGLCarousel({
     description: img.description
   })) || defaultImages
 
-  // Handle wheel
-  const handleWheel = (e: React.WheelEvent) => {
-    if (activePlane !== null) return
-    const isVerticalScroll = Math.abs(e.deltaY) > Math.abs(e.deltaX)
-    const wheelProgress = isVerticalScroll ? e.deltaY : e.deltaX
-    setProgress(prev => Math.max(0, Math.min(prev + wheelProgress * speed, 100)))
-  }
-
-  // Handle drag
-  const handleMouseDown = (e: React.MouseEvent) => {
-    if (activePlane !== null) return
-    dragRef.current.isDown = true
-    dragRef.current.startX = e.clientX
-    dragRef.current.startProgress = progress
-  }
-
-  const handleMouseMove = (e: React.MouseEvent) => {
-    if (!dragRef.current.isDown || activePlane !== null) return
-    const deltaX = e.clientX - dragRef.current.startX
-    const newProgress = dragRef.current.startProgress + deltaX * -0.3
-    setProgress(Math.max(0, Math.min(newProgress, 100)))
-  }
-
-  const handleMouseUp = () => {
-    dragRef.current.isDown = false
-  }
-
-  const handleClick = (e: React.MouseEvent) => {
-    const deltaX = Math.abs(dragRef.current.startX - e.clientX)
-    if (deltaX > 5) return
-
-    if (activePlane !== null) {
-      setActivePlane(null)
-      return
-    }
-
-    // Click in center expands the current image
-    const rect = e.currentTarget.getBoundingClientRect()
-    const x = (e.clientX - rect.left) / rect.width
-    const y = (e.clientY - rect.top) / rect.height
-    
-    if (x > 0.35 && x < 0.65 && y > 0.3 && y < 0.7) {
-      const activeIndex = Math.round((progress / 100) * (carouselImages.length - 1))
-      setActivePlane(activeIndex)
-    }
-  }
-
   return (
-    <div 
-      ref={setRectRef}
+    <WebGLView
       className="webgl-carousel"
-      onWheel={handleWheel}
-      onMouseDown={handleMouseDown}
-      onMouseMove={handleMouseMove}
-      onMouseUp={handleMouseUp}
-      onMouseLeave={handleMouseUp}
-      onClick={handleClick}
-      data-cursor={activePlane === null ? "-drag" : "-hidden"}
+      style={{ width: '100vw', height: '100vh' }}
+      data-cursor={activePlane === null ? "-drag" : ""}
       data-cursor-text={activePlane === null ? "DRAG" : ""}
     >
-      <WebGLTunnel>
-        <WebGLCarouselContent
-          rect={rect}
-          images={carouselImages}
-          speed={speed}
-          gap={gap}
-          planeWidth={width}
-          planeHeight={height}
-          activePlane={activePlane}
-          setActivePlane={setActivePlane}
-          progress={progress}
-          setProgress={setProgress}
-        />
-      </WebGLTunnel>
-    </div>
+      <WebGLCarouselContent
+        images={carouselImages}
+        speed={speed}
+        gap={gap}
+        planeWidth={width}
+        planeHeight={height}
+        activePlane={activePlane}
+        setActivePlane={setActivePlane}
+        progress={progress}
+        setProgress={setProgress}
+      />
+    </WebGLView>
   )
 }

@@ -1,15 +1,15 @@
 'use client'
 
 import { useRef, useEffect, useState, useMemo } from 'react'
-import { useFrame } from '@react-three/fiber'
+import { useFrame, useThree } from '@react-three/fiber'
 import { usePrevious } from '@/hooks/use-previous'
-import { useWebGLRect } from '@/hooks/use-webgl-rect'
 import gsap from 'gsap'
 import * as THREE from 'three'
 import { CarouselItem } from './CarouselItem.webgl'
 import { PostProcessing } from './PostProcessing.webgl'
 import { lerp, getPiramidalIndex } from './utils'
 import type { CarouselImage } from './index'
+import { useWebGLRect } from '@/hooks/use-webgl-rect'
 import type { Rect } from 'hamo'
 
 interface WebGLCarouselContentProps {
@@ -24,6 +24,12 @@ interface WebGLCarouselContentProps {
   progress: number
   setProgress: (progress: number) => void
 }
+
+// Set GSAP defaults
+gsap.defaults({
+  duration: 2.5,
+  ease: 'power3.out'
+})
 
 export function WebGLCarouselContent({
   rect,
@@ -41,6 +47,7 @@ export function WebGLCarouselContent({
   const postRef = useRef<any>(null)
   const prevActivePlane = usePrevious(activePlane)
   const carouselRef = useRef<THREE.Group>(null)
+  const { viewport } = useThree()
   
   // Internal state
   const progressRef = useRef(progress)
@@ -63,9 +70,7 @@ export function WebGLCarouselContent({
     const piramidalIndex = getPiramidalIndex($items, active)[index]
     gsap.to(item.position, {
       x: (index - active) * (planeWidth + gap),
-      y: $items.length * -0.1 + piramidalIndex * 0.1,
-      duration: 2.5,
-      ease: 'power3.out'
+      y: $items.length * -0.1 + piramidalIndex * 0.1
     })
   }
 

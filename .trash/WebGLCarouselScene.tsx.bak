@@ -1,19 +1,18 @@
 'use client'
 
 import { useRef, useEffect, useState, useMemo } from 'react'
-import { useFrame } from '@react-three/fiber'
+import { useFrame, useThree } from '@react-three/fiber'
+import { PerspectiveCamera } from '@react-three/drei'
 import { usePrevious } from '@/hooks/use-previous'
-import { useWebGLRect } from '@/hooks/use-webgl-rect'
+import { useGSAP } from '@/hooks/use-gsap'
 import gsap from 'gsap'
 import * as THREE from 'three'
 import { CarouselItem } from './CarouselItem.webgl'
 import { PostProcessing } from './PostProcessing.webgl'
 import { lerp, getPiramidalIndex } from './utils'
 import type { CarouselImage } from './index'
-import type { Rect } from 'hamo'
 
-interface WebGLCarouselContentProps {
-  rect?: Rect | null
+interface WebGLCarouselSceneProps {
   images: CarouselImage[]
   speed: number
   gap: number
@@ -21,36 +20,30 @@ interface WebGLCarouselContentProps {
   planeHeight: number
   activePlane: number | null
   setActivePlane: (index: number | null) => void
-  progress: number
-  setProgress: (progress: number) => void
 }
 
-export function WebGLCarouselContent({
-  rect,
+export function WebGLCarouselScene({
   images,
   speed: speedProp,
   gap,
   planeWidth,
   planeHeight,
   activePlane,
-  setActivePlane,
-  progress,
-  setProgress
-}: WebGLCarouselContentProps) {
+  setActivePlane
+}: WebGLCarouselSceneProps) {
   const [root, setRoot] = useState<THREE.Group | null>(null)
   const postRef = useRef<any>(null)
   const prevActivePlane = usePrevious(activePlane)
-  const carouselRef = useRef<THREE.Group>(null)
+  const { viewport } = useThree()
   
   // Internal state
-  const progressRef = useRef(progress)
+  const progressRef = useRef(0)
+  const startX = useRef(0)
+  const isDown = useRef(false)
+  const speedWheel = 0.02
+  const speedDrag = -0.3
   const oldProgressRef = useRef(0)
   const speedRef = useRef(0)
-
-  // Update progress ref when prop changes
-  useEffect(() => {
-    progressRef.current = progress
-  }, [progress])
 
   // Get items from root group
   const $items = useMemo(() => {
@@ -58,7 +51,7 @@ export function WebGLCarouselContent({
     return []
   }, [root])
 
-  // Display items with pyramidal index
+  // Display items with pyramidal index using useGSAP for proper cleanup
   const displayItems = (item: any, index: number, active: number) => {
     const piramidalIndex = getPiramidalIndex($items, active)[index]
     gsap.to(item.position, {
@@ -69,15 +62,31 @@ export function WebGLCarouselContent({
     })
   }
 
-  // Position carousel based on DOM rect
-  useWebGLRect(rect, ({ scale, position }) => {
-    if (carouselRef.current && rect) {
-      carouselRef.current.position.set(position.x, position.y, position.z)
-      const carouselScale = Math.min(scale.x, scale.y) * 0.15
-      carouselRef.current.scale.set(carouselScale, carouselScale, carouselScale)
-      carouselRef.current.updateMatrix()
-    }
-  })
+  // Event handlers
+  const handleWheel = (e: any) => {
+    if (activePlane !== null) return
+    const isVerticalScroll = Math.abs(e.deltaY) > Math.abs(e.deltaX)
+    const wheelProgress = isVerticalScroll ? e.deltaY : e.deltaX
+    progressRef.current = progressRef.current + wheelProgress * speedWheel
+  }
+
+  const handleDown = (e: any) => {
+    if (activePlane !== null) return
+    isDown.current = true
+    startX.current = e.clientX || (e.touches && e.touches[0].clientX) || 0
+  }
+
+  const handleUp = () => {
+    isDown.current = false
+  }
+
+  const handleMove = (e: any) => {
+    if (activePlane !== null || !isDown.current) return
+    const x = e.clientX || (e.touches && e.touches[0].clientX) || 0
+    const mouseProgress = (x - startX.current) * speedDrag
+    progressRef.current = progressRef.current + mouseProgress
+    startX.current = x
+  }
 
   // RAF update
   useFrame(() => {
@@ -109,6 +118,24 @@ export function WebGLCarouselContent({
     }
   }, [activePlane, $items, prevActivePlane])
 
+  // Render plane events
+  const renderPlaneEvents = () => {
+    return (
+      <mesh
+        position={[0, 0, -0.01]}
+        onWheel={handleWheel}
+        onPointerDown={handleDown}
+        onPointerUp={handleUp}
+        onPointerMove={handleMove}
+        onPointerLeave={handleUp}
+        onPointerCancel={handleUp}
+      >
+        <planeGeometry args={[viewport.width, viewport.height]} />
+        <meshBasicMaterial transparent={true} opacity={0} />
+      </mesh>
+    )
+  }
+
   // Render slider
   const renderSlider = () => {
     return (
@@ -129,9 +156,11 @@ export function WebGLCarouselContent({
   }
 
   return (
-    <group ref={carouselRef} matrixAutoUpdate={false}>
+    <>
+      <PerspectiveCamera makeDefault position={[0, 0, 10]} fov={30} />
+      {renderPlaneEvents()}
       {renderSlider()}
       <PostProcessing ref={postRef} />
-    </group>
+    </>
   )
 }
