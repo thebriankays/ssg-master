@@ -33,7 +33,7 @@ export function CarouselItem({
 
   useEffect(() => {
     if (activePlane === index) {
-      setIsActive(activePlane === index)
+      setIsActive(true)
       setCloseActive(true)
     } else {
       setIsActive(false)
@@ -45,7 +45,7 @@ export function CarouselItem({
     
     gsap.killTweensOf($root.current.position)
     gsap.to($root.current.position, {
-      z: isActive ? 0 : -0.01,
+      z: isActive ? 1 : -0.01,
       duration: 0.2,
       ease: 'power3.out',
       delay: isActive ? 0 : 2
@@ -56,7 +56,6 @@ export function CarouselItem({
     if (!$root.current) return
     
     gsap.killTweensOf($root.current.scale)
-    
     gsap.to($root.current.scale, {
       x: hover ? 1.1 : 1,
       y: hover ? 1.1 : 1,
@@ -64,6 +63,12 @@ export function CarouselItem({
       ease: 'power3.out'
     })
   }, [hover])
+
+  const handleClick = () => {
+    if (!isActive) {
+      setActivePlane(index)
+    }
+  }
 
   const handleClose = (e: any) => {
     e.stopPropagation()
@@ -77,8 +82,9 @@ export function CarouselItem({
   }
 
   return (
-    <group
+    <group 
       ref={$root}
+      onClick={handleClick}
       onPointerEnter={() => setHover(true)}
       onPointerLeave={() => setHover(false)}
     >
@@ -91,8 +97,8 @@ export function CarouselItem({
 
       {isCloseActive ? (
         <mesh position={[0, 0, 0.01]} onClick={handleClose}>
-          <planeGeometry args={[viewport.width, viewport.height]} />
-          <meshBasicMaterial transparent={true} opacity={0} color={'red'} />
+          <planeGeometry args={[width * 10, height * 10]} />
+          <meshBasicMaterial transparent={true} opacity={0} />
         </mesh>
       ) : null}
     </group>
