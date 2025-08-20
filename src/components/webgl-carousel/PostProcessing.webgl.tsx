@@ -3,18 +3,17 @@
 import { forwardRef, useImperativeHandle, useRef } from 'react'
 import { useThree } from '@react-three/fiber'
 import { MeshTransmissionMaterial } from '@react-three/drei'
-import * as THREE from 'three'
+import { Color } from 'three'
 
 interface PostProcessingProps {
   ior?: number
-  backgroundColor?: string
 }
 
 export const PostProcessing = forwardRef<any, PostProcessingProps>((props, ref) => {
-  const { ior = 0.9, backgroundColor = 'white' } = props
+  const { ior = 0.9 } = props
   const { viewport } = useThree()
   const materialRef = useRef<any>(null)
-  
+
   // Expose thickness setter to parent
   useImperativeHandle(ref, () => ({
     get thickness() {
@@ -24,7 +23,7 @@ export const PostProcessing = forwardRef<any, PostProcessingProps>((props, ref) 
       if (materialRef.current) {
         materialRef.current.thickness = value
       }
-    }
+    },
   }))
 
   return (
@@ -32,16 +31,16 @@ export const PostProcessing = forwardRef<any, PostProcessingProps>((props, ref) 
       <planeGeometry args={[viewport.width, viewport.height]} />
       <MeshTransmissionMaterial
         ref={materialRef}
-        background={new THREE.Color(backgroundColor)}
         transmission={0.7}
         roughness={0}
         thickness={0}
         chromaticAberration={0.06}
         anisotropy={0}
         ior={ior}
+        background={null} // Set background to null for transparency
+        transparent={true} // Enable transparency
       />
     </mesh>
   )
 })
-
 PostProcessing.displayName = 'PostProcessing'

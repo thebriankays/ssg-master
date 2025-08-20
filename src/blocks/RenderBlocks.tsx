@@ -8,6 +8,8 @@ import { ContentBlock } from '@/blocks/Content/Component'
 import { FormBlock } from '@/blocks/Form/Component'
 import { MediaBlock } from '@/blocks/MediaBlock/Component'
 import { WebGLCarouselBlock } from '@/blocks/WebGLCarouselBlock/Component'
+import { WhatameshBlock } from '@/blocks/Whatamesh/Component'
+import { ScrollingImagesBlock } from '@/blocks/ScrollingImagesBlock/Component'
 
 const blockComponents = {
   archive: ArchiveBlock,
@@ -16,6 +18,8 @@ const blockComponents = {
   formBlock: FormBlock,
   mediaBlock: MediaBlock,
   webglCarouselBlock: WebGLCarouselBlock,
+  whatamesh: WhatameshBlock,
+  scrollImagesBlock: ScrollingImagesBlock,
 }
 
 export const RenderBlocks: React.FC<{

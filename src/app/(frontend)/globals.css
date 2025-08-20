@@ -2,6 +2,9 @@
 @tailwind components;
 @tailwind utilities;
 @import '../../styles/webgl.css';
+@import '../../styles/canvas-fixes.css';
+
+/* Remove background to see WebGL content */
 
 @layer base {
   h1,
@@ -89,8 +92,18 @@
   * {
     @apply border-border;
   }
+  
+  html {
+    height: 100%;
+  }
+  
   body {
-    @apply bg-background text-foreground min-h-[100vh] flex flex-col;
+    @apply text-foreground min-h-[100vh] flex flex-col;
+    background: transparent; /* Ensure body doesn't have a white background */
+    /* Remove any background color to allow WebGL to show through */
+    background: transparent !important;
+    margin: 0;
+    padding: 0;
   }
 }
 
@@ -102,3 +115,61 @@ html[data-theme='dark'],
 html[data-theme='light'] {
   opacity: initial;
 }
+
+/* Ensure WebGL canvases are positioned correctly */
+.global-canvas {
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  width: 100% !important;
+  height: 100vh !important;
+  z-index: -1 !important;
+  pointer-events: none !important;
+}
+
+.global-canvas canvas {
+  width: 100% !important;
+  height: 100% !important;
+  display: block !important;
+}
+
+.views-canvas {
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  width: 100% !important;
+  height: 100vh !important;
+  z-index: 10 !important;
+  pointer-events: none !important;
+}
+
+.views-canvas canvas {
+  width: 100% !important;
+  height: 100% !important;
+  display: block !important;
+}
+
+/* Content should be above WebGL */
+.shared-canvas-content {
+  position: relative !important;
+  z-index: 1 !important;
+  min-height: 100vh;
+  background: transparent !important;
+}
+
+/* Content sections that need backgrounds */
+.content-section {
+  &--with-background {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    border-radius: 8px;
+    padding: 2rem;
+    margin: 1rem 0;
+    
+    [data-theme="dark"] & {
+      background: rgba(0, 0, 0, 0.95);
+    }
+  }
+}
+
+/* Debug styles removed - canvas should be transparent */

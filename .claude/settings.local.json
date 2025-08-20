@@ -15,7 +15,17 @@
       "Bash(npx tsc:*)",
       "Bash(find:*)",
       "Bash(pnpm run:*)",
-      "Bash(npx payload generate:types:*)"
+      "Bash(npx payload generate:types:*)",
+      "Bash(git remote:*)",
+      "Bash(git push:*)",
+      "Bash(git fetch:*)",
+      "Bash(touch \"D:\\Dev\\ssg-master\\src\\components\\whatamesh\\Whatamesh.webgl.tsx\")",
+      "Bash(mkdir -p \"D:\\Dev\\ssg-master\\src\\app\\(frontend)\\test\")",
+      "Bash(touch \"D:\\Dev\\ssg-master\\src\\app\\(frontend)\\test\\page.tsx\")",
+      "Bash(npx tailwindcss:*)",
+      "Bash(git checkout:*)",
+      "Bash(ls:*)",
+      "Bash(grep:*)"
     ],
     "deny": []
   }

@@ -6,6 +6,7 @@ import { ThemeProvider } from '@/providers/Theme'
 import { WebGLLayout } from '@/components/webgl-layout'
 import { ReactTempus } from '@/providers/tempus-provider'
 import { LenisProvider } from '@/providers/lenis-provider'
+import { MouseFollowerProvider } from '@/providers/MouseFollowerProvider'
 
 export const Providers: React.FC<{
   children: React.ReactNode
@@ -16,9 +17,11 @@ export const Providers: React.FC<{
       <HeaderThemeProvider headerTheme={headerTheme}>
         <ReactTempus />
         <LenisProvider>
-          <WebGLLayout>
-            {children}
-          </WebGLLayout>
+          <MouseFollowerProvider>
+            <WebGLLayout>
+              {children}
+            </WebGLLayout>
+          </MouseFollowerProvider>
         </LenisProvider>
       </HeaderThemeProvider>
     </ThemeProvider>

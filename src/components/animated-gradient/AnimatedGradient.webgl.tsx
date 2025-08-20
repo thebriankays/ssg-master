@@ -1,5 +1,4 @@
 import { useFrame, useThree } from '@react-three/fiber'
-import { useObjectFit, useWindowSize } from 'hamo'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { CanvasTexture, LinearFilter, type Mesh } from 'three'
 import { useFlowmap } from '@/webgl/components/flowmap'
@@ -40,8 +39,8 @@ function useGradient(colors: string[]) {
   return texture
 }
 
-type WebGLAnimatedGradientProps = {
-  rect: DOMRect
+interface AnimatedGradientWebGLProps {
+  rect: DOMRect | null
   amplitude?: number
   frequency?: number
   colorAmplitude?: number
@@ -51,20 +50,22 @@ type WebGLAnimatedGradientProps = {
   flowmap?: boolean
   colors?: string[]
   speed?: number
+  isGlobal?: boolean
 }
 
-export function WebGLAnimatedGradient({
+export function AnimatedGradientWebGL({
   rect,
-  amplitude = 2,
-  frequency = 0.33,
-  colorAmplitude = 2,
-  colorFrequency = 0.33,
+  amplitude = 0.5,
+  frequency = 0.2,
+  colorAmplitude = 0.5,
+  colorFrequency = 0.2,
   quantize = 0,
   radial = false,
-  flowmap: hasFlowmap = true,
-  colors = ['#ff0000', '#000000'],
+  flowmap: hasFlowmap = false, // Temporarily disabled
+  colors = ['#1e293b', '#6366f1', '#8b5cf6', '#ec4899', '#06b6d4'],
   speed = 1,
-}: WebGLAnimatedGradientProps) {
+  isGlobal = false,
+}: AnimatedGradientWebGLProps) {
   const flowmap = useFlowmap('fluid')
 
   const [material] = useState(
@@ -106,17 +107,23 @@ export function WebGLAnimatedGradient({
     material.frequency = frequency
   }, [material, frequency])
 
-  const aspect = useObjectFit(rect.width, rect.height, 1, 1, 'contain')
-
-  useEffect(() => {
-    material.aspect.set(aspect[0], aspect[1])
-  }, [material, aspect])
-
-  const { width: windowWidth = 0, height: windowHeight = 0 } = useWindowSize()
-
+  // Use viewport for sizing when global
+  const { width: windowWidth, height: windowHeight } = useThree((state) => state.size)
+  
   useEffect(() => {
     material.resolution.set(windowWidth, windowHeight)
   }, [material, windowWidth, windowHeight])
+  
+  useEffect(() => {
+    // For global background, use viewport aspect ratio
+    if (isGlobal) {
+      material.aspect.set(1, 1)
+    } else if (rect) {
+      const aspectX = rect.width > rect.height ? 1 : rect.width / rect.height
+      const aspectY = rect.height > rect.width ? 1 : rect.height / rect.width
+      material.aspect.set(aspectX, aspectY)
+    }
+  }, [material, isGlobal, rect])
 
   const viewport = useThree((state) => state.viewport)
 
@@ -126,20 +133,44 @@ export function WebGLAnimatedGradient({
 
   const meshRef = useRef<Mesh>(null!)
 
-  useWebGLRect(rect, ({ scale, position, rotation }: any) => {
-    meshRef.current.position.set(position.x, position.y, position.z)
-    meshRef.current.rotation.set(rotation.x, rotation.y, rotation.z)
-    meshRef.current.scale.set(scale.x, scale.y, scale.z)
-    meshRef.current.updateMatrix()
-  })
+  // Only use rect positioning if not global
+  if (!isGlobal && rect) {
+    useWebGLRect(rect, ({ scale, position, rotation }: any) => {
+      if (meshRef.current) {
+        meshRef.current.position.set(position.x, position.y, position.z)
+        meshRef.current.rotation.set(rotation.x, rotation.y, rotation.z)
+        meshRef.current.scale.set(scale.x, scale.y, scale.z)
+        meshRef.current.updateMatrix()
+      }
+    })
+  }
 
   useFrame(({ clock }) => {
     material.time = clock.getElapsedTime() * speed * 0.05
   })
 
+  // For global background, render full viewport
+  if (isGlobal) {
+    // Ensure scale values are valid
+    const scaleX = Number.isFinite(viewport.width) && viewport.width > 0 ? viewport.width : 100
+    const scaleY = Number.isFinite(viewport.height) && viewport.height > 0 ? viewport.height : 100
+    
+    return (
+      <mesh 
+        ref={meshRef}
+        position={[0, 0, -100]}
+        scale={[scaleX, scaleY, 1]}
+        renderOrder={-1}
+      >
+        <planeGeometry args={[1, 1, 1, 1]} />
+        <primitive object={material} />
+      </mesh>
+    )
+  }
+  
   return (
     <mesh matrixAutoUpdate={false} ref={meshRef}>
-      <planeGeometry />
+      <planeGeometry args={[1, 1, 1, 1]} />
       <primitive object={material} />
     </mesh>
   )

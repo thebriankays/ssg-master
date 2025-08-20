@@ -1,0 +1,79 @@
+@import '../../app/css/type.scss';
+
+.scrolling-images {
+  width: 100%;
+  position: relative;
+  
+  // Loading state
+  &.loading {
+    min-height: 100vh;
+    background: #000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    
+    &::after {
+      content: '';
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.4);
+      animation: loaderAnim 0.7s linear infinite alternate forwards;
+    }
+  }
+}
+
+@keyframes loaderAnim {
+  to {
+    opacity: 1;
+    transform: scale3d(0.5, 0.5, 1);
+  }
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(var(--columns, 3), 1fr);
+  gap: var(--gap, 5vh);
+  
+  @include mid-break {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  @include small-break {
+    grid-template-columns: 1fr;
+    gap: calc(var(--gap, 5vh) / 2);
+  }
+}
+
+.grid__item {
+  height: var(--image-height, 100vh);
+  background-size: cover;
+  background-position: 50% 50%;
+  background-repeat: no-repeat;
+  will-change: transform, opacity, filter;
+  
+  @include small-break {
+    height: calc(var(--image-height, 100vh) * 0.6);
+  }
+}
+
+// Block wrapper styles
+.scrolling-images-block {
+  position: relative;
+  width: 100%;
+  
+  &--empty {
+    min-height: 300px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #f5f5f5;
+  }
+  
+  // Infinite scroll modifier
+  &.infinite-scroll {
+    .grid {
+      // Additional styles for infinite scroll if needed
+    }
+  }
+}

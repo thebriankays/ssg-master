@@ -43,7 +43,7 @@ export function Plane({ texture, width, height, active, ...props }: PlaneProps) 
         uProgress: { value: 0 },
         uZoomScale: { value: { x: 1, y: 1 } },
         uTex: { value: tex },
-        uRes: { value: { x: width, y: height } },
+        uRes: { value: { x: 1, y: 1 } },
         uImageRes: {
           value: { x: tex.source.data.width, y: tex.source.data.height }
         }
@@ -68,21 +68,13 @@ export function Plane({ texture, width, height, active, ...props }: PlaneProps) 
       fragmentShader: /* glsl */ `
       uniform sampler2D uTex;
       uniform vec2 uRes;
-      uniform vec2 uZoomScale;
       uniform vec2 uImageRes;
 
-      /*------------------------------
-      Background Cover UV
-      --------------------------------
-      u = basic UV
-      s = screensize
-      i = image size
-      ------------------------------*/
       vec2 CoverUV(vec2 u, vec2 s, vec2 i) {
-        float rs = s.x / s.y; // Aspect screen size
-        float ri = i.x / i.y; // Aspect image size
-        vec2 st = rs < ri ? vec2(i.x * s.y / i.y, s.y) : vec2(s.x, i.y * s.x / i.x); // New st
-        vec2 o = (rs < ri ? vec2((st.x - s.x) / 2.0, 0.0) : vec2(0.0, (st.y - s.y) / 2.0)) / st; // Offset
+        float rs = s.x / s.y;
+        float ri = i.x / i.y;
+        vec2 st = rs < ri ? vec2(i.x * s.y / i.y, s.y) : vec2(s.x, i.y * s.x / i.x);
+        vec2 o = (rs < ri ? vec2((st.x - s.x) / 2.0, 0.0) : vec2(0.0, (st.y - s.y) / 2.0)) / st;
         return u * s / st + o;
       }
 

@@ -1,0 +1,44 @@
+/* Canvas positioning fixes */
+
+/* Ensure the WebGL canvas is behind everything */
+.webgl {
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  width: 100vw !important;
+  height: 100vh !important;
+  z-index: -10 !important; /* Behind everything */
+  pointer-events: none !important;
+  background: transparent !important;
+}
+
+.webgl canvas {
+  background: transparent !important;
+}
+
+/* Ensure main content is above canvas */
+main,
+.wrapper,
+header,
+footer,
+section,
+article {
+  position: relative;
+  z-index: 1;
+}
+
+/* Hero images need proper z-index */
+.hero,
+[class*="hero"] {
+  position: relative;
+  z-index: 1;
+}
+
+/* Hero image containers */
+.hero img,
+[class*="hero"] img,
+.hero picture,
+[class*="hero"] picture {
+  position: relative;
+  z-index: 1;
+}

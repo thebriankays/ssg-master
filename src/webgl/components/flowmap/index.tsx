@@ -21,7 +21,16 @@ export function useFlowmap(type: 'fluid' | 'flowmap' = 'flowmap') {
 
 export function FlowmapProvider({ children }: { children: React.ReactNode }) {
   const gl = useThree((state) => state.gl)
-  const fluid = useMemo(() => new Fluid(gl, { size: 128 }), [gl])
+  const fluid = useMemo(() => {
+    const fluidInstance = new Fluid(gl, { size: 128 })
+    // Much more subtle and faster dissipation
+    fluidInstance.radius = 0.01 // Very small effect radius
+    fluidInstance.curlStrength = 5 // Less swirl
+    fluidInstance.densityDissipation = 0.92 // Faster fade
+    fluidInstance.velocityDissipation = 0.95 // Much faster velocity fade
+    fluidInstance.pressureDissipation = 0.8 // Faster pressure dissipation
+    return fluidInstance
+  }, [gl])
   const flowmap = useMemo(() => new Flowmap(gl, { size: 128 }), [gl])
   const sheet = useCurrentSheet()
 
@@ -30,10 +39,10 @@ export function FlowmapProvider({ children }: { children: React.ReactNode }) {
     'fluid simulation',
     {
       density: types.number(0.98, { range: [0, 1], nudgeMultiplier: 0.01 }),
-      velocity: types.number(1, { range: [0, 1], nudgeMultiplier: 0.01 }),
-      pressure: types.number(0, { range: [0, 1], nudgeMultiplier: 0.01 }),
-      curl: types.number(0, { range: [0, 100], nudgeMultiplier: 1 }),
-      radius: types.number(0.5, { range: [0, 1], nudgeMultiplier: 0.01 }),
+      velocity: types.number(0.99, { range: [0, 1], nudgeMultiplier: 0.01 }),
+      pressure: types.number(0.94, { range: [0, 1], nudgeMultiplier: 0.01 }),
+      curl: types.number(10, { range: [0, 100], nudgeMultiplier: 1 }),
+      radius: types.number(0.03, { range: [0, 1], nudgeMultiplier: 0.01 }),
     },
     {
       onValuesChange: ({

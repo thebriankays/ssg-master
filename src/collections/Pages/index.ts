@@ -8,6 +8,8 @@ import { Content } from '../../blocks/Content/config'
 import { FormBlock } from '../../blocks/Form/config'
 import { MediaBlock } from '../../blocks/MediaBlock/config'
 import { WebGLCarouselBlock } from '../../blocks/WebGLCarouselBlock/config'
+import { WhatameshBlock } from '../../blocks/Whatamesh/config'
+import { ScrollingImagesBlock } from '../../blocks/ScrollingImagesBlock/config'
 import { hero } from '@/heros/config'
 import { slugField } from '@/fields/slug'
 import { populatePublishedAt } from '../../hooks/populatePublishedAt'
@@ -76,7 +78,16 @@ export const Pages: CollectionConfig<'pages'> = {
             {
               name: 'layout',
               type: 'blocks',
-              blocks: [CallToAction, Content, MediaBlock, Archive, FormBlock, WebGLCarouselBlock],
+              blocks: [
+                CallToAction, 
+                Content, 
+                MediaBlock, 
+                Archive, 
+                FormBlock, 
+                WebGLCarouselBlock,
+                WhatameshBlock,
+                ScrollingImagesBlock
+              ],
               required: true,
               admin: {
                 initCollapsed: true,

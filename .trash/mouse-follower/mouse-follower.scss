@@ -1,0 +1,131 @@
+/* Mouse Follower Custom Styles */
+
+/* Basic cursor */
+.mf-cursor {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 9999;
+  pointer-events: none;
+  will-change: transform;
+  backface-visibility: hidden;
+
+  &:before {
+    content: "";
+    position: absolute;
+    top: -24px;
+    left: -24px;
+    width: 48px;
+    height: 48px;
+    background: currentColor;
+    border-radius: 50%;
+    transform: scale(0.2);
+    transition: transform 0.25s ease-in-out;
+  }
+
+  &.-visible:before {
+    transform: scale(1);
+  }
+
+  &.-hidden:before {
+    transform: scale(0);
+  }
+}
+
+/* Inner element - used for additional styling */
+.mf-cursor-inner {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+}
+
+/* Text cursor */
+.mf-cursor-text {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: white;
+  text-align: center;
+  mix-blend-mode: difference;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  z-index: 10001;
+  white-space: nowrap;
+  margin: 0;
+  padding: 0;
+  line-height: 1;
+}
+
+.mf-cursor.-text .mf-cursor-text {
+  opacity: 1;
+}
+
+/* 3D Carousel Drag Cursor Styles */
+.mf-cursor.-drag {
+  mix-blend-mode: exclusion;
+  
+  &:before {
+    width: 80px;
+    height: 80px;
+    top: -40px;
+    left: -40px;
+    background: transparent;
+    border: 2px solid white;
+    transform: scale(1) !important;
+  }
+  
+  .mf-cursor-inner {
+    width: 80px;
+    height: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .mf-cursor-text {
+    position: static;
+    transform: none;
+    opacity: 1 !important;
+    visibility: visible !important;
+    color: white;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+  }
+}
+
+/* Ensure visible on hover */
+.mf-cursor.-drag.-visible:before {
+  transform: scale(1) !important;
+}
+
+/* Hide system cursor on drag areas */
+[data-cursor="-drag"] {
+  cursor: none !important;
+}
+
+/* Exclusion blend mode */
+.mf-cursor.-exclusion {
+  mix-blend-mode: exclusion;
+
+  &:before {
+    background: white;
+  }
+}
+
+/* Difference blend mode */
+.mf-cursor.-difference {
+  mix-blend-mode: difference;
+
+  &:before {
+    background: white;
+  }
+}

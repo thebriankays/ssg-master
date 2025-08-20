@@ -123,15 +123,23 @@ src/
 
 ### 1. Shared Canvas Architecture
 
-The WebGL system uses drei's View component to create a single shared canvas that all WebGL components render to:
+The WebGL system uses a hybrid approach with tunnel-rat for global effects and drei's View component for isolated 3D scenes:
 
-- **SharedCanvasProvider**: Wraps the app and provides the canvas
-- **useWebGLView**: Hook for creating View-compatible refs
-- **View component**: Automatically manages viewport bounds
+#### Tunnel Pattern (Global Effects)
+- **WebGLTunnel**: Injects meshes into the global canvas
+- **useRect + useWebGLRect**: Manual DOM→WebGL position mapping  
+- **Best for**: Screen-space shaders, gradients, particle effects, post-processing
+
+#### View Pattern (3D Widgets)
+- **View component**: Creates isolated viewport with own camera
+- **Automatic bounds**: Handles viewport clipping and positioning
+- **Best for**: 3D models, carousels, product viewers, games
+
+See [WebGL Patterns Guide](./webgl-patterns.md) for detailed usage guidelines.
 
 Benefits:
 - Single WebGL context (better performance)
-- Automatic bounds management
+- Flexible rendering strategies
 - Seamless DOM integration
 - Responsive by default
 

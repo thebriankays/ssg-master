@@ -1,0 +1,47 @@
+/* Custom Mouse Follower Styles */
+
+/* Override default cursor for drag state */
+.mf-cursor.-drag {
+  mix-blend-mode: exclusion !important;
+  
+  /* Main cursor dot */
+  &::before {
+    content: "";
+    position: absolute;
+    top: -40px;
+    left: -40px;
+    width: 80px;
+    height: 80px;
+    background: white !important;
+    border-radius: 50%;
+    transform: scale(1) !important;
+  }
+}
+
+/* Text positioning for drag state */
+.mf-cursor.-drag.-text {
+  .mf-cursor-text {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    font-size: 12px !important;
+    font-weight: 600 !important;
+    letter-spacing: 0.1em !important;
+    text-transform: uppercase !important;
+    color: black !important;
+    mix-blend-mode: normal !important;
+    opacity: 1 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+}
+
+/* Hide system cursor on drag areas */
+[data-cursor*="-drag"] {
+  cursor: none !important;
+}

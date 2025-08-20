@@ -45,7 +45,7 @@ export function CarouselItem({
     
     gsap.killTweensOf($root.current.position)
     gsap.to($root.current.position, {
-      z: isActive ? 1 : -0.01,
+      z: isActive ? 0 : -0.01,
       duration: 0.2,
       ease: 'power3.out',
       delay: isActive ? 0 : 2

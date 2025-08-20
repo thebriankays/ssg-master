@@ -1,8 +1,8 @@
 'use client'
 
-import { useState } from 'react'
-import dynamic from 'next/dynamic'
+import { useState, Suspense } from 'react'
 import { Canvas } from '@react-three/fiber'
+import dynamic from 'next/dynamic'
 import './webgl-carousel.scss'
 
 const WebGLCarouselContent = dynamic(
@@ -19,6 +19,7 @@ export interface CarouselImage {
 interface WebGLCarouselProps {
   images?: Array<{
     src: string
+    alt?: string
     title?: string
     description?: string
   }>
@@ -50,7 +51,6 @@ export function WebGLCarousel({
   autoPlayInterval = 3000
 }: WebGLCarouselProps) {
   const [activePlane, setActivePlane] = useState<number | null>(null)
-  const [loaded, setLoaded] = useState(false)
 
   // Transform input images to carousel format
   const carouselImages = images?.map(img => ({
@@ -60,18 +60,31 @@ export function WebGLCarousel({
   })) || defaultImages
 
   return (
-    <div className="webgl-carousel">
-      <Canvas>
-        <WebGLCarouselContent
-          images={carouselImages}
-          speed={speed}
-          gap={gap}
-          planeWidth={width}
-          planeHeight={height}
-          activePlane={activePlane}
-          setActivePlane={setActivePlane}
-          onLoad={() => setLoaded(true)}
-        />
+    <div className="webgl-carousel" data-cursor="-drag" data-cursor-text="DRAG">
+      <Canvas 
+        camera={{ position: [0, 0, 10], fov: 30 }}
+        gl={{ 
+          alpha: true, 
+          antialias: true,
+          preserveDrawingBuffer: true,
+          premultipliedAlpha: false
+        }}
+        style={{ background: 'transparent' }}
+        onCreated={({ gl }) => {
+          gl.setClearColor(0x000000, 0)
+        }}
+      >
+        <Suspense fallback={null}>
+          <WebGLCarouselContent
+            images={carouselImages}
+            speed={speed}
+            gap={gap}
+            planeWidth={width}
+            planeHeight={height}
+            activePlane={activePlane}
+            setActivePlane={setActivePlane}
+          />
+        </Suspense>
       </Canvas>
     </div>
   )

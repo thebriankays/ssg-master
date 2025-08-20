@@ -269,7 +269,16 @@ export interface Page {
       | null;
     media?: (number | null) | Media;
   };
-  layout: (CallToActionBlock | ContentBlock | MediaBlock | ArchiveBlock | FormBlock | WebGLCarouselBlock)[];
+  layout: (
+    | CallToActionBlock
+    | ContentBlock
+    | MediaBlock
+    | ArchiveBlock
+    | FormBlock
+    | WebGLCarouselBlock
+    | WhatameshBlock
+    | ScrollingImagesBlock
+  )[];
   meta?: {
     title?: string | null;
     /**
@@ -826,20 +835,125 @@ export interface WebGLCarouselBlock {
   settings?: {
     autoPlay?: boolean | null;
     autoPlayInterval?: number | null;
+    showDots?: boolean | null;
+    showInfo?: boolean | null;
     speed?: number | null;
     gap?: number | null;
     planeWidth?: number | null;
     planeHeight?: number | null;
   };
-  appearance?: {
-    height?: ('default' | 'small' | 'large' | 'fullscreen' | 'viewport') | null;
-    variant?: ('default' | 'contained' | 'rounded' | 'gradient') | null;
-    showInfo?: boolean | null;
-    showDots?: boolean | null;
-  };
   id?: string | null;
   blockName?: string | null;
   blockType: 'webglCarouselBlock';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "WhatameshBlock".
+ */
+export interface WhatameshBlock {
+  type?: ('global' | 'section') | null;
+  colors?: {
+    /**
+     * First gradient color (hex format)
+     */
+    color1?: string | null;
+    /**
+     * Second gradient color (hex format)
+     */
+    color2?: string | null;
+    /**
+     * Third gradient color (hex format)
+     */
+    color3?: string | null;
+    /**
+     * Fourth gradient color (hex format)
+     */
+    color4?: string | null;
+  };
+  settings?: {
+    /**
+     * Apply darker gradient to top of animation
+     */
+    darkenTop?: boolean | null;
+    /**
+     * Speed multiplier for the animation
+     */
+    speed?: number | null;
+    /**
+     * Scale of the noise pattern
+     */
+    scale?: number | null;
+    /**
+     * Rotation angle in degrees
+     */
+    rotation?: number | null;
+  };
+  /**
+   * Height of the section (e.g., 100vh, 500px)
+   */
+  height?: string | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'whatamesh';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "ScrollingImagesBlock".
+ */
+export interface ScrollingImagesBlock {
+  /**
+   * Choose the animation style for the scrolling images
+   */
+  variant: '3d' | 'scaleXY' | 'scaleOpacity';
+  /**
+   * Number of columns in the grid (will be 1 on mobile)
+   */
+  columns: '1' | '2' | '3' | '4' | '5' | '6';
+  gap?: ('0' | '2vh' | '5vh' | '8vh' | '10vh') | null;
+  /**
+   * Add images in groups of 3 for best effect. The first group will be duplicated to create the infinite scroll effect.
+   */
+  imageGroups: {
+    /**
+     * Optional name for this group (for organization)
+     */
+    groupName?: string | null;
+    /**
+     * Add exactly 3 images per group
+     */
+    images: {
+      /**
+       * Image will be displayed at 100vh height
+       */
+      image: number | Media;
+      /**
+       * Alternative text for accessibility
+       */
+      alt?: string | null;
+      id?: string | null;
+    }[];
+    id?: string | null;
+  }[];
+  /**
+   * Fine-tune the scrolling behavior
+   */
+  settings?: {
+    /**
+     * When enabled with Lenis, creates a true infinite scroll loop
+     */
+    infiniteScroll?: boolean | null;
+    /**
+     * Set the height of each image
+     */
+    imageHeight?: ('50vh' | '60vh' | '70vh' | '80vh' | '90vh' | '100vh' | '110vh' | '120vh') | null;
+    /**
+     * Add custom CSS classes for additional styling
+     */
+    className?: string | null;
+  };
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'scrollImagesBlock';
 }
 /**
  * Airline data with IATA/ICAO codes and callsigns
@@ -3609,6 +3723,8 @@ export interface PagesSelect<T extends boolean = true> {
         archive?: T | ArchiveBlockSelect<T>;
         formBlock?: T | FormBlockSelect<T>;
         webglCarouselBlock?: T | WebGLCarouselBlockSelect<T>;
+        whatamesh?: T | WhatameshBlockSelect<T>;
+        scrollImagesBlock?: T | ScrollingImagesBlockSelect<T>;
       };
   meta?:
     | T
@@ -3726,18 +3842,69 @@ export interface WebGLCarouselBlockSelect<T extends boolean = true> {
     | {
         autoPlay?: T;
         autoPlayInterval?: T;
+        showDots?: T;
+        showInfo?: T;
         speed?: T;
         gap?: T;
         planeWidth?: T;
         planeHeight?: T;
       };
-  appearance?:
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "WhatameshBlock_select".
+ */
+export interface WhatameshBlockSelect<T extends boolean = true> {
+  type?: T;
+  colors?:
     | T
     | {
-        height?: T;
-        variant?: T;
-        showInfo?: T;
-        showDots?: T;
+        color1?: T;
+        color2?: T;
+        color3?: T;
+        color4?: T;
+      };
+  settings?:
+    | T
+    | {
+        darkenTop?: T;
+        speed?: T;
+        scale?: T;
+        rotation?: T;
+      };
+  height?: T;
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "ScrollingImagesBlock_select".
+ */
+export interface ScrollingImagesBlockSelect<T extends boolean = true> {
+  variant?: T;
+  columns?: T;
+  gap?: T;
+  imageGroups?:
+    | T
+    | {
+        groupName?: T;
+        images?:
+          | T
+          | {
+              image?: T;
+              alt?: T;
+              id?: T;
+            };
+        id?: T;
+      };
+  settings?:
+    | T
+    | {
+        infiniteScroll?: T;
+        imageHeight?: T;
+        className?: T;
       };
   id?: T;
   blockName?: T;
@@ -5593,13 +5760,20 @@ export interface Footer {
 export interface SiteSetting {
   id: number;
   /**
-   * Configure the gradient background colors
+   * Configure the global background effect
    */
   backgroundGradient?: {
+    type?: ('whatamesh' | 'gradient' | 'none') | null;
     color1?: string | null;
     color2?: string | null;
     color3?: string | null;
     color4?: string | null;
+    whatameshSettings?: {
+      darkenTop?: boolean | null;
+      speed?: number | null;
+      scale?: number | null;
+      enableFluid?: boolean | null;
+    };
   };
   /**
    * Email address for contact or notifications
@@ -5865,10 +6039,19 @@ export interface SiteSettingsSelect<T extends boolean = true> {
   backgroundGradient?:
     | T
     | {
+        type?: T;
         color1?: T;
         color2?: T;
         color3?: T;
         color4?: T;
+        whatameshSettings?:
+          | T
+          | {
+              darkenTop?: T;
+              speed?: T;
+              scale?: T;
+              enableFluid?: T;
+            };
       };
   siteEmail?: T;
   aiSettings?:

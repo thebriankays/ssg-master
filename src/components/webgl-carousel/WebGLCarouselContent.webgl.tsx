@@ -1,6 +1,6 @@
 'use client'
 
-import { useRef, useEffect, useState, useMemo, useCallback } from 'react'
+import { useRef, useEffect, useState, useMemo } from 'react'
 import { useFrame, useThree } from '@react-three/fiber'
 import { usePrevious } from '@/hooks/use-previous'
 import gsap from 'gsap'
@@ -10,7 +10,6 @@ import { PostProcessing } from './PostProcessing.webgl'
 import { lerp, getPiramidalIndex } from './utils'
 import type { CarouselImage } from './index'
 
-
 interface WebGLCarouselContentProps {
   images: CarouselImage[]
   speed: number
@@ -19,11 +18,8 @@ interface WebGLCarouselContentProps {
   planeHeight: number
   activePlane: number | null
   setActivePlane: (index: number | null) => void
-  onLoad?: () => void
 }
 
-// This component contains the actual 3D content and hooks
-// It must be rendered INSIDE a Canvas/View context
 // Set GSAP defaults
 gsap.defaults({
   duration: 2.5,
@@ -37,8 +33,7 @@ export function WebGLCarouselContent({
   planeWidth,
   planeHeight,
   activePlane,
-  setActivePlane,
-  onLoad
+  setActivePlane
 }: WebGLCarouselContentProps) {
   const [root, setRoot] = useState<THREE.Group | null>(null)
   const postRef = useRef<any>(null)
@@ -61,15 +56,35 @@ export function WebGLCarouselContent({
   }, [root])
 
   // Display items with pyramidal index
-  const displayItems = useCallback((item: any, index: number, active: number) => {
+  const displayItems = (item: any, index: number, active: number) => {
     const piramidalIndex = getPiramidalIndex($items, active)[index]
     gsap.to(item.position, {
       x: (index - active) * (planeWidth + gap),
-      y: $items.length * -0.1 + piramidalIndex * 0.1,
-      duration: 2.5,
-      ease: 'power3.out'
+      y: $items.length * -0.1 + piramidalIndex * 0.1
     })
-  }, [$items, planeWidth, gap])
+  }
+
+  // RAF update
+  useFrame(() => {
+    if (!$items.length) return
+    
+    progressRef.current = Math.max(0, Math.min(progressRef.current, 100))
+    
+    const active = Math.floor((progressRef.current / 100) * ($items.length - 1))
+    $items.forEach((item, index) => displayItems(item, index, active))
+    
+    speedRef.current = lerp(
+      speedRef.current,
+      Math.abs(oldProgressRef.current - progressRef.current),
+      0.1
+    )
+
+    oldProgressRef.current = lerp(oldProgressRef.current, progressRef.current, 0.1)
+
+    if (postRef.current && postRef.current.thickness !== undefined) {
+      postRef.current.thickness = speedRef.current
+    }
+  })
 
   // Event handlers
   const handleWheel = (e: any) => {
@@ -96,28 +111,6 @@ export function WebGLCarouselContent({
     progressRef.current = progressRef.current + mouseProgress
     startX.current = x
   }
-
-  // RAF update
-  useFrame(() => {
-    if (!$items.length) return
-    
-    progressRef.current = Math.max(0, Math.min(progressRef.current, 100))
-    
-    const active = Math.floor((progressRef.current / 100) * ($items.length - 1))
-    $items.forEach((item, index) => displayItems(item, index, active))
-    
-    speedRef.current = lerp(
-      speedRef.current,
-      Math.abs(oldProgressRef.current - progressRef.current),
-      0.1
-    )
-
-    oldProgressRef.current = lerp(oldProgressRef.current, progressRef.current, 0.1)
-
-    if (postRef.current && postRef.current.thickness !== undefined) {
-      postRef.current.thickness = speedRef.current
-    }
-  })
 
   // Click effect - sync progress when plane is clicked
   useEffect(() => {
@@ -163,13 +156,6 @@ export function WebGLCarouselContent({
       </group>
     )
   }
-
-  // Notify parent when loaded
-  useEffect(() => {
-    if (root) {
-      onLoad?.()
-    }
-  }, [root, onLoad])
 
   return (
     <group>
