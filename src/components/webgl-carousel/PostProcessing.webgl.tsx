@@ -34,8 +34,8 @@ export const PostProcessing = forwardRef<any, PostProcessingProps>((props, ref) 
   })
 
   return (
-    <mesh ref={meshRef} position={[0, 0, 1]}>
-      <planeGeometry args={[viewport.width, viewport.height]} />
+    <mesh ref={meshRef} position={[0, 0, 2]} renderOrder={1000}>
+      <planeGeometry args={[20, 20]} />
       <MeshTransmissionMaterial
         ref={materialRef}
         transmission={0.7}

@@ -19,7 +19,9 @@ export const Providers: React.FC<{
         <LenisProvider>
           <MouseFollowerProvider>
             <WebGLLayout>
-              {children}
+              <div style={{ position: 'relative', zIndex: 1, isolation: 'isolate' }}>
+                {children}
+              </div>
             </WebGLLayout>
           </MouseFollowerProvider>
         </LenisProvider>

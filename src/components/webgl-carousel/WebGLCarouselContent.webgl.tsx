@@ -3,17 +3,14 @@
 import { useRef, useEffect, useState, useMemo } from 'react'
 import { useFrame } from '@react-three/fiber'
 import { usePrevious } from '@/hooks/use-previous'
-import { useWebGLRect } from '@/hooks/use-webgl-rect'
 import gsap from 'gsap'
 import * as THREE from 'three'
 import { CarouselItem } from './CarouselItem.webgl'
 import { PostProcessing } from './PostProcessing.webgl'
 import { lerp, getPiramidalIndex } from './utils'
 import type { CarouselImage } from './index'
-import type { Rect } from 'hamo'
 
 interface WebGLCarouselContentProps {
-  rect?: Rect | null
   images: CarouselImage[]
   speed: number
   gap: number
@@ -26,7 +23,6 @@ interface WebGLCarouselContentProps {
 }
 
 export function WebGLCarouselContent({
-  rect,
   images,
   speed: speedProp,
   gap,
@@ -40,7 +36,6 @@ export function WebGLCarouselContent({
   const [root, setRoot] = useState<THREE.Group | null>(null)
   const postRef = useRef<any>(null)
   const prevActivePlane = usePrevious(activePlane)
-  const carouselRef = useRef<THREE.Group>(null)
   
   // Internal state
   const progressRef = useRef(progress)
@@ -64,20 +59,19 @@ export function WebGLCarouselContent({
     gsap.to(item.position, {
       x: (index - active) * (planeWidth + gap),
       y: $items.length * -0.1 + piramidalIndex * 0.1,
+      z: 0,
       duration: 2.5,
       ease: 'power3.out'
     })
   }
 
-  // Position carousel based on DOM rect
-  useWebGLRect(rect, ({ scale, position }) => {
-    if (carouselRef.current && rect) {
-      carouselRef.current.position.set(position.x, position.y, position.z)
-      const carouselScale = Math.min(scale.x, scale.y) * 0.15
-      carouselRef.current.scale.set(carouselScale, carouselScale, carouselScale)
-      carouselRef.current.updateMatrix()
+  // Effect to handle click on planes
+  useEffect(() => {
+    if (!$items.length) return
+    if (activePlane !== null && prevActivePlane === null) {
+      progressRef.current = (activePlane / ($items.length - 1)) * 100
     }
-  })
+  }, [activePlane, $items, prevActivePlane])
 
   // RAF update
   useFrame(() => {
@@ -101,14 +95,6 @@ export function WebGLCarouselContent({
     }
   })
 
-  // Click effect - sync progress when plane is clicked
-  useEffect(() => {
-    if (!$items.length) return
-    if (activePlane !== null && prevActivePlane === null) {
-      progressRef.current = (activePlane / ($items.length - 1)) * 100
-    }
-  }, [activePlane, $items, prevActivePlane])
-
   // Render slider
   const renderSlider = () => {
     return (
@@ -129,9 +115,9 @@ export function WebGLCarouselContent({
   }
 
   return (
-    <group ref={carouselRef} matrixAutoUpdate={false}>
+    <>
       {renderSlider()}
       <PostProcessing ref={postRef} />
-    </group>
+    </>
   )
 }

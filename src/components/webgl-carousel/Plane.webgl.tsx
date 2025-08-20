@@ -102,7 +102,11 @@ export function Plane({ texture, width, height, active, ...props }: PlaneProps) 
   return (
     <mesh ref={meshRef} {...props}>
       <planeGeometry args={[width, height, 30, 30]} />
-      <shaderMaterial args={[shaderArgs]} />
+      {tex ? (
+        <shaderMaterial args={[shaderArgs]} />
+      ) : (
+        <meshBasicMaterial color="red" />
+      )}
     </mesh>
   )
 }

@@ -123,17 +123,17 @@ src/
 
 ### 1. Shared Canvas Architecture
 
-The WebGL system uses a hybrid approach with tunnel-rat for global effects and drei's View component for isolated 3D scenes:
+The WebGL system uses a single shared canvas with tunnel-rat for both global effects and DOM-aligned widgets:
 
-#### Tunnel Pattern (Global Effects)
+#### Tunnel Pattern (Recommended)
 - **WebGLTunnel**: Injects meshes into the global canvas
-- **useRect + useWebGLRect**: Manual DOM→WebGL position mapping  
-- **Best for**: Screen-space shaders, gradients, particle effects, post-processing
+- **WebGLMount**: Simplified wrapper that handles DOM→WebGL position mapping automatically
+- **Best for**: Most use cases - screen-space effects, DOM-aligned 3D widgets, global backgrounds
 
-#### View Pattern (3D Widgets)
+#### View Pattern (Special Cases Only)
 - **View component**: Creates isolated viewport with own camera
-- **Automatic bounds**: Handles viewport clipping and positioning
-- **Best for**: 3D models, carousels, product viewers, games
+- **Use only when**: You need multiple cameras, isolated render passes, or scissor testing
+- **Avoid mixing**: Don't use View and Tunnel in the same canvas
 
 See [WebGL Patterns Guide](./webgl-patterns.md) for detailed usage guidelines.
 
@@ -244,18 +244,25 @@ WebGL Components (via SharedCanvas)
 ### WebGL Component Pattern
 
 ```tsx
-import { useWebGLView } from '@/hooks/useWebGLView'
-import { View } from '@react-three/drei'
+import { WebGLMount } from '@/components/webgl/WebGLMount'
 
 export function MyWebGLComponent({ className }) {
-  const viewRef = useWebGLView<HTMLDivElement>()
+  const handleWheel = (e: WheelEvent) => {
+    // Handle wheel events
+  }
 
   return (
-    <div ref={viewRef} className={className}>
-      <View track={viewRef as React.RefObject<HTMLElement>}>
-        {/* 3D content here */}
-      </View>
-    </div>
+    <WebGLMount
+      className={className}
+      style={{ width: '100%', height: '400px' }}
+      interactive="dom"
+      onWheel={handleWheel}
+    >
+      <mesh>
+        <boxGeometry />
+        <meshBasicMaterial />
+      </mesh>
+    </WebGLMount>
   )
 }
 ```

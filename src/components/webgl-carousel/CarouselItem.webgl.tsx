@@ -65,29 +65,11 @@ export function CarouselItem({
     })
   }, [hover])
 
-  const handleClick = () => {
-    if (!isActive) {
-      setActivePlane(index)
-    }
-  }
-
-  const handleClose = (e: any) => {
-    e.stopPropagation()
-    if (!isActive) return
-    setActivePlane(null)
-    setHover(false)
-    clearTimeout(timeoutID.current)
-    timeoutID.current = setTimeout(() => {
-      setCloseActive(false)
-    }, 1500)
-  }
+  // Remove click handlers since we're using DOM forwarding
 
   return (
     <group 
       ref={$root}
-      onClick={handleClick}
-      onPointerEnter={() => setHover(true)}
-      onPointerLeave={() => setHover(false)}
     >
       <Plane
         width={width}
@@ -96,12 +78,6 @@ export function CarouselItem({
         active={isActive}
       />
 
-      {isCloseActive ? (
-        <mesh position={[0, 0, 0.01]} onClick={handleClose}>
-          <planeGeometry args={[width * 10, height * 10]} />
-          <meshBasicMaterial transparent={true} opacity={0} />
-        </mesh>
-      ) : null}
     </group>
   )
 }

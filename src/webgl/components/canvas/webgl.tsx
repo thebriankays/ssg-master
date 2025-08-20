@@ -23,7 +23,7 @@ function ConditionalSheetProvider({ children, id }: { children: ReactNode; id: s
   } catch (e) {
     // No Theatre context available
   }
-  
+
   // Render children without SheetProvider if Theatre isn't available
   return <>{children}</>
 }
@@ -35,7 +35,13 @@ type WebGLCanvasProps = React.HTMLAttributes<HTMLDivElement> & {
   style?: React.CSSProperties
 }
 
-export function WebGLCanvas({ render = true, postprocessing = false, className, style, ...props }: WebGLCanvasProps) {
+export function WebGLCanvas({
+  render = true,
+  postprocessing = false,
+  className,
+  style,
+  ...props
+}: WebGLCanvasProps) {
   const { WebGLTunnel, DOMTunnel } = useCanvas()
   const dpr = typeof window !== 'undefined' ? window.devicePixelRatio || 1 : 1
 
@@ -52,9 +58,9 @@ export function WebGLCanvas({ render = true, postprocessing = false, className, 
         }}
         onCreated={({ gl }) => {
           gl.setClearColor(0x000000, 0) // Set clear color to transparent
+          gl.autoClear = false // <-- IMPORTANT
           gl.outputColorSpace = THREE.SRGBColorSpace // Ensure sRGB output
           gl.toneMapping = THREE.NoToneMapping // No tone mapping
-          gl.autoClear = false // Don't auto clear between renders
         }}
         dpr={[1, 2]}
         orthographic
@@ -62,15 +68,15 @@ export function WebGLCanvas({ render = true, postprocessing = false, className, 
         frameloop="never"
         linear
         flat
-        style={{ 
+        style={{
           pointerEvents: 'none',
           position: 'fixed',
           top: 0,
           left: 0,
           width: '100vw',
-          height: '100vh'
+          height: '100vh',
         }}
-        resize={{ scroll: false, debounce: { scroll: 0, resize: 0 } }}  // Remove resize debounce
+        resize={{ scroll: false, debounce: { scroll: 0, resize: 0 } }} // Remove resize debounce
       >
         {/* <StateListener onChange={onChange} /> */}
         <ConditionalSheetProvider id="webgl">
@@ -86,8 +92,6 @@ export function WebGLCanvas({ render = true, postprocessing = false, className, 
             <Suspense>
               <WebGLTunnel.Out />
             </Suspense>
-            {/* View.Port for drei View components - render after tunnel */}
-            <View.Port />
             {postprocessing && <PostProcessing />}
           </FlowmapProvider>
           <Preload />

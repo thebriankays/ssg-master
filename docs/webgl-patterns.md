@@ -112,16 +112,45 @@ export function ThreeDWidget() {
 - Better for true 3D content
 - Isolated from other views
 
+### WebGLMount Pattern (Recommended)
+A simplified wrapper that combines DOM measurement with tunnel rendering:
+
+```tsx
+import { WebGLMount } from '@/components/webgl/WebGLMount'
+
+export function MyWidget() {
+  return (
+    <WebGLMount
+      className="my-widget"
+      style={{ width: '100%', height: '400px' }}
+      interactive="dom"
+      onWheel={handleWheel}
+      onPointerDown={handleDown}
+    >
+      <MyWebGLContent />
+    </WebGLMount>
+  )
+}
+```
+
+Benefits:
+- Automatic DOM→WebGL position sync
+- Built-in event forwarding
+- Consistent API across components
+- No need to manually handle rect measurements
+
 ## Decision Guide
 
 Ask yourself:
 
 1. **Does it need perspective?** → Use View
-2. **Is it a screen-space effect?** → Use Tunnel
+2. **Is it a screen-space effect?** → Use Tunnel (via WebGLMount)
 3. **Does it need its own camera?** → Use View
-4. **Should it interact with global effects?** → Use Tunnel
+4. **Should it interact with global effects?** → Use Tunnel (via WebGLMount)
 5. **Is it a self-contained 3D scene?** → Use View
-6. **Does it use gl_FragCoord?** → Use Tunnel
+6. **Does it use gl_FragCoord?** → Use Tunnel (via WebGLMount)
+
+**For most DOM-aligned WebGL widgets**: Use WebGLMount wrapper with tunnel pattern
 
 ## Performance Considerations
 
