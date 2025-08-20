@@ -2,15 +2,31 @@
 
 import { OrthographicCamera, View } from '@react-three/drei'
 import { Canvas } from '@react-three/fiber'
-import { Suspense } from 'react'
+import { Suspense, type ReactNode } from 'react'
 import * as THREE from 'three'
-import { SheetProvider } from '@/orchestra/theatre'
+import { SheetProvider, useTheatreContext } from '@/orchestra/theatre'
 import { FlowmapProvider } from '../flowmap'
 import { PostProcessing } from '../postprocessing'
 import { Preload } from '../preload'
 import { RAF } from '../raf'
 import { useCanvas } from './'
 import './webgl.scss'
+
+// Wrapper that only uses SheetProvider if Theatre is available
+function ConditionalSheetProvider({ children, id }: { children: ReactNode; id: string }) {
+  try {
+    // Check if we're in a Theatre context
+    const context = useTheatreContext()
+    if (context && context.project) {
+      return <SheetProvider id={id}>{children}</SheetProvider>
+    }
+  } catch (e) {
+    // No Theatre context available
+  }
+  
+  // Render children without SheetProvider if Theatre isn't available
+  return <>{children}</>
+}
 
 type WebGLCanvasProps = React.HTMLAttributes<HTMLDivElement> & {
   render?: boolean
@@ -58,7 +74,7 @@ export function WebGLCanvas({ render = true, postprocessing = false, className, 
         resize={{ scroll: false, debounce: { scroll: 0, resize: 0 } }}  // Remove resize debounce
       >
         {/* <StateListener onChange={onChange} /> */}
-        <SheetProvider id="webgl">
+        <ConditionalSheetProvider id="webgl">
           <OrthographicCamera
             makeDefault
             position={[0, 0, 5000]}
@@ -76,7 +92,7 @@ export function WebGLCanvas({ render = true, postprocessing = false, className, 
             {postprocessing && <PostProcessing />}
           </FlowmapProvider>
           <Preload />
-        </SheetProvider>
+        </ConditionalSheetProvider>
       </Canvas>
       <DOMTunnel.Out />
     </div>

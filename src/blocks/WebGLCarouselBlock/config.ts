@@ -3,13 +3,18 @@ import type { Block } from 'payload'
 export const WebGLCarouselBlock: Block = {
   slug: 'webglCarouselBlock',
   interfaceName: 'WebGLCarouselBlock',
+  labels: {
+    singular: 'WebGL Carousel',
+    plural: 'WebGL Carousels',
+  },
   fields: [
     {
       name: 'images',
       type: 'array',
       label: 'Carousel Images',
       required: true,
-      minRows: 1,
+      minRows: 2,
+      maxRows: 10,
       fields: [
         {
           name: 'image',
@@ -26,6 +31,7 @@ export const WebGLCarouselBlock: Block = {
           name: 'description',
           type: 'textarea',
           label: 'Description',
+          maxLength: 200,
         },
       ],
     },
@@ -52,6 +58,18 @@ export const WebGLCarouselBlock: Block = {
           },
         },
         {
+          name: 'showDots',
+          type: 'checkbox',
+          label: 'Show Navigation Dots',
+          defaultValue: true,
+        },
+        {
+          name: 'showInfo',
+          type: 'checkbox',
+          label: 'Show Image Info',
+          defaultValue: true,
+        },
+        {
           name: 'speed',
           type: 'number',
           label: 'Scroll Speed',
@@ -65,7 +83,7 @@ export const WebGLCarouselBlock: Block = {
         {
           name: 'gap',
           type: 'number',
-          label: 'Gap Between Slides',
+          label: 'Image Gap',
           defaultValue: 0.1,
           min: 0,
           max: 0.5,
@@ -76,7 +94,7 @@ export const WebGLCarouselBlock: Block = {
         {
           name: 'planeWidth',
           type: 'number',
-          label: 'Slide Width',
+          label: 'Image Width',
           defaultValue: 1,
           min: 0.5,
           max: 3,
@@ -87,84 +105,13 @@ export const WebGLCarouselBlock: Block = {
         {
           name: 'planeHeight',
           type: 'number',
-          label: 'Slide Height',
+          label: 'Image Height',
           defaultValue: 2.5,
           min: 1,
           max: 4,
           admin: {
             step: 0.1,
           },
-        },
-      ],
-    },
-    {
-      name: 'appearance',
-      type: 'group',
-      label: 'Appearance',
-      fields: [
-        {
-          name: 'height',
-          type: 'select',
-          label: 'Height',
-          defaultValue: 'default',
-          options: [
-            {
-              label: 'Default (600px)',
-              value: 'default',
-            },
-            {
-              label: 'Small (400px)',
-              value: 'small',
-            },
-            {
-              label: 'Large (800px)',
-              value: 'large',
-            },
-            {
-              label: 'Full Screen',
-              value: 'fullscreen',
-            },
-            {
-              label: 'Viewport Height',
-              value: 'viewport',
-            },
-          ],
-        },
-        {
-          name: 'variant',
-          type: 'select',
-          label: 'Variant',
-          defaultValue: 'default',
-          options: [
-            {
-              label: 'Default',
-              value: 'default',
-            },
-            {
-              label: 'Contained',
-              value: 'contained',
-            },
-            {
-              label: 'Rounded',
-              value: 'rounded',
-            },
-            {
-              label: 'With Gradient',
-              value: 'gradient',
-            },
-          ],
-        },
-        {
-          name: 'showInfo',
-          type: 'checkbox',
-          label: 'Show Title & Description',
-          defaultValue: true,
-        },
-        {
-          name: 'showDots',
-          type: 'checkbox',
-          label: 'Show Navigation Dots',
-          defaultValue: true,
         },
       ],
     },

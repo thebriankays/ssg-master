@@ -13,12 +13,19 @@ import { Providers } from '@/providers'
 import { InitTheme } from '@/providers/Theme/InitTheme'
 import { mergeOpenGraph } from '@/utilities/mergeOpenGraph'
 import { draftMode } from 'next/headers'
+import { WhatameshBackground } from '@/components/whatamesh'
+import { getSiteSettings } from '@/utilities/getSiteSettings'
 
 import './globals.css'
 import { getServerSideURL } from '@/utilities/getURL'
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
   const { isEnabled } = await draftMode()
+  const siteSettings = await getSiteSettings()
+
+  // Extract background settings
+  const bgSettings = siteSettings?.backgroundGradient
+  const bgType = bgSettings?.type || 'whatamesh'
 
   return (
     <html className={cn(GeistSans.variable, GeistMono.variable)} lang="en" suppressHydrationWarning>
@@ -34,6 +41,23 @@ export default async function RootLayout({ children }: { children: React.ReactNo
               preview: isEnabled,
             }}
           />
+          
+          {bgType === 'whatamesh' && (
+            <WhatameshBackground 
+              colors={{
+                color1: bgSettings?.color1 || '#ff0080',
+                color2: bgSettings?.color2 || '#7928ca',
+                color3: bgSettings?.color3 || '#ff4e00',
+                color4: bgSettings?.color4 || '#ff0080',
+              }}
+              darkenTop={bgSettings?.darkenTop}
+              speed={bgSettings?.speed}
+              scale={bgSettings?.scale}
+              amplitude={bgSettings?.amplitude}
+              rotation={bgSettings?.rotation}
+              flowmap={bgSettings?.flowmap}
+            />
+          )}
           
           <Wrapper>
             <Header />

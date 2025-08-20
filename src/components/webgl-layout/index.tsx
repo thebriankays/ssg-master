@@ -24,7 +24,7 @@ export function WebGLLayout({
   const studio = useStudio()
 
   const content = (
-    <Canvas root force className={className}>
+    <Canvas root force className={className} style={{ position: 'fixed', inset: 0, width: '100vw', height: '100vh', zIndex: 0 }}>
       {children}
     </Canvas>
   )

@@ -44,9 +44,20 @@ export function TheatreProjectProvider({
   const [project, setProject] = useState<IProject | null>(null)
 
   useEffect(() => {
-    const proj = getProject(projectId)
-    setProject(proj)
-  }, [projectId])
+    try {
+      // Only create project if studio is available or if we have state
+      if (studio || process.env.NODE_ENV === 'production') {
+        const proj = getProject(projectId, {
+          // Provide empty state to avoid the error
+          state: {}
+        })
+        setProject(proj)
+      }
+    } catch (error) {
+      console.debug('Theatre project creation skipped:', error)
+      setProject(null)
+    }
+  }, [projectId, studio])
 
   return (
     <TheatreContext.Provider value={{ project, studio }}>
@@ -65,14 +76,21 @@ export function SheetProvider({
   id: string
   instance?: string
 }) {
-  const { project } = useContext(TheatreContext)
+  const context = useContext(TheatreContext)
   const [sheet, setSheet] = useState<ISheet | null>(null)
 
   useEffect(() => {
-    if (!project) return
-    const newSheet = project.sheet(id, instance)
-    setSheet(newSheet)
-  }, [project, id, instance])
+    // Only create sheet if we have a valid Theatre context with a project
+    if (!context || !context.project) return
+    
+    try {
+      const newSheet = context.project.sheet(id, instance)
+      setSheet(newSheet)
+    } catch (error) {
+      // Silently handle Theatre errors when studio is not loaded
+      console.debug('Theatre sheet creation skipped:', error)
+    }
+  }, [context, id, instance])
 
   return (
     <SheetContext.Provider value={{ sheet }}>

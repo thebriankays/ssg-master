@@ -5,6 +5,9 @@
 // For runtime theme switching, use CSS custom properties in _theme.scss
 // =====================================================
 
+// Debug mode - set to false for production
+$debug-mode: false;
+
 // =====================================================
 // Colors
 // =====================================================
