@@ -7,7 +7,7 @@ import { gsap } from 'gsap'
  * 
  * @param callback - Function containing GSAP animations
  * @param dependencies - Dependency array (like useEffect)
- * @returns Context object for storing references
+ * @returns void
  */
 export function useGSAP<T extends gsap.Context = gsap.Context>(
   callback: (context: T) => void | (() => void),
@@ -17,14 +17,22 @@ export function useGSAP<T extends gsap.Context = gsap.Context>(
 
   useEffect(() => {
     // Create GSAP context for automatic cleanup
-    const ctx = gsap.context(() => {
-      const cleanup = callback(ctx as T)
+    const ctx = gsap.context(() => {}) as T
+    
+    // Make gsap available in the callback scope by wrapping it
+    const wrappedCallback = () => {
+      // Ensure gsap is available globally for the callback
+      const cleanup = callback(ctx)
+      
       // If callback returns a cleanup function, store it
       if (cleanup && typeof cleanup === 'function') {
         ctx.add(cleanup)
       }
-    }) as T
-
+    }
+    
+    // Execute the wrapped callback within the context
+    ctx.add(wrappedCallback)
+    
     contextRef.current = ctx
 
     // Cleanup on unmount or dependency change

@@ -19,13 +19,14 @@ type CanvasProps = PropsWithChildren<{
   root?: boolean
   force?: boolean
   className?: string
+  style?: React.CSSProperties
 }>
 
 const useRoot = create<CanvasContextValue>(() => ({}))
 
 export const CanvasContext = createContext<CanvasContextValue>({})
 
-export function Canvas({ children, root = false, force = false, ...props }: CanvasProps) {
+export function Canvas({ children, root = false, force = false, className, style, ...props }: CanvasProps) {
   const [WebGLTunnel] = useState(() => tunnel())
   const [DOMTunnel] = useState(() => tunnel())
 
@@ -43,7 +44,7 @@ export function Canvas({ children, root = false, force = false, ...props }: Canv
 
   return (
     <CanvasContext.Provider value={isWebGL || force ? { WebGLTunnel, DOMTunnel } : {}}>
-      {(isWebGL || force) && <WebGLCanvas {...props} />}
+      {(isWebGL || force) && <WebGLCanvas className={className} style={style} {...props} />}
       {children}
     </CanvasContext.Provider>
   )

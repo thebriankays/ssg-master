@@ -1,1 +1,95 @@
-// src/utilities/getSiteSettings.ts\nimport type { SiteSettings } from '@/payload-types'\nimport { getPayloadHMR } from '@payloadcms/next/utilities'\nimport configPromise from '@payload-config'\nimport { unstable_cache } from 'next/cache'\n\nexport const getSiteSettings = unstable_cache(\n  async (): Promise<SiteSettings | null> => {\n    try {\n      const payload = await getPayloadHMR({\n        config: configPromise,\n      })\n\n      const siteSettings = await payload.findGlobal({\n        slug: 'site-settings',\n      })\n\n      return siteSettings || null\n    } catch (error) {\n      console.error('Error fetching site settings:', error)\n      return null\n    }\n  },\n  ['site-settings'],\n  {\n    tags: ['site-settings'],\n    revalidate: 3600, // Cache for 1 hour\n  }\n)\n\n// Get only the typography settings\nexport const getTypographySettings = unstable_cache(\n  async () => {\n    try {\n      const siteSettings = await getSiteSettings()\n      return siteSettings?.typography || null\n    } catch (error) {\n      console.error('Error fetching typography settings:', error)\n      return null\n    }\n  },\n  ['typography-settings'],\n  {\n    tags: ['site-settings', 'typography'],\n    revalidate: 3600,\n  }\n)\n\n// Get used font IDs from site settings\nexport const getUsedFontIds = unstable_cache(\n  async (): Promise<string[]> => {\n    try {\n      const siteSettings = await getSiteSettings()\n      const typography = siteSettings?.typography\n      \n      if (!typography) return []\n\n      const fontIds: string[] = []\n      \n      // Extract font family names from typography settings\n      if (typography.primaryHeadingFont) fontIds.push(typography.primaryHeadingFont)\n      if (typography.secondaryHeadingFont) fontIds.push(typography.secondaryHeadingFont)\n      if (typography.bodyFont) fontIds.push(typography.bodyFont)\n      if (typography.navigationFont) fontIds.push(typography.navigationFont)\n      if (typography.buttonFont) fontIds.push(typography.buttonFont)\n      if (typography.quoteFont) fontIds.push(typography.quoteFont)\n      if (typography.codeFont) fontIds.push(typography.codeFont)\n      \n      // Remove duplicates and filter out empty values\n      return [...new Set(fontIds.filter(Boolean))]\n    } catch (error) {\n      console.error('Error getting used font IDs:', error)\n      return []\n    }\n  },\n  ['used-font-ids'],\n  {\n    tags: ['site-settings', 'typography', 'fonts'],\n    revalidate: 3600,\n  }\n)\n
+// src/utilities/getSiteSettings.ts
+// Temporary type until payload generates types
+interface SiteSetting {
+  id: string
+  typography?: any
+  whatamesh?: {
+    gradientColors?: {
+      color1?: string
+      color2?: string
+      color3?: string
+      color4?: string
+    }
+  }
+  [key: string]: any
+}
+
+import { getPayload } from 'payload'
+import configPromise from '@/payload.config'
+import { unstable_cache } from 'next/cache'
+
+export const getSiteSettings = unstable_cache(
+  async (): Promise<SiteSetting | null> => {
+    try {
+      const payload = await getPayload({
+        config: configPromise,
+      })
+
+      const siteSettings = await payload.findGlobal({
+        slug: 'site-settings',
+      })
+
+      return siteSettings || null
+    } catch (error) {
+      console.error('Error fetching site settings:', error)
+      return null
+    }
+  },
+  ['site-settings'],
+  {
+    tags: ['site-settings'],
+    revalidate: 3600, // Cache for 1 hour
+  }
+)
+
+// Get only the typography settings
+export const getTypographySettings = unstable_cache(
+  async () => {
+    try {
+      const siteSettings = await getSiteSettings()
+      return siteSettings?.typography || null
+    } catch (error) {
+      console.error('Error fetching typography settings:', error)
+      return null
+    }
+  },
+  ['typography-settings'],
+  {
+    tags: ['site-settings', 'typography'],
+    revalidate: 3600,
+  }
+)
+
+// Get used font IDs from site settings
+export const getUsedFontIds = unstable_cache(
+  async (): Promise<string[]> => {
+    try {
+      const siteSettings = await getSiteSettings()
+      const typography = siteSettings?.typography
+      
+      if (!typography) return []
+
+      const fontIds: string[] = []
+      
+      // Extract font family names from typography settings
+      if (typography.primaryHeadingFont) fontIds.push(typography.primaryHeadingFont)
+      if (typography.secondaryHeadingFont) fontIds.push(typography.secondaryHeadingFont)
+      if (typography.bodyFont) fontIds.push(typography.bodyFont)
+      if (typography.navigationFont) fontIds.push(typography.navigationFont)
+      if (typography.buttonFont) fontIds.push(typography.buttonFont)
+      if (typography.quoteFont) fontIds.push(typography.quoteFont)
+      if (typography.codeFont) fontIds.push(typography.codeFont)
+      
+      // Remove duplicates and filter out empty values
+      return [...new Set(fontIds.filter(Boolean))]
+    } catch (error) {
+      console.error('Error getting used font IDs:', error)
+      return []
+    }
+  },
+  ['used-font-ids'],
+  {
+    tags: ['site-settings', 'typography', 'fonts'],
+    revalidate: 3600,
+  }
+)

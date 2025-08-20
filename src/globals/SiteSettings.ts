@@ -32,15 +32,70 @@ export const SiteSettings: GlobalConfig = {
             {
               name: 'backgroundGradient',
               type: 'group',
-              label: 'Background Gradient',
+              label: 'Global Background',
               admin: {
-                description: 'Configure the gradient background colors',
+                description: 'Configure the global background effect',
               },
               fields: [
-                colorPickerField({ name: 'color1', label: 'Gradient Color 1' }),
-                colorPickerField({ name: 'color2', label: 'Gradient Color 2' }),
-                colorPickerField({ name: 'color3', label: 'Gradient Color 3' }),
-                colorPickerField({ name: 'color4', label: 'Gradient Color 4' }),
+                {
+                  name: 'type',
+                  type: 'select',
+                  label: 'Background Type',
+                  defaultValue: 'whatamesh',
+                  options: [
+                    { label: 'Whatamesh (WebGL Gradient)', value: 'whatamesh' },
+                    { label: 'Simple Gradient', value: 'gradient' },
+                    { label: 'None', value: 'none' },
+                  ],
+                },
+                colorPickerField({ name: 'color1', label: 'Color 1', defaultValue: '#c3e4ff' }),
+                colorPickerField({ name: 'color2', label: 'Color 2', defaultValue: '#6ec3f4' }),
+                colorPickerField({ name: 'color3', label: 'Color 3', defaultValue: '#eae2ff' }),
+                colorPickerField({ name: 'color4', label: 'Color 4', defaultValue: '#b9beff' }),
+                {
+                  name: 'whatameshSettings',
+                  type: 'group',
+                  label: 'Whatamesh Settings',
+                  admin: {
+                    condition: (data, siblingData) => siblingData?.type === 'whatamesh',
+                  },
+                  fields: [
+                    {
+                      name: 'darkenTop',
+                      type: 'checkbox',
+                      label: 'Darken Top',
+                      defaultValue: false,
+                    },
+                    {
+                      name: 'speed',
+                      type: 'number',
+                      label: 'Animation Speed',
+                      defaultValue: 1,
+                      min: 0.1,
+                      max: 5,
+                      admin: {
+                        step: 0.1,
+                      },
+                    },
+                    {
+                      name: 'scale',
+                      type: 'number',
+                      label: 'Noise Scale',
+                      defaultValue: 1,
+                      min: 0.1,
+                      max: 5,
+                      admin: {
+                        step: 0.1,
+                      },
+                    },
+                    {
+                      name: 'enableFluid',
+                      type: 'checkbox',
+                      label: 'Enable Fluid Effect',
+                      defaultValue: false,
+                    },
+                  ],
+                },
                 {
                   name: 'presetSelector',
                   type: 'ui',

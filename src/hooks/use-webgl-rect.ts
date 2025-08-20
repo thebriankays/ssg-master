@@ -3,7 +3,7 @@ import type { Rect } from 'hamo'
 import { useLenis } from 'lenis/react'
 import { useCallback, useEffect, useRef } from 'react'
 import { Euler, Vector3 } from 'three'
-import { useTransform } from '@/hooks/use-transform'
+import { useTransform } from '~/hooks/use-transform'
 
 interface WebGLTransform {
   position: Vector3
@@ -12,10 +12,7 @@ interface WebGLTransform {
   isVisible: boolean
 }
 
-export function useWebGLRect(
-  rect: Rect,
-  onUpdate?: (transform: WebGLTransform) => void
-) {
+export function useWebGLRect(rect: Rect, onUpdate?: (transform: WebGLTransform) => void) {
   const size = useThree((state) => state.size)
 
   const transformRef = useRef<WebGLTransform>({
@@ -52,12 +49,10 @@ export function useWebGLRect(
     }
 
     transform.isVisible =
-      scroll > rect.top - size.height + translate.y &&
-      scroll < rect.top + translate.y + rect.height
+      scroll > rect.top - size.height + translate.y && scroll < rect.top + translate.y + rect.height
 
     transform.position.x = -size.width / 2 + (rect.left + rect.width / 2)
-    transform.position.y =
-      size.height / 2 - (rect.top + rect.height / 2) + scroll - translate.y
+    transform.position.y = size.height / 2 - (rect.top + rect.height / 2) + scroll - translate.y
     transform.scale.x = rect.width * scale.x
     transform.scale.y = rect.height * scale.y
 

@@ -7,6 +7,8 @@
   flex-direction: column;
   min-height: 100vh;
   width: 100%;
+  // Remove background color to allow WebGL background to show through
+  background: transparent;
   
   // Main content area
   &__main {
@@ -15,16 +17,28 @@
     flex-direction: column;
     position: relative;
     z-index: 1;
+    // Ensure content is above the WebGL background
+    isolation: isolate;
   }
   
-  // Theme variations
+  // Semi-transparent overlays for better readability if needed
+  &--with-overlay {
+    &::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.1);
+      z-index: 0;
+      pointer-events: none;
+    }
+  }
+  
+  // Theme variations (only color, no background)
   &[data-theme="light"] {
-    background-color: var(--background-light, #ffffff);
     color: var(--foreground-light, #000000);
   }
   
   &[data-theme="dark"] {
-    background-color: var(--background-dark, #000000);
     color: var(--foreground-dark, #ffffff);
   }
 }
@@ -32,4 +46,19 @@
 // Ensure proper stacking context
 body:has(.wrapper) {
   overflow-x: hidden;
+}
+
+// Content sections that need backgrounds
+.content-section {
+  &--with-background {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    border-radius: 8px;
+    padding: 2rem;
+    margin: 1rem 0;
+    
+    [data-theme="dark"] & {
+      background: rgba(0, 0, 0, 0.95);
+    }
+  }
 }

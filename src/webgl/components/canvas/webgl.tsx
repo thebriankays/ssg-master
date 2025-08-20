@@ -1,8 +1,9 @@
 'use client'
 
-import { OrthographicCamera } from '@react-three/drei'
+import { OrthographicCamera, View } from '@react-three/drei'
 import { Canvas } from '@react-three/fiber'
 import { Suspense } from 'react'
+import * as THREE from 'three'
 import { SheetProvider } from '@/orchestra/theatre'
 import { FlowmapProvider } from '../flowmap'
 import { PostProcessing } from '../postprocessing'
@@ -14,14 +15,16 @@ import './webgl.scss'
 type WebGLCanvasProps = React.HTMLAttributes<HTMLDivElement> & {
   render?: boolean
   postprocessing?: boolean
+  className?: string
+  style?: React.CSSProperties
 }
 
-export function WebGLCanvas({ render = true, postprocessing = false, ...props }: WebGLCanvasProps) {
+export function WebGLCanvas({ render = true, postprocessing = false, className, style, ...props }: WebGLCanvasProps) {
   const { WebGLTunnel, DOMTunnel } = useCanvas()
   const dpr = typeof window !== 'undefined' ? window.devicePixelRatio || 1 : 1
 
   return (
-    <div className="webgl" {...props}>
+    <div className={`webgl ${className || ''}`} style={{ ...style }} {...props}>
       <Canvas
         gl={{
           precision: 'highp',
@@ -29,17 +32,30 @@ export function WebGLCanvas({ render = true, postprocessing = false, ...props }:
           // Disable MSAA when DPR is high to avoid redundant work
           antialias: dpr < 2,
           alpha: true,
+          preserveDrawingBuffer: true,
+          premultipliedAlpha: false,
           ...(postprocessing && { stencil: false, depth: false }),
+        }}
+        onCreated={({ gl }) => {
+          gl.setClearColor(0x000000, 0) // Set clear color to transparent
+          gl.outputColorSpace = THREE.SRGBColorSpace // Ensure sRGB output
+          gl.toneMapping = THREE.NoToneMapping // No tone mapping
         }}
         dpr={[1, 2]}
         orthographic
-        // camera={{ position: [0, 0, 5000], near: 0.001, far: 10000, zoom: 1 }}
+        camera={{ position: [0, 0, 5000], near: 0.001, far: 10000, zoom: 1 }}
         frameloop="never"
         linear
         flat
-        eventSource={document.documentElement}
-        eventPrefix="client"
-        resize={{ scroll: false, debounce: { scroll: 0, resize: 500 } }}
+        style={{ 
+          pointerEvents: 'none',
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          width: '100vw',
+          height: '100vh'
+        }}
+        resize={{ scroll: false, debounce: { scroll: 0, resize: 0 } }}  // Remove resize debounce
       >
         {/* <StateListener onChange={onChange} /> */}
         <SheetProvider id="webgl">
@@ -52,10 +68,12 @@ export function WebGLCanvas({ render = true, postprocessing = false, ...props }:
           />
           <RAF render={render} />
           <FlowmapProvider>
-            {postprocessing && <PostProcessing />}
             <Suspense>
               <WebGLTunnel.Out />
             </Suspense>
+            {/* View.Port for drei View components (3D widgets) */}
+            <View.Port />
+            {postprocessing && <PostProcessing />}
           </FlowmapProvider>
           <Preload />
         </SheetProvider>

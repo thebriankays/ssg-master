@@ -1,12 +1,12 @@
 'use client'
 
 import { type Rect, useLazyState, useWindowSize } from 'hamo'
-import { useLenis } from 'lenis/react'
+import { useLenis } from '@/providers/lenis-provider'
 import { useCallback, useEffect, useRef } from 'react'
-import { useTransform } from '~/hooks/use-transform'
-import { clamp, mapRange } from '~/libs/utils'
-import { useOrchestra } from '~/orchestra'
-import { useMinimap } from '~/orchestra/minimap'
+import { useTransform } from '@/hooks/use-transform'
+import { clamp, mapRange } from '@/libs/utils'
+// import { useOrchestra } from '@/orchestra'
+// import { useMinimap } from '@/orchestra/Minimap'
 
 // @refresh reset
 
@@ -30,11 +30,13 @@ function useMarker({
   const color = type === 'start' ? 'green' : 'red'
   const text = type === 'start' ? 'start' : 'end'
 
-  const setElementRef = useMinimap({
-    color,
-  })
+  // const setElementRef = useMinimap({
+  //   color,
+  // })
 
-  const { minimap } = useOrchestra()
+  // const { minimap } = useOrchestra()
+  const minimap = false // Disabled for now
+  const setElementRef = null
 
   useEffect(() => {
     if (!minimap) return

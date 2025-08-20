@@ -1,8 +1,7 @@
 import { useMediaQuery } from 'hamo'
-import { breakpoints } from '~/styles/config'
 
 export function useDeviceDetection() {
-  const breakpoint = breakpoints.dt
+  const breakpoint = 768 // Default desktop breakpoint
 
   const isMobile = useMediaQuery(`(max-width: ${breakpoint - 1}px)`)
   const isDesktop = useMediaQuery(`(min-width: ${breakpoint}px)`)
